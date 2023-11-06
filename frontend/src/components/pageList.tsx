@@ -14,7 +14,8 @@ const PageList = () => {
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
+    localStorage.clear();
     navigate('/login');
   }
 
