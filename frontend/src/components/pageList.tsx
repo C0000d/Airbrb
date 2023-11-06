@@ -1,0 +1,62 @@
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import Login from './login';
+import Register from './register';
+import Dashboard from './dashboard';
+
+const LandingPage = () => {
+  return <>Hi</>;
+}
+
+const PageList = () => {
+  const [token, setToken] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
+
+  useEffect(() => {
+    // if user's information already in local storage
+    const checkToken = localStorage.getItem('token');
+    if (checkToken) {
+      setToken(checkToken);
+    }
+  }, []);
+
+  const pages = token ? ['Dashboard'] : ['Register', 'Login'];
+
+  return (
+    <>
+      {token
+        ? (
+          <>
+            <Link to="dashboard">Dashboard</Link>
+            &nbsp;|&nbsp;
+            <a href='#' onClick={logout}>Logout</a>
+          </>
+          )
+        : (
+          <>
+            <Link to="./login">Login</Link>
+            &nbsp;|&nbsp;
+            <Link to="./register">Register</Link>
+          </>
+          )
+      }
+
+      <hr />
+
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+      </Routes>
+    </>
+  );
+}
+
+export default PageList;
