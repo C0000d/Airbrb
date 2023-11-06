@@ -52,7 +52,7 @@ const PageList = () => {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
-        <Route path='/register' element={<Register />} />
+        <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
     </>
