@@ -35,6 +35,10 @@ function Login (props : loginProps) {
     }
   };
 
+  const back = () => {
+    navigate('/');
+  }
+
   return (
     <>
       <h2>Login</h2>
@@ -42,7 +46,7 @@ function Login (props : loginProps) {
       <input type="text" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
       Password:
       <input type="password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}/>
-
+      <button type="button" onClick={back}>Cancel</button>
       <button type="button" onClick={login}>Login</button>
     </>
   );

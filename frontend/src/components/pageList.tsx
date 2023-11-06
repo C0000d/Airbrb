@@ -4,11 +4,11 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 
-const LandingPage = () => {
+export const LandingPage = () => {
   return <>Hi</>;
 }
 
-const PageList = () => {
+export const PageList = () => {
   const [token, setToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -60,4 +60,4 @@ const PageList = () => {
   );
 }
 
-export default PageList;
+// export default PageList;

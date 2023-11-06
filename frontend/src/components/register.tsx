@@ -38,6 +38,10 @@ function Register (props: registerProps) {
     }
   };
 
+  const back = () => {
+    navigate('/');
+  }
+
   return (
     <>
       <h2>Register</h2>
@@ -47,6 +51,7 @@ function Register (props: registerProps) {
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} /><br />
       Name:
         <input type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+      <button type="button" onClick={back}>Cancel</button>
       <button type="button" onClick={register}>Register</button>
     </>
   )
