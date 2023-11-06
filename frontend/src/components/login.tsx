@@ -7,13 +7,15 @@ interface loginProps {
 }
 
 function Login (props : loginProps) {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  if (props.token) {
-    navigate('/dashboard');
-  }
+  React.useEffect(() => {
+    if (props.token) {
+      navigate('/dashboard');
+    }
+  }, [props.token]);
 
   const login = async () => {
     const response = await fetch('http://localhost:5005/user/auth/login', {
@@ -43,9 +45,9 @@ function Login (props : loginProps) {
     <>
       <h2>Login</h2>
       Email:
-      <input type="text" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
+      <input type="text" value={email} onChange={ e => setEmail(e.target.value)}/> <br />
       Password:
-      <input type="password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}/>
+      <input type="password" value={password} onChange={ e => setPassword(e.target.value)}/> <br />
       <button type="button" onClick={back}>Cancel</button>
       <button type="button" onClick={login}>Login</button>
     </>

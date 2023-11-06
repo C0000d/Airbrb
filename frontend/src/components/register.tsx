@@ -51,13 +51,13 @@ function Register (props: registerProps) {
     <>
       <h2>Register</h2>
       Email:
-        <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
+      <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
       Password:
       <input type="password" value={password} onChange={e => setPassword(e.target.value)} /><br />
       Check Password:
       <input type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /><br />
       Name:
-        <input type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+      <input type="text" value={name} onChange={e => setName(e.target.value)} /><br />
       <button type="button" onClick={back}>Cancel</button>
       <button type="button" onClick={register}>Register</button>
     </>

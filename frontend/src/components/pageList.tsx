@@ -27,7 +27,7 @@ export const PageList = () => {
     }
   }, []);
 
-  const pages = token ? ['Dashboard'] : ['Register', 'Login'];
+  // const pages = token ? ['Dashboard'] : ['Register', 'Login'];
 
   return (
     <>
