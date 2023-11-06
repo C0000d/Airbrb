@@ -41,7 +41,7 @@ function Login (props : loginProps) {
       Email:
       <input type="text" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
       Password:
-      <input type="text" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}/>
+      <input type="password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}/>
 
       <button type="button" onClick={login}>Login</button>
     </>
