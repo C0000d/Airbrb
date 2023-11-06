@@ -32,6 +32,7 @@ function Login (props : loginProps) {
       alert(data.error);
     } else if (data.token) {
       localStorage.setItem('token', data.token);
+      localStorage.setItem('email', email);
       props.setToken(data.token);
       navigate('/dashboard');
     }

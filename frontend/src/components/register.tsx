@@ -37,6 +37,8 @@ function Register (props: registerProps) {
         alert(data.error);
       } else if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('email', email);
+        localStorage.setItem('name', name)
         props.setToken(data.token);
         navigate('/dashboard');
       }
