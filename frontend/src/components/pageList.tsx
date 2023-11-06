@@ -16,7 +16,7 @@ export const PageList = () => {
     setToken(null);
     // localStorage.removeItem('token');
     localStorage.clear();
-    navigate('/login');
+    navigate('/');
   }
 
   useEffect(() => {
