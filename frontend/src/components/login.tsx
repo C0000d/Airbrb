@@ -6,7 +6,7 @@ interface loginProps {
   setToken: (token: string) => void;
 }
 
-function Login (props : loginProps) {
+const Login = (props : loginProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();

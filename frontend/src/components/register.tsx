@@ -6,7 +6,7 @@ interface registerProps {
   setToken: (token: string) => void;
 }
 
-function Register (props: registerProps) {
+const Register = (props: registerProps) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [checkPassword, setCheckPassword] = React.useState('')
