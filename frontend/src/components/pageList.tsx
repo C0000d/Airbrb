@@ -4,9 +4,9 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 
-const LandingPage = () => {
-  return <>Hi</>;
-}
+// const LandingPage = () => {
+//   return <>Hi</>;
+// }
 
 const PageList = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -16,7 +16,7 @@ const PageList = () => {
     setToken(null);
     // localStorage.removeItem('token');
     localStorage.clear();
-    navigate('/');
+    navigate('/dashboard');
   }
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const PageList = () => {
       {token
         ? (
           <>
-            <Link to="dashboard">Dashboard</Link>
+            <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
             <a href='#' onClick={logout}>Logout</a>
           </>
@@ -51,7 +51,7 @@ const PageList = () => {
       <hr />
 
       <Routes>
-        <Route path='/' element={<LandingPage />} />
+        {/* <Route path='/' element={<Dashboard />} /> */}
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
         <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />

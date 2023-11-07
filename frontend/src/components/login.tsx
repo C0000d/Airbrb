@@ -39,7 +39,7 @@ const Login = (props : loginProps) => {
   };
 
   const back = () => {
-    navigate('/');
+    navigate('/dashboard');
   }
 
   return (

@@ -46,7 +46,7 @@ const Register = (props: registerProps) => {
   }
 
   const back = () => {
-    navigate('/');
+    navigate('/dashboard');
   }
 
   return (
