@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 interface registerProps {
   token?: string | null;
   setToken: (token: string) => void;
@@ -51,17 +53,21 @@ const Register = (props: registerProps) => {
 
   return (
     <>
-      <h2>Register</h2>
-      Email:
-      <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
-      Password:
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} /><br />
-      Check Password:
-      <input type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /><br />
-      Name:
-      <input type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-      <button type="button" onClick={back}>Cancel</button>
-      <button type="button" onClick={register}>Register</button>
+      <Typography variant="h4" gutterBottom>
+        Register
+      </Typography> <br />
+      <TextField label="Email *" type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
+      <br />
+      <TextField label="Password *" type="password" value={password} onChange={e => setPassword(e.target.value)} /> <br />
+      <br />
+      <TextField label="Check Password *" type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /> <br />
+      <br />
+      <TextField label="Name *" type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+      <br />
+      {/* <button type="button" onClick={back}>Cancel</button> */}
+      <Button variant="outlined" onClick={back}>Cancel</Button>
+      {/* <button type="button" onClick={register}>Register</button> */}
+      <Button variant="contained" onClick={register}>Register</Button>
     </>
   )
 }
