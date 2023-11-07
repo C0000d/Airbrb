@@ -14,11 +14,23 @@ const PageList = () => {
   const [token, setToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const logout = () => {
-    setToken(null);
-    // localStorage.removeItem('token');
-    localStorage.clear();
-    navigate('/dashboard');
+  const logout = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch('http://localhost:5005/user/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      setToken(null);
+      localStorage.clear();
+      navigate('/dashboard');
+    }
   }
 
   useEffect(() => {
