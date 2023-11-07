@@ -14,8 +14,9 @@ const PageList = () => {
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem('token');
-    navigate('/login');
+    // localStorage.removeItem('token');
+    localStorage.clear();
+    navigate('/');
   }
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const PageList = () => {
     }
   }, []);
 
-  const pages = token ? ['Dashboard'] : ['Register', 'Login'];
+  // const pages = token ? ['Dashboard'] : ['Register', 'Login'];
 
   return (
     <>
@@ -52,7 +53,7 @@ const PageList = () => {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
-        <Route path='/register' element={<Register />} />
+        <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
     </>
