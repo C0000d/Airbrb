@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Typography } from '@mui/material';
 
 interface loginProps {
   token?: string | null;
@@ -44,13 +45,14 @@ const Login = (props : loginProps) => {
 
   return (
     <>
-      <h2>Login</h2>
-      Email:
-      <input type="text" value={email} onChange={ e => setEmail(e.target.value)}/> <br />
-      Password:
-      <input type="password" value={password} onChange={ e => setPassword(e.target.value)}/> <br />
-      <button type="button" onClick={back}>Cancel</button>
-      <button type="button" onClick={login}>Login</button>
+      <Typography variant='h4'>Login</Typography>
+      <br/>
+      <TextField type="text" variant='outlined' label='Email Address *' value={email} onChange={ e => setEmail(e.target.value)}/> <br />
+      <br/>
+      <TextField type="password" variant='outlined' label='Password *' value={password} onChange={ e => setPassword(e.target.value)}/> <br />
+      <br/>
+      <Button variant='outlined' type="button" onClick={back}>Cancel</Button>
+      <Button variant='contained' type="button" onClick={login}>Login</Button>
     </>
   );
 }

@@ -64,10 +64,8 @@ const Register = (props: registerProps) => {
       <br />
       <TextField label="Name *" type="text" value={name} onChange={e => setName(e.target.value)} /><br />
       <br />
-      {/* <button type="button" onClick={back}>Cancel</button> */}
-      <Button variant="outlined" onClick={back}>Cancel</Button>
-      {/* <button type="button" onClick={register}>Register</button> */}
-      <Button variant="contained" onClick={register}>Register</Button>
+      <Button variant="outlined" type="button" onClick={back}>Cancel</Button>
+      <Button variant="contained" type="button" onClick={register}>Register</Button>
     </>
   )
 }
