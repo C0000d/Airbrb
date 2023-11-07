@@ -4,6 +4,7 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import HostedListings from './hostedListing';
+import HostedDetail from './hostedLIstDetail'
 
 // const LandingPage = () => {
 //   return <>Hi</>;
@@ -37,9 +38,9 @@ const PageList = () => {
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <Link to="./dashboard" onClick={logout}>Logout</Link>
-            &nbsp;|&nbsp;
             <Link to="./hostedListing">Hosted Listings</Link>
+            &nbsp;|&nbsp;
+            <Link to="./dashboard" onClick={logout}>Logout</Link>
           </>
           )
         : (
@@ -58,7 +59,9 @@ const PageList = () => {
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
         <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing' element={<HostedListings />} />
+        <Route path='/hostedListing' element={<HostedListings />} >
+          <Route path='hostedLIstDetail' element={<HostedDetail />} />
+        </Route>
       </Routes>
     </>
   );

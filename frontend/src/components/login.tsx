@@ -51,8 +51,8 @@ const Login = (props : loginProps) => {
       <br/>
       <TextField type="password" variant='outlined' label='Password *' value={password} onChange={ e => setPassword(e.target.value)}/> <br />
       <br/>
-      <Button variant='outlined' type="button" onClick={back}>Cancel</Button>
-      <Button variant='contained' type="button" onClick={login}>Login</Button>
+      <Button variant='outlined' type="button" onClick={back} style={{ marginRight: 10, marginBottom: 10 }}>Cancel</Button>
+      <Button variant='contained' type="button" onClick={login} style={{ marginBottom: 10 }}>Login</Button>
     </>
   );
 }
