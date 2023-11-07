@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
+import HostedListings from './hostedListing';
 
 // const LandingPage = () => {
 //   return <>Hi</>;
@@ -36,7 +37,9 @@ const PageList = () => {
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <a href='#' onClick={logout}>Logout</a>
+            <Link to="./dashboard" onClick={logout}>Logout</Link>
+            &nbsp;|&nbsp;
+            <Link to="./hostedListing">Hosted Listings</Link>
           </>
           )
         : (
@@ -55,6 +58,7 @@ const PageList = () => {
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
         <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/hostedListing' element={<HostedListings />} />
       </Routes>
     </>
   );
