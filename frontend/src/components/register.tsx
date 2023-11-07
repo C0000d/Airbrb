@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 interface registerProps {
   token?: string | null;
   setToken: (token: string) => void;

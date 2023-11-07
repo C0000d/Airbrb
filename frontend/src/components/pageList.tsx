@@ -4,7 +4,7 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import HostedListings from './hostedListing';
-import HostedDetail from './hostedLIstDetail'
+// import HostedDetail from './hostedLIstDetail'
 
 // const LandingPage = () => {
 //   return <>Hi</>;
@@ -59,9 +59,9 @@ const PageList = () => {
         <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
         <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing' element={<HostedListings />} >
-          <Route path='hostedLIstDetail' element={<HostedDetail />} />
-        </Route>
+        <Route path='/hostedListing/*' element={<HostedListings />} />
+        {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
+        {/* </Route> */}
       </Routes>
     </>
   );
