@@ -114,11 +114,11 @@ const CreateHostedListing = () => {
           Create a new listing
         </Typography>
         <br />
-        <TextField fullWidth label="Listing Title" value={title} onChange={e => setTitle(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Address" value={address} onChange={e => setAddress(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Price (per night)" value={price} onChange={e => setPrice(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
         {/* <TextField fullWidth label="Listing Thumbnail" /> <br /> */}
         <Box
@@ -131,7 +131,7 @@ const CreateHostedListing = () => {
         }}
         >
           <Typography variant="h6" gutterBottom>
-            Listing Thumbnail: &nbsp;&nbsp;&nbsp;
+            Thumbnail (optional): &nbsp;&nbsp;
           </Typography>
           {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             Upload file
@@ -149,13 +149,13 @@ const CreateHostedListing = () => {
           </Button>
         </Box>
         <br />
-        <TextField fullWidth label="Property Type" value={type} onChange={e => setType(e.target.value)} /> <br />
+        <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bathrooms" value={number} onChange={e => setNumber(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of bathrooms *" value={number} onChange={e => setNumber(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property bedrooms" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
+        <TextField fullWidth label="Property bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property amenities" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
+        <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
         <Button variant="contained" type="button" onClick={create} style={{ marginBottom: 10 }}>Submit</Button>
