@@ -3,6 +3,8 @@ import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom'
 import HostedDetail from './hostedLIstDetail'
 import CreateHostedListing from './createHostedListing';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const HostedListings = () => {
   const location = useLocation();
@@ -19,6 +21,27 @@ const HostedListings = () => {
       {
         !isAtEitherPage && (
         <>
+          <Box sx={{ flexGrow: 1, p: 2 }}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                '--Grid-borderWidth': '1px',
+                borderTop: 'var(--Grid-borderWidth) solid',
+                borderLeft: 'var(--Grid-borderWidth) solid',
+                borderColor: 'divider',
+                '& > div': {
+                  borderRight: 'var(--Grid-borderWidth) solid',
+                  borderBottom: 'var(--Grid-borderWidth) solid',
+                  borderColor: 'divider',
+                },
+              }}
+            >
+              {[...Array(9)].map((_, index) => (
+                <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} />
+              ))}
+            </Grid>
+          </Box>
           <Link to="./hostedLIstDetail">hostedListing</Link>
           <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
         </>

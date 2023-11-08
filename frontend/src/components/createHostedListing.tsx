@@ -64,23 +64,39 @@ const CreateHostedListing = () => {
 
   const create = async () => {
     // console.log(img)
-    const token = localStorage.getItem('token')
-    const res = await fetch('http://localhost:5005/listings/new', {
-      method: 'POST',
-      body: JSON.stringify({
-        title, address, price, thumbnail: img, metadata: { type, number, bedrooms, amenities }
-      }),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }
-    });
-    const data = await res.json();
-    if (data.error) {
-      alert(data.error);
+    if (title === '') {
+      alert('Please input title!')
+    } else if (address === '') {
+      alert('Please input address!')
+    } else if (price === '') {
+      alert('Please input price!')
+    } else if (type === '') {
+      alert('Please input type!')
+    } else if (number === '') {
+      alert('Please input number of bathrooms!')
+    } else if (bedrooms === '') {
+      alert('Please describe the bedrooms!')
+    } else if (amenities === '') {
+      alert('Please describe the amenities!')
     } else {
-      alert('Successfully create a new listing!')
-      // navigate('/hostedListing');
+      const token = localStorage.getItem('token')
+      const res = await fetch('http://localhost:5005/listings/new', {
+        method: 'POST',
+        body: JSON.stringify({
+          title, address, price, thumbnail: img, metadata: { type, number, bedrooms, amenities }
+        }),
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      const data = await res.json();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        alert('Successfully create a new listing!')
+        navigate('/hostedListing');
+      }
     }
   }
 

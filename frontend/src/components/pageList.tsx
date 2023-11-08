@@ -29,6 +29,7 @@ const PageList = () => {
     } else {
       setToken(null);
       localStorage.clear();
+      alert('Successfully logout!')
       navigate('/dashboard');
     }
   }
