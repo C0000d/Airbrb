@@ -5,6 +5,7 @@ import CreateHostedListing from './createHostedListing';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
+import ListingElement from './hostedLIstElement'
 
 const HostedListings = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const HostedListings = () => {
       {
         !isAtEitherPage && (
         <>
+          <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
           <Box sx={{ flexGrow: 1, p: 2 }}>
             <Grid
               container
@@ -36,7 +38,13 @@ const HostedListings = () => {
                   borderColor: 'divider',
                 },
               }}
-            >
+              >
+              <Grid>
+                <ListingElement />
+              </Grid>
+                <Grid>
+                  <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
+              </Grid>
               {[...Array(6)].map((_, index) => (
                 <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} />
               ))}
