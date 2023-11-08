@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { TextField, Button, Typography } from '@mui/material';
+import { AuthContext } from '../AuthContext';
 
-interface loginProps {
-  token?: string | null;
-  setToken: (token: string) => void;
-}
-
-const Login = (props : loginProps) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const authContext = useContext(AuthContext);
+  // check if authContext works
+  if (!authContext) {
+    throw new Error('authContext not available!');
+  }
+
+  const { token, setToken } = authContext;
+
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (props.token) {
+    if (token) {
       navigate('/dashboard');
     }
-  }, [props.token]);
+  }, [token]);
 
   const login = async () => {
     const response = await fetch('http://localhost:5005/user/auth/login', {
@@ -35,13 +39,13 @@ const Login = (props : loginProps) => {
     } else if (data.token) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('email', email);
-      props.setToken(data.token);
+      setToken(data.token);
       navigate('/dashboard');
     }
   };
 
   const back = () => {
-    navigate('/');
+    navigate('/dashboard');
   }
 
   return (

@@ -1,23 +1,30 @@
-import React from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { AuthContext } from '../AuthContext';
 
-interface registerProps {
-  token?: string | null;
-  setToken: (token: string) => void;
-}
-
-const Register = (props: registerProps) => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [checkPassword, setCheckPassword] = React.useState('')
-  const [name, setName] = React.useState('');
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('')
+  const [name, setName] = useState('');
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    if (props.token) {
+  const authContext = useContext(AuthContext);
+  // check if authContext works
+  if (!authContext) {
+    throw new Error('authContext not available!');
+  }
+
+  const { token, setToken } = authContext;
+
+  useEffect(() => {
+    if (token) {
       navigate('/dashboard');
     }
-  }, [props.token]);
+  }, [token]);
 
   const register = async () => {
     if (password !== checkPassword) {
@@ -39,29 +46,33 @@ const Register = (props: registerProps) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('email', email);
         localStorage.setItem('name', name)
-        props.setToken(data.token);
+        setToken(data.token);
         navigate('/dashboard');
       }
     }
   }
 
   const back = () => {
-    navigate('/');
+    navigate('/dashboard');
   }
 
   return (
     <>
-      <h2>Register</h2>
-      Email:
-      <input type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
-      Password:
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} /><br />
-      Check Password:
-      <input type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /><br />
-      Name:
-      <input type="text" value={name} onChange={e => setName(e.target.value)} /><br />
-      <button type="button" onClick={back}>Cancel</button>
-      <button type="button" onClick={register}>Register</button>
+      <Typography variant="h4" gutterBottom>
+        Register
+      </Typography> <br />
+      <TextField label="Email *" type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
+      <br />
+      <TextField label="Password *" type="password" value={password} onChange={e => setPassword(e.target.value)} /> <br />
+      <br />
+      <TextField label="Check Password *" type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /> <br />
+      <br />
+      <TextField label="Name *" type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+      <br />
+      {/* <button type="button" onClick={back}>Cancel</button> */}
+      <Button variant="outlined" onClick={back}>Cancel</Button>
+      {/* <button type="button" onClick={register}>Register</button> */}
+      <Button variant="contained" onClick={register}>Register</Button>
     </>
   )
 }
