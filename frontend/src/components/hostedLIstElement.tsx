@@ -5,10 +5,21 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-const ListingElement = () => {
+interface eleProps {
+  listingId: string;
+  // title: string;
+  // description: string;
+  // imageUrl: string;
+}
+
+const ListingElement = (props: eleProps) => {
+  const storeId = () => {
+    localStorage.setItem('listingId', props.listingId)
+  }
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
+    <Card sx={{ maxWidth: 345 }} onClick={storeId}>
+      <CardActionArea >
         <CardMedia
           component="img"
           height="140"
@@ -17,17 +28,24 @@ const ListingElement = () => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            Title:
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            Property Type: house
+            &nbsp;&nbsp;| No. of beds: 5<br />
+            No. of bathrooms:
+            &nbsp;&nbsp;| Price (per night): 999<br />
+            Rating: <br />
+            Number of total reviews:
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          Share
+          Edit
+        </Button>
+        <Button size="small" color="primary">
+          Delete
         </Button>
       </CardActions>
     </Card>

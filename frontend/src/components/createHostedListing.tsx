@@ -13,8 +13,9 @@ const CreateHostedListing = () => {
   const [address, setAddress] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [type, setType] = React.useState('');
-  const [number, setNumber] = React.useState('');
+  const [bathrooms, setBathrooms] = React.useState('');
   const [bedrooms, setBedrooms] = React.useState('');
+  const [beds, setBeds] = React.useState('');
   const [amenities, setAmenities] = React.useState('');
   const [img, setImg] = React.useState('');
 
@@ -72,10 +73,12 @@ const CreateHostedListing = () => {
       alert('Please input price!')
     } else if (type === '') {
       alert('Please input type!')
-    } else if (number === '') {
+    } else if (bathrooms === '') {
       alert('Please input number of bathrooms!')
     } else if (bedrooms === '') {
-      alert('Please describe the bedrooms!')
+      alert('Please input number of bedrooms!')
+    } else if (beds === '') {
+      alert('Please input number of beds!')
     } else if (amenities === '') {
       alert('Please describe the amenities!')
     } else {
@@ -83,7 +86,7 @@ const CreateHostedListing = () => {
       const res = await fetch('http://localhost:5005/listings/new', {
         method: 'POST',
         body: JSON.stringify({
-          title, address, price, thumbnail: img, metadata: { type, number, bedrooms, amenities }
+          title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities }
         }),
         headers: {
           'Content-type': 'application/json',
@@ -151,9 +154,11 @@ const CreateHostedListing = () => {
         <br />
         <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bathrooms *" value={number} onChange={e => setNumber(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of bathrooms *" value={bathrooms} onChange={e => setBathrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
+        <br />
+        <TextField fullWidth label="Number of beds *" value={beds} onChange={e => setBeds(e.target.value)} /> <br />
         <br />
         <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />

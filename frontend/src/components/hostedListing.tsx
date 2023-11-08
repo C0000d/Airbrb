@@ -17,6 +17,8 @@ const HostedListings = () => {
     navigate('/hostedListing/createHostedListing')
   }
 
+  const listingId = '156';
+
   return (
     <>
       {
@@ -40,7 +42,7 @@ const HostedListings = () => {
               }}
               >
               <Grid>
-                <ListingElement />
+                <ListingElement listingId={listingId}/>
               </Grid>
                 <Grid>
                   <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
