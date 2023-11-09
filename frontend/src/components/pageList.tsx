@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
+import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
 
 const PageList = () => {
@@ -56,8 +57,9 @@ const PageList = () => {
       <Routes>
         {/* <Route path='/' element={<Dashboard />} /> */}
         <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register/>} />
+        <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/listings/:listingId' element={<ListDetail />} />
       </Routes>
     </>
   );
