@@ -13,8 +13,9 @@ const CreateHostedListing = () => {
   const [address, setAddress] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [type, setType] = React.useState('');
-  const [number, setNumber] = React.useState('');
+  const [bathrooms, setBathrooms] = React.useState('');
   const [bedrooms, setBedrooms] = React.useState('');
+  const [beds, setBeds] = React.useState('');
   const [amenities, setAmenities] = React.useState('');
   const [img, setImg] = React.useState('');
 
@@ -64,23 +65,41 @@ const CreateHostedListing = () => {
 
   const create = async () => {
     // console.log(img)
-    const token = localStorage.getItem('token')
-    const res = await fetch('http://localhost:5005/listings/new', {
-      method: 'POST',
-      body: JSON.stringify({
-        title, address, price, thumbnail: img, metadata: { type, number, bedrooms, amenities }
-      }),
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }
-    });
-    const data = await res.json();
-    if (data.error) {
-      alert(data.error);
+    if (title === '') {
+      alert('Please input title!')
+    } else if (address === '') {
+      alert('Please input address!')
+    } else if (price === '') {
+      alert('Please input price!')
+    } else if (type === '') {
+      alert('Please input type!')
+    } else if (bathrooms === '') {
+      alert('Please input number of bathrooms!')
+    } else if (bedrooms === '') {
+      alert('Please input number of bedrooms!')
+    } else if (beds === '') {
+      alert('Please input number of beds!')
+    } else if (amenities === '') {
+      alert('Please describe the amenities!')
     } else {
-      alert('Successfully create a new listing!')
-      // navigate('/hostedListing');
+      const token = localStorage.getItem('token')
+      const res = await fetch('http://localhost:5005/listings/new', {
+        method: 'POST',
+        body: JSON.stringify({
+          title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities }
+        }),
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      const data = await res.json();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        alert('Successfully create a new listing!')
+        navigate('/hostedListing');
+      }
     }
   }
 
@@ -98,11 +117,11 @@ const CreateHostedListing = () => {
           Create a new listing
         </Typography>
         <br />
-        <TextField fullWidth label="Listing Title" value={title} onChange={e => setTitle(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Address" value={address} onChange={e => setAddress(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Price (per night)" value={price} onChange={e => setPrice(e.target.value)} /> <br />
+        <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
         {/* <TextField fullWidth label="Listing Thumbnail" /> <br /> */}
         <Box
@@ -115,7 +134,7 @@ const CreateHostedListing = () => {
         }}
         >
           <Typography variant="h6" gutterBottom>
-            Listing Thumbnail: &nbsp;&nbsp;&nbsp;
+            Thumbnail (optional): &nbsp;&nbsp;
           </Typography>
           {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             Upload file
@@ -133,13 +152,15 @@ const CreateHostedListing = () => {
           </Button>
         </Box>
         <br />
-        <TextField fullWidth label="Property Type" value={type} onChange={e => setType(e.target.value)} /> <br />
+        <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bathrooms" value={number} onChange={e => setNumber(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of bathrooms *" value={bathrooms} onChange={e => setBathrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property bedrooms" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property amenities" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
+        <TextField fullWidth label="Number of beds *" value={beds} onChange={e => setBeds(e.target.value)} /> <br />
+        <br />
+        <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
         <Button variant="contained" type="button" onClick={create} style={{ marginBottom: 10 }}>Submit</Button>

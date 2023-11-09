@@ -5,6 +5,7 @@ import Register from './register';
 import Dashboard from './dashboard';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
+import HostedListings, { getAllListings } from './hostedListing';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -16,11 +17,24 @@ const PageList = () => {
   const { token, setToken } = authContext;
   const navigate = useNavigate();
 
-  const logout = () => {
-    setToken(null);
-    // localStorage.removeItem('token');
-    localStorage.clear();
-    navigate('/dashboard');
+  const logout = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch('http://localhost:5005/user/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      setToken(null);
+      localStorage.clear();
+      alert('Successfully logout!')
+      navigate('/dashboard');
+    }
   }
 
   useEffect(() => {
@@ -40,7 +54,9 @@ const PageList = () => {
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <a href='#' onClick={logout}>Logout</a>
+            <Link to="./hostedListing" onClick={getAllListings}>Hosted Listings</Link>
+            &nbsp;|&nbsp;
+            <Link to="./dashboard" onClick={logout}>Logout</Link>
           </>
           )
         : (
@@ -59,6 +75,7 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/hostedListing/*' element={<HostedListings />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
       </Routes>
     </>
