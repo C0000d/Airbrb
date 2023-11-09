@@ -71,7 +71,7 @@ const Dashboard = () => {
         }
         const jsonResponse = await response.json();
         const listingData: ListingData[] = jsonResponse.listings;
-        console.log(listingData);
+        // console.log(listingData);
         setListings(listingData);
         // const bookingData: Booking[] = [];
         // if (token) {
@@ -88,7 +88,7 @@ const Dashboard = () => {
     return <>Loading...</>
   }
 
-  listings.map((listing) => (console.log(listing.reviews)));
+  // listings.map((listing) => (console.log(listing.reviews)));
 
   return token
     ? (

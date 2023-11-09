@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
+import HostedListings, { getAllListings } from './hostedListing';
+// import HostedListings from './hostedListing';
 
 const CreateHostedListing = () => {
   const [title, setTitle] = React.useState('');
@@ -97,7 +99,9 @@ const CreateHostedListing = () => {
       if (data.error) {
         alert(data.error);
       } else {
-        alert('Successfully create a new listing!')
+        alert('Successfully create a new listing!');
+        // () => { HostedListings }
+        // getAllListings();
         navigate('/hostedListing');
       }
     }

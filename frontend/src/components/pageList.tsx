@@ -4,6 +4,7 @@ import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
 import HostedListings, { getAllListings } from './hostedListing';
+// import HostedListings from './hostedListing';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
 // import getAllListings from './hostedListing';

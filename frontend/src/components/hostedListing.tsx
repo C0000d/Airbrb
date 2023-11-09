@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
 import HostedDetail from './hostedLIstDetail'
 import CreateHostedListing from './createHostedListing';
@@ -7,8 +7,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import ListingElement from './hostedLIstElement'
 
+interface Listing {
+  // 添加你的listing对象的类型定义
+  id: string;
+  // 其他的属性...
+}
+
 let listings: any = []
-const hostedListings: any = []
+let hostedListings: any = []
+// const [hostedListings, setHostedListings] = useState<Listing[]>([]);
 export const getAllListings = async () => {
   // console.log('hello')
   const response = await fetch('http://localhost:5005/listings', {
@@ -22,14 +29,18 @@ export const getAllListings = async () => {
     alert(allListing.error);
   } else {
     listings = allListing
-    console.log(listings)
+    // console.log(listings)
     const user = localStorage.getItem('email')
-    for (const listing of listings) {
+    hostedListings = []
+    // const newHostedListings: Listing[] = [];
+    listings.listings.forEach((listing: any) => {
       if (listing.owner === user) {
-        hostedListings.push(listing)
+        hostedListings.push(listing);
+        // newHostedListings.push(listing);
       }
-    }
+    });
     console.log(hostedListings)
+    // setHostedListings(newHostedListings);
   }
 }
 
@@ -43,7 +54,21 @@ export const HostedListings = () => {
     navigate('/hostedListing/createHostedListing')
   }
 
-  const listingId = '156';
+  const createElement = () => {
+    const elements = [];
+    for (const listing of hostedListings) {
+      elements.push(
+        <Grid key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <ListingElement listingId={listing.id} />
+        </Grid>
+      );
+    }
+    return elements;
+  }
+
+  // useEffect(() => {
+  //   getAllListings();
+  // }, []);
 
   return (
     <>
@@ -51,7 +76,7 @@ export const HostedListings = () => {
         !isAtEitherPage && (
         <>
           <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
-          <Box sx={{ flexGrow: 1, p: 2 }}>
+          <Box sx={{ flexGrow: 1, p: 2 }} >
             <Grid
               container
               spacing={2}
@@ -67,9 +92,10 @@ export const HostedListings = () => {
                 },
               }}
               >
-              <Grid>
+                {createElement()}
+              {/* <Grid {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <ListingElement listingId={listingId}/>
-              </Grid>
+              </Grid> */}
                 {/* <Grid>
                   <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
               </Grid> */}
