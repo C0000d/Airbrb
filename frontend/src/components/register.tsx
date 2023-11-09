@@ -1,26 +1,39 @@
-import React from 'react'
+// import React from 'react'
+// import { useNavigate } from 'react-router-dom';
+// import TextField from '@mui/material/TextField';
+// import Button from '@mui/material/Button';
+// import Typography from '@mui/material/Typography';
+import React, { useEffect, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { AuthContext } from '../AuthContext';
 import Box from '@mui/material/Box';
-interface registerProps {
-  token?: string | null;
-  setToken: (token: string) => void;
-}
+// interface registerProps {
+//   token?: string | null;
+//   setToken: (token: string) => void;
+// }
 
-const Register = (props: registerProps) => {
+const Register = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [checkPassword, setCheckPassword] = React.useState('')
   const [name, setName] = React.useState('');
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+  // check if authContext works
+  if (!authContext) {
+    throw new Error('authContext not available!');
+  }
+
+  const { token, setToken } = authContext;
 
   React.useEffect(() => {
-    if (props.token) {
+    if (token) {
       navigate('/dashboard');
     }
-  }, [props.token]);
+  }, [token]);
 
   const register = async () => {
     if (password !== checkPassword) {
@@ -42,7 +55,7 @@ const Register = (props: registerProps) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('email', email);
         localStorage.setItem('name', name)
-        props.setToken(data.token);
+        setToken(data.token);
         navigate('/dashboard');
       }
     }

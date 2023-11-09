@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
-import HostedListings from './hostedListing';
+import HostedListings, { getAllListings } from './hostedListing';
+import ListDetail from './listDetail';
+import { AuthContext } from '../AuthContext';
+// import getAllListings from './hostedListing';
 // import HostedDetail from './hostedLIstDetail'
 
 // const LandingPage = () => {
@@ -11,7 +14,13 @@ import HostedListings from './hostedListing';
 // }
 
 const PageList = () => {
-  const [token, setToken] = useState<string | null>(null);
+  const authContext = useContext(AuthContext);
+  // check if authContext works
+  if (!authContext) {
+    throw new Error('authContext not available!');
+  }
+
+  const { token, setToken } = authContext;
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -46,12 +55,13 @@ const PageList = () => {
 
   return (
     <>
+      {/* {console.log(token)} */}
       {token
         ? (
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <Link to="./hostedListing">Hosted Listings</Link>
+            <Link to="./hostedListing" onClick={getAllListings}>Hosted Listings</Link>
             &nbsp;|&nbsp;
             <Link to="./dashboard" onClick={logout}>Logout</Link>
           </>
@@ -69,10 +79,11 @@ const PageList = () => {
 
       <Routes>
         {/* <Route path='/' element={<Dashboard />} /> */}
-        <Route path='/login' element={<Login token={token} setToken={setToken}/>} />
-        <Route path='/register' element={<Register token={token} setToken={setToken}/>} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/hostedListing/*' element={<HostedListings />} />
+        <Route path='/listings/:listingId' element={<ListDetail />} />
         {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
         {/* </Route> */}
       </Routes>

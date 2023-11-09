@@ -7,7 +7,33 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import ListingElement from './hostedLIstElement'
 
-const HostedListings = () => {
+let listings: any = []
+const hostedListings: any = []
+export const getAllListings = async () => {
+  // console.log('hello')
+  const response = await fetch('http://localhost:5005/listings', {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+    }
+  });
+  const allListing = await response.json();
+  if (allListing.error) {
+    alert(allListing.error);
+  } else {
+    listings = allListing
+    console.log(listings)
+    const user = localStorage.getItem('email')
+    for (const listing of listings) {
+      if (listing.owner === user) {
+        hostedListings.push(listing)
+      }
+    }
+    console.log(hostedListings)
+  }
+}
+
+export const HostedListings = () => {
   const location = useLocation();
   const atDetailPage = location.pathname.includes('hostedLIstDetail');
   const atCreateListingPage = location.pathname.includes('createHostedListing');
@@ -44,16 +70,16 @@ const HostedListings = () => {
               <Grid>
                 <ListingElement listingId={listingId}/>
               </Grid>
-                <Grid>
+                {/* <Grid>
                   <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
-              </Grid>
-              {[...Array(6)].map((_, index) => (
+              </Grid> */}
+              {/* {[...Array(6)].map((_, index) => (
                 <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} />
-              ))}
+              ))} */}
             </Grid>
           </Box>
-          <Link to="./hostedLIstDetail">hostedListing</Link>
-          <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
+          {/* <Link to="./hostedLIstDetail">hostedListing</Link> */}
+          {/* <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button> */}
         </>
         )
       }
