@@ -5,10 +5,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-// import defaultImg from './defaultImg.png';
-// import { title } from 'process';
-// import HostedDetail from './hostedLIstDetail'
-
 interface eleProps {
   listingId: string;
 }
@@ -36,9 +32,7 @@ const ListingElement = (props: eleProps) => {
       if (data.error) {
         alert(data.error);
       } else {
-        // console.log(data.listing)
         setDetail(data.listing);
-        // console.log(detail)
       }
     }
 
@@ -47,7 +41,7 @@ const ListingElement = (props: eleProps) => {
 
   const deleteListing = async () => {
     const token = localStorage.getItem('token')
-    const listingId = localStorage.getItem('listingId')
+    const listingId = props.listingId
     const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'DELETE',
       headers: {
@@ -59,11 +53,8 @@ const ListingElement = (props: eleProps) => {
     if (data.error) {
       alert(data.error);
     } else {
-      alert('Successfully delete!');
       navigate('/hostedListing')
-      // console.log(data.listing)
-      // setDetail(data.listing);
-      // console.log(detail)
+      alert('Successfully delete!');
     }
   }
 

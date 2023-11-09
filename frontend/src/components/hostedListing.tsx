@@ -7,44 +7,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import ListingElement from './hostedLIstElement'
 
-interface Listing {
-  // 添加你的listing对象的类型定义
-  id: string;
-  // 其他的属性...
-}
-
-let listings: any = []
-let hostedListings: any = []
-// const [hostedListings, setHostedListings] = useState<Listing[]>([]);
-export const getAllListings = async () => {
-  // console.log('hello')
-  const response = await fetch('http://localhost:5005/listings', {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json',
-    }
-  });
-  const allListing = await response.json();
-  if (allListing.error) {
-    alert(allListing.error);
-  } else {
-    listings = allListing
-    // console.log(listings)
-    const user = localStorage.getItem('email')
-    hostedListings = []
-    // const newHostedListings: Listing[] = [];
-    listings.listings.forEach((listing: any) => {
-      if (listing.owner === user) {
-        hostedListings.push(listing);
-        // newHostedListings.push(listing);
-      }
-    });
-    console.log(hostedListings)
-    // setHostedListings(newHostedListings);
-  }
-}
-
-export const HostedListings = () => {
+const HostedListings = () => {
   const location = useLocation();
   const atDetailPage = location.pathname.includes('hostedLIstDetail');
   const atCreateListingPage = location.pathname.includes('createHostedListing');
@@ -53,22 +16,30 @@ export const HostedListings = () => {
   const createListing = () => {
     navigate('/hostedListing/createHostedListing')
   }
-
-  const createElement = () => {
-    const elements = [];
-    for (const listing of hostedListings) {
-      elements.push(
-        <Grid key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-          <ListingElement listingId={listing.id} />
-        </Grid>
-      );
-    }
-    return elements;
-  }
-
-  // useEffect(() => {
-  //   getAllListings();
-  // }, []);
+  const [hostedListings, setHostedListings] = useState<any[]>([]);
+  useEffect(() => {
+    (async () => {
+      const response = await fetch('http://localhost:5005/listings', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        }
+      });
+      const allListing = await response.json();
+      if (allListing.error) {
+        alert(allListing.error);
+      } else {
+        const user = localStorage.getItem('email')
+        const newListings: any = []
+        allListing.listings.forEach((listing: any) => {
+          if (listing.owner === user) {
+            newListings.push(listing);
+          }
+        });
+        setHostedListings(newListings);
+      }
+    })();
+  }, [])
 
   return (
     <>
@@ -92,24 +63,16 @@ export const HostedListings = () => {
                 },
               }}
               >
-                {createElement()}
-              {/* <Grid {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                <ListingElement listingId={listingId}/>
-              </Grid> */}
-                {/* <Grid>
-                  <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
-              </Grid> */}
-              {/* {[...Array(6)].map((_, index) => (
-                <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160} />
-              ))} */}
+                {hostedListings.map((listing: any) => (
+              <Grid key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <ListingElement listingId={listing.id} />
+              </Grid>
+                ))}
             </Grid>
           </Box>
-          {/* <Link to="./hostedLIstDetail">hostedListing</Link> */}
-          {/* <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button> */}
         </>
         )
       }
-      {/* <Outlet /> */}
       <Routes>
         <Route path='/hostedLIstDetail' element={<HostedDetail />} />
         <Route path='/createHostedListing' element={<CreateHostedListing />} />

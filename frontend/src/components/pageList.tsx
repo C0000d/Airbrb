@@ -3,16 +3,9 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
-import HostedListings, { getAllListings } from './hostedListing';
-// import HostedListings from './hostedListing';
+import HostedListings from './hostedListing';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
-// import getAllListings from './hostedListing';
-// import HostedDetail from './hostedLIstDetail'
-
-// const LandingPage = () => {
-//   return <>Hi</>;
-// }
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -52,17 +45,14 @@ const PageList = () => {
     }
   }, []);
 
-  // const pages = token ? ['Dashboard'] : ['Register', 'Login'];
-
   return (
     <>
-      {/* {console.log(token)} */}
       {token
         ? (
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <Link to="./hostedListing" onClick={getAllListings}>Hosted Listings</Link>
+            <Link to="./hostedListing" >Hosted Listings</Link>
             &nbsp;|&nbsp;
             <Link to="./dashboard" onClick={logout}>Logout</Link>
           </>
@@ -79,14 +69,11 @@ const PageList = () => {
       <hr />
 
       <Routes>
-        {/* <Route path='/' element={<Dashboard />} /> */}
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing/*' element={<HostedListings />} />
+        <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
-        {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
-        {/* </Route> */}
       </Routes>
     </>
   );

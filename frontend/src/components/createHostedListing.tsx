@@ -7,8 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
-import HostedListings, { getAllListings } from './hostedListing';
-// import HostedListings from './hostedListing';
 
 const CreateHostedListing = () => {
   const [title, setTitle] = React.useState('');
@@ -50,23 +48,7 @@ const CreateHostedListing = () => {
     }
   };
 
-  // const FileToDataUrl = async (file: File):Promise<string> => {
-  //   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //   const valid = validFileTypes.find((type) => type === file.type);
-  //   // Bad data, let's walk away.
-  //   if (!valid) {
-  //     throw Error('provided file is not a png, jpg or jpeg image.');
-  //   }
-  //   const reader = new FileReader();
-  //   return new Promise<string>((resolve, reject) => {
-  //     reader.onerror = () => reject(reader.error);
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.readAsDataURL(file);
-  //   });
-  // }
-
   const create = async () => {
-    // console.log(img)
     if (title === '') {
       alert('Please input title!')
     } else if (address === '') {
@@ -100,8 +82,6 @@ const CreateHostedListing = () => {
         alert(data.error);
       } else {
         alert('Successfully create a new listing!');
-        // () => { HostedListings }
-        // getAllListings();
         navigate('/hostedListing');
       }
     }
@@ -127,7 +107,6 @@ const CreateHostedListing = () => {
         <br />
         <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
-        {/* <TextField fullWidth label="Listing Thumbnail" /> <br /> */}
         <Box
         sx={{
           width: 500,
@@ -140,18 +119,12 @@ const CreateHostedListing = () => {
           <Typography variant="h6" gutterBottom>
             Thumbnail (optional): &nbsp;&nbsp;
           </Typography>
-          {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-            Upload file
-          <VisuallyHiddenInput type="file" accept="image/jpeg, image/png, image/jpg" />
-          </Button> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             {fileName || 'Upload file'}
             <VisuallyHiddenInput
-              // value={img}
               accept="image/jpeg, image/png, image/jpg"
               type="file"
               onChange={handleFileChange}
-              // onChange={e => setImg(e.target.files[0])}
           />
           </Button>
         </Box>
