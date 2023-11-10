@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -57,15 +57,6 @@ const Publish = () => {
     if (!currentAvailability) {
       return;
     }
-
-    // let adjustedDate = null;
-    // if (value) {
-    //   const dateValue = new Date(value);
-    //   const offset = dateValue.getTimezoneOffset();
-    //   const sydneyOffset = -600;
-    //   const adjustedTime = dateValue.getTime() - (offset - sydneyOffset) * 60 * 1000;
-    //   adjustedDate = new Date(adjustedTime);
-    // }
 
     if (field === 'start') {
       newAvailability[index] = { ...currentAvailability, start: value };
