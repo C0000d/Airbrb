@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthContext';
 import { Link } from 'react-router-dom';
 import ListElement, { fetchListingDetails } from './listElement';
+import { Box, Grid } from '@mui/material';
 
 interface Review {
   user: string;
@@ -21,7 +22,9 @@ interface ListingData {
 
 interface Booking {
   listingId: string;
-  status: 'accpeted' | 'pending' | 'declined' | 'not booked'
+  startDate: string;
+  endDate: string;
+  status: 'accpeted' | 'pending' | 'not booked';
 }
 
 interface MetaData {
@@ -52,7 +55,6 @@ interface ListingDetail {
 
 const Dashboard = () => {
   const [listings, setListings] = useState<ListingData[]>([]);
-  const [userBooking, setUserBooking] = useState([]);
 
   const authContext = useContext(AuthContext);
   // check if authContext works
@@ -94,11 +96,33 @@ const Dashboard = () => {
     ? (
       <>
         dashboard
-        {listings.map((listing) => (
-          <Link key={listing.id} to={`/listings/${listing.id}`}>
-            <ListElement listingId={listing.id} />
-          </Link>
-        ))}
+        <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Grid
+              container
+              spacing={2}
+              sx={{
+                '--Grid-borderWidth': '1px',
+                borderTop: 'var(--Grid-borderWidth) solid',
+                borderLeft: 'var(--Grid-borderWidth) solid',
+                borderColor: 'divider',
+                '& > div': {
+                  borderRight: 'var(--Grid-borderWidth) solid',
+                  borderBottom: 'var(--Grid-borderWidth) solid',
+                  borderColor: 'divider',
+                },
+              }}
+              >
+
+            {listings.map((listing, index) => (
+              <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <Link key={listing.id} to={`/listings/${listing.id}`}>
+                  <ListElement listingId={listing.id} />
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
       </>
       )
     : (
@@ -112,4 +136,4 @@ const Dashboard = () => {
 // };
 
 export default Dashboard;
-export { Review, TimePeriod, ListingData, ListingDetail };
+export { Booking, Review, TimePeriod, ListingData, ListingDetail };

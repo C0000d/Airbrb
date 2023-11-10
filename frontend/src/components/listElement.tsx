@@ -61,7 +61,7 @@ const ListElement = ({ listingId }: { listingId: string }) => {
   return (
     thumbnail.includes('image')
       ? (
-        <Card sx={{ maxWidth: 300 }}>
+        <Card >
           <CardActionArea>
             <CardMedia
               component="img"
@@ -91,7 +91,7 @@ const ListElement = ({ listingId }: { listingId: string }) => {
               <Typography gutterBottom variant='h5'>{title}</Typography>
               <Typography variant='body2' color='text.secondary'>{address}</Typography>
               <br/>
-              <Typography variant='body2'>&#x2605 {reviewsRate}</Typography>
+              <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
             </CardContent>
           </CardActionArea>
         </Card>
