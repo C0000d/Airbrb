@@ -1,17 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography } from '@mui/material';
+import { Box, TextField, Button, Typography } from '@mui/material';
 import { AuthContext } from '../AuthContext';
-
-// interface loginProps {
-//   token?: string | null;
-//   setToken: (token: string) => void;
-// }
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
 
   const authContext = useContext(AuthContext);
   // check if authContext works
@@ -20,6 +14,8 @@ const Login = () => {
   }
 
   const { token, setToken } = authContext;
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (token) {
@@ -54,14 +50,23 @@ const Login = () => {
 
   return (
     <>
-      <Typography variant='h4'>Login</Typography>
-      <br/>
-      <TextField type="text" variant='outlined' label='Email Address *' value={email} onChange={ e => setEmail(e.target.value)}/> <br />
-      <br/>
-      <TextField type="password" variant='outlined' label='Password *' value={password} onChange={ e => setPassword(e.target.value)}/> <br />
-      <br/>
-      <Button variant='outlined' type="button" onClick={back} style={{ marginRight: 10, marginBottom: 10 }}>Cancel</Button>
-      <Button variant='contained' type="button" onClick={login} style={{ marginBottom: 10 }}>Login</Button>
+      <Box
+        sx={{
+          width: 500,
+          maxWidth: '100%',
+          textAlign: 'center',
+          margin: 'auto',
+        }}
+      >
+        <Typography variant='h4'>Login</Typography>
+        <br/>
+        <TextField fullWidth type="text" variant='outlined' label='Email Address *' value={email} onChange={ e => setEmail(e.target.value)}/> <br />
+        <br/>
+        <TextField fullWidth type="password" variant='outlined' label='Password *' value={password} onChange={ e => setPassword(e.target.value)}/> <br />
+        <br/>
+        <Button variant='outlined' type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
+        <Button variant='contained' type="button" onClick={login} style={{ marginBottom: 10 }}>Login</Button>
+      </Box>
     </>
   );
 }

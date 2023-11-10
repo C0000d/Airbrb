@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import HostedDetail from './hostedLIstDetail'
 import CreateHostedListing from './createHostedListing';
 import Button from '@mui/material/Button';
@@ -9,7 +9,7 @@ import ListingElement from './hostedLIstElement'
 
 const HostedListings = () => {
   const location = useLocation();
-  const atDetailPage = location.pathname.includes('hostedLIstDetail');
+  const atDetailPage = location.pathname.includes('detail/:');
   const atCreateListingPage = location.pathname.includes('createHostedListing');
   const isAtEitherPage = atDetailPage || atCreateListingPage;
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const HostedListings = () => {
       }
     })();
   }, [])
-
+  const listingId = localStorage.getItem('listingId')
   return (
     <>
       {
@@ -74,7 +74,8 @@ const HostedListings = () => {
         )
       }
       <Routes>
-        <Route path='/hostedLIstDetail' element={<HostedDetail />} />
+        {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
+        <Route path={`/detail/:${listingId}`} element={<HostedDetail />} />
         <Route path='/createHostedListing' element={<CreateHostedListing />} />
       </Routes>
     </>

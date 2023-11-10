@@ -61,7 +61,7 @@ const ListElement = ({ listingId }: { listingId: string }) => {
   return (
     thumbnail.includes('image')
       ? (
-        <Card sx={{ maxWidth: 300 }}>
+        <Card >
           <CardActionArea>
             <CardMedia
               component="img"

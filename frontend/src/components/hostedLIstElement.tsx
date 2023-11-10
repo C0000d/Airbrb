@@ -12,7 +12,8 @@ interface eleProps {
 const ListingElement = (props: eleProps) => {
   const navigate = useNavigate();
   const detailPage = () => {
-    navigate('/hostedListing/hostedLIstDetail')
+    // navigate('/hostedListing/hostedLIstDetail')
+    navigate(`/hostedListing/detail/:${props.listingId}`)
   }
 
   const storeId = () => {
@@ -84,6 +85,9 @@ const ListingElement = (props: eleProps) => {
       <CardActions sx={{ paddingTop: '0px' }}>
         <Button size="small" color="primary" onClick={detailPage}>
           Edit
+        </Button>
+        <Button size="small" color="primary">
+          Publish
         </Button>
         <Button size="small" color="primary" onClick={deleteListing}>
           Delete
