@@ -46,7 +46,7 @@ const Publish = () => {
       alert(data.error);
     } else {
       alert('successfuly published!')
-      console.log(availability);
+      // console.log(availability);
       navigate('/hostedListing');
     }
   }

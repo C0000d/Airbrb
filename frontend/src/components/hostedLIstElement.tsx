@@ -64,9 +64,23 @@ const ListingElement = (props: eleProps) => {
     navigate('/hostedListing/publishListing')
   }
 
-  const unpublish = () => {
-    alert('successfully unpublished!');
-    navigate('/hostedListing');
+  const unpublish = async () => {
+    const token = localStorage.getItem('token')
+    const listingId = props.listingId
+    const res = await fetch(`http://localhost:5005/listings/unpublish/${listingId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert('successfully unpublished!');
+      navigate('/hostedListing');
+    }
   }
 
   return (
