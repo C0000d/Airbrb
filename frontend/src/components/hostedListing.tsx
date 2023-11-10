@@ -77,7 +77,7 @@ const HostedListings = () => {
       }
       <Routes>
         {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
-        <Route path={`/detail/:${listingId}`} element={<HostedDetail />} />
+        <Route path={`/detail/:${listingId}`} element={<HostedDetail key={new Date().toISOString()}/>} />
         <Route path='/createHostedListing' element={<CreateHostedListing />} />
         <Route path='/publishListing' element={<Publish />} />
       </Routes>
