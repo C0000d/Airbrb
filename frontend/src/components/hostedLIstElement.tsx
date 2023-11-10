@@ -20,7 +20,7 @@ const ListingElement = (props: eleProps) => {
     localStorage.setItem('listingId', props.listingId)
   }
 
-  const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [] });
+  const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
   useEffect(() => {
     const getDetail = async () => {
       const res = await fetch(`http://localhost:5005/listings/${props.listingId}`, {
@@ -34,6 +34,7 @@ const ListingElement = (props: eleProps) => {
         alert(data.error);
       } else {
         setDetail(data.listing);
+        // console.log(detail.published)
       }
     }
 
@@ -57,6 +58,15 @@ const ListingElement = (props: eleProps) => {
       navigate('/hostedListing')
       alert('Successfully delete!');
     }
+  }
+
+  const publish = () => {
+    navigate('/hostedListing/publishListing')
+  }
+
+  const unpublish = () => {
+    alert('successfully unpublished!');
+    navigate('/hostedListing');
   }
 
   return (
@@ -86,9 +96,22 @@ const ListingElement = (props: eleProps) => {
         <Button size="small" color="primary" onClick={detailPage}>
           Edit
         </Button>
-        <Button size="small" color="primary">
-          Publish
-        </Button>
+        {!detail.published
+          ? (
+            <>
+              <Button size="small" color="primary" onClick={publish}>
+                Publish
+              </Button>
+            </>
+            )
+          : (
+            <>
+              <Button size="small" color="primary" onClick={unpublish}>
+                unPublish
+              </Button>)
+            </>
+            )
+        }
         <Button size="small" color="primary" onClick={deleteListing}>
           Delete
         </Button>

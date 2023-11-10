@@ -5,13 +5,15 @@ import CreateHostedListing from './createHostedListing';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import ListingElement from './hostedLIstElement'
+import ListingElement from './hostedLIstElement';
+import Publish from './publishListing'
 
 const HostedListings = () => {
   const location = useLocation();
   const atDetailPage = location.pathname.includes('detail/:');
   const atCreateListingPage = location.pathname.includes('createHostedListing');
-  const isAtEitherPage = atDetailPage || atCreateListingPage;
+  const atPublishListingPage = location.pathname.includes('publishListing');
+  const isAtEitherPage = atDetailPage || atCreateListingPage || atPublishListingPage;
   const navigate = useNavigate();
   const createListing = () => {
     navigate('/hostedListing/createHostedListing')
@@ -77,6 +79,7 @@ const HostedListings = () => {
         {/* <Route path='/hostedLIstDetail' element={<HostedDetail />} /> */}
         <Route path={`/detail/:${listingId}`} element={<HostedDetail />} />
         <Route path='/createHostedListing' element={<CreateHostedListing />} />
+        <Route path='/publishListing' element={<Publish />} />
       </Routes>
     </>
   );
