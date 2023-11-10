@@ -108,7 +108,7 @@ const ListingElement = (props: eleProps) => {
             <>
               <Button size="small" color="primary" onClick={unpublish}>
                 unPublish
-              </Button>)
+              </Button>
             </>
             )
         }

@@ -22,29 +22,66 @@ const Publish = () => {
     navigate('/hostedListing')
   }
 
-  const publish = () => {
-    alert('successfuly published!')
-    console.log(availability);
-    navigate('/hostedListing')
+  const publish = async () => {
+    if (availability.length === 1) {
+      for (const date of availability) {
+        if (date.start === null || date.end === null) {
+          alert('Please add at least one available date!')
+          return;
+        }
+      }
+    }
+    const token = localStorage.getItem('token')
+    const listingId = localStorage.getItem('listingId')
+    const res = await fetch(`http://localhost:5005/listings/publish/${listingId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ availability }),
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert('successfuly published!')
+      console.log(availability);
+      navigate('/hostedListing');
+    }
   }
 
-  // const [availability, setAvailability] = useState([{ start: null, end: null }]);
   const updateAvailability = (index: number, field: keyof Availability, value: DateType) => {
     const newAvailability = [...availability];
     const currentAvailability = newAvailability[index];
     if (!currentAvailability) {
       return;
     }
+
+    // let adjustedDate = null;
+    // if (value) {
+    //   const dateValue = new Date(value);
+    //   const offset = dateValue.getTimezoneOffset();
+    //   const sydneyOffset = -600;
+    //   const adjustedTime = dateValue.getTime() - (offset - sydneyOffset) * 60 * 1000;
+    //   adjustedDate = new Date(adjustedTime);
+    // }
+
     if (field === 'start') {
       newAvailability[index] = { ...currentAvailability, start: value };
     } else if (field === 'end') {
       newAvailability[index] = { ...currentAvailability, end: value };
     }
-    // newAvailability[index] = { ...newAvailability[index], [field]: value };
     setAvailability(newAvailability);
   }
 
   const addDatePicker = () => {
+    for (const date of availability) {
+      if (date.start === null || date.end === null) {
+        alert('Please fill all the fields!')
+        return;
+      }
+    }
     setAvailability([...availability, { start: null, end: null }]);
   };
 
@@ -66,14 +103,6 @@ const Publish = () => {
       </>
     )
   }
-
-  // const [datePickers, setDatePickers] = useState([<DatePickerComponent key={0} />]);
-  // const addDatePicker = () => {
-  //   setDatePickers([
-  //     ...datePickers,
-  //     <DatePickerComponent key={datePickers.length} />,
-  //   ]);
-  // };
 
   return (
     <Box
