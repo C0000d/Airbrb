@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 
 const CreateHostedListing = () => {
   const [title, setTitle] = React.useState('');
@@ -48,23 +50,7 @@ const CreateHostedListing = () => {
     }
   };
 
-  // const FileToDataUrl = async (file: File):Promise<string> => {
-  //   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //   const valid = validFileTypes.find((type) => type === file.type);
-  //   // Bad data, let's walk away.
-  //   if (!valid) {
-  //     throw Error('provided file is not a png, jpg or jpeg image.');
-  //   }
-  //   const reader = new FileReader();
-  //   return new Promise<string>((resolve, reject) => {
-  //     reader.onerror = () => reject(reader.error);
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.readAsDataURL(file);
-  //   });
-  // }
-
   const create = async () => {
-    // console.log(img)
     if (title === '') {
       alert('Please input title!')
     } else if (address === '') {
@@ -97,7 +83,7 @@ const CreateHostedListing = () => {
       if (data.error) {
         alert(data.error);
       } else {
-        alert('Successfully create a new listing!')
+        alert('Successfully create a new listing!');
         navigate('/hostedListing');
       }
     }
@@ -123,7 +109,6 @@ const CreateHostedListing = () => {
         <br />
         <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
-        {/* <TextField fullWidth label="Listing Thumbnail" /> <br /> */}
         <Box
         sx={{
           width: 500,
@@ -136,21 +121,30 @@ const CreateHostedListing = () => {
           <Typography variant="h6" gutterBottom>
             Thumbnail (optional): &nbsp;&nbsp;
           </Typography>
-          {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-            Upload file
-          <VisuallyHiddenInput type="file" accept="image/jpeg, image/png, image/jpg" />
-          </Button> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             {fileName || 'Upload file'}
             <VisuallyHiddenInput
-              // value={img}
               accept="image/jpeg, image/png, image/jpg"
               type="file"
               onChange={handleFileChange}
-              // onChange={e => setImg(e.target.files[0])}
           />
           </Button>
         </Box>
+        <br />
+        <Card sx={{ boxShadow: 0 }}>
+          <CardMedia
+            component="img"
+            height='auto'
+            image={img || require('./defaultImg.png')}
+            alt="Thumbnail Image"
+            sx={{
+              width: '50%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              height: 'auto'
+            }}
+          />
+        </Card>
         <br />
         <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />

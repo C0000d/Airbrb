@@ -1,8 +1,8 @@
-import React, { createContext } from 'react';
+import React, { createContext, useState } from 'react';
 
 interface AuthContextType {
-    token: string | null;
-    setToken: (token: string | null) => void;
+  token: string | null;
+  setToken: (token: string | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

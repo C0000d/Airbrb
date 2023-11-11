@@ -5,7 +5,7 @@ import Register from './register';
 import Dashboard from './dashboard';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
-import HostedListings, { getAllListings } from './hostedListing';
+import HostedListings from './hostedListing';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -54,7 +54,7 @@ const PageList = () => {
           <>
             <Link to="./dashboard">Dashboard</Link>
             &nbsp;|&nbsp;
-            <Link to="./hostedListing" onClick={getAllListings}>Hosted Listings</Link>
+            <Link to="./hostedListing">Hosted Listings</Link>
             &nbsp;|&nbsp;
             <Link to="./dashboard" onClick={logout}>Logout</Link>
           </>
@@ -75,7 +75,7 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing/*' element={<HostedListings />} />
+        <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
       </Routes>
     </>
