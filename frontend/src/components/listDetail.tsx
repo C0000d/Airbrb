@@ -123,16 +123,18 @@ const ListDetail = () => {
       alert('The date is invalid, please try again!');
       return;
     }
+    const user = localStorage.getItem('email')
+    if (listing.owner === user) {
+      alert('You can not book your own listing!');
+      return;
+    }
 
     const totalNights = countNights(startDate, endDate);
     const newTotalPrice = totalNights * listing.price;
     setTotalPrice(newTotalPrice);
+    // console.log(newTotalPrice);
     try {
-      // console.log('listing price', listing.price);
-      // console.log('total night:', totalNights);
-      // console.log('total price:', totalPrice);
-      // console.log('date range', { start: startDate, end: endDate });
-
+      // console.log(startDate?.toISOString());
       const response = await fetch(`http://localhost:5005/bookings/new/${listingId}`, {
         method: 'POST',
         headers: {
@@ -140,17 +142,18 @@ const ListDetail = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          dateRange: { start: startDate, end: endDate },
+          dateRange: { start: startDate?.toISOString(), end: endDate?.toISOString(), },
           totalPrice: newTotalPrice
         })
       });
 
-      if (!response.ok) {
-        alert(`HTTP error! status: ${response.status}`);
-      }
+      // if (!response.ok) {
+      //   alert(`HTTP error! status: ${response.status}`);
+      // }
 
       const data = await response.json();
       alert('Booking has been sent! Please wait for owner\'s response.');
+      navigate('/dashboard')
       return data;
     } catch (error) {
       alert(`Booking failed: ${error}`);
