@@ -39,6 +39,8 @@ interface MetaData {
   number: string;
   bedrooms: string;
   amenities: string;
+  beds: string;
+  bathrooms: string
 }
 
 interface TimePeriod {
@@ -99,7 +101,7 @@ const Dashboard = () => {
 
         if (token) {
           const user = localStorage.getItem('email');
-          console.log('user: ', user);
+          // console.log('user: ', user);
           // fetch bookings
           response = await fetch('http://localhost:5005/bookings', {
             headers: { Authorization: `Bearer ${token}` },

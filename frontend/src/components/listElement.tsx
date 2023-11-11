@@ -19,6 +19,7 @@ const fetchListingDetails = async (listingId?: string) => {
   }
 
   const data: rawListingData = await response.json();
+  // console.log(data)
   return data;
 };
 
@@ -75,8 +76,9 @@ const ListElement = ({ listingId }: { listingId: string }) => {
                   />
                   <CardContent sx={{ paddingBottom: '8px' }}>
                     <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
-                    <br/>
+                  <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
+                  No. of total reviews: {data.reviews.length}</Typography>
+                    {/* <br/> */}
                     <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
                   </CardContent>
                 </CardActionArea>
@@ -93,8 +95,9 @@ const ListElement = ({ listingId }: { listingId: string }) => {
                   />
                   <CardContent sx={{ paddingBottom: '8px' }}>
                     <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
-                    <br/>
+                    <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
+                  No. of total reviews: {data.reviews.length}</Typography>
+                    {/* <br/> */}
                     <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
                   </CardContent>
                 </CardActionArea>
@@ -112,8 +115,9 @@ const ListElement = ({ listingId }: { listingId: string }) => {
               />
               <CardContent sx={{ paddingBottom: '8px' }}>
                 <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
-                <br/>
+                <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
+                  No. of total reviews: {data.reviews.length}</Typography>
+                {/* <br/> */}
                 <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
               </CardContent>
             </CardActionArea>

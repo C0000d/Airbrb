@@ -195,8 +195,10 @@ const ListDetail = () => {
           />
         </Card>
         <Typography variant='h5'>Title: {listing.title}</Typography>
-        <Typography variant='subtitle1'>Address: {listing.address}</Typography>
-        <Typography variant='body1' >Owned By: {listing.owner}</Typography>
+        <Typography variant='subtitle1'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
+        <Typography variant='body1' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
+          No. of bathrooms: {listing.metadata.bathrooms} <br />
+        No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Type: {listing.metadata.type}<br /></Typography>
       </Box>
       {/* <Typography variant='h4'>{listing.title}</Typography>
       <Typography variant='subtitle1'>{listing.address}</Typography>

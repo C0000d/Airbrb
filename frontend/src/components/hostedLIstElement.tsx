@@ -97,10 +97,13 @@ const ListingElement = (props: eleProps) => {
             Title: {detail.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
+            {/* Address: {detail.address} <br /> */}
             Property Type: {detail.metadata.type}
             &nbsp;&nbsp; | No. of beds: {detail.metadata.beds}<br />
+            {/* No. of bedrooms: {detail.metadata.bedrooms}<br /> */}
             No. of bathrooms: {detail.metadata.bathrooms} <br />
             Price(per night): {detail.price}<br />
+            {/* Amenities: {detail.metadata.amenities} <br /> */}
             Rating: <br />
             No. of total reviews: {detail.reviews.length}
           </Typography>
