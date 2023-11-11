@@ -65,17 +65,17 @@ const ListElement = ({ listingId }: { listingId: string }) => {
       ? (
           thumbnail.includes('image')
             ? (
-              <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+              <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="140"
+                    height="auto"
                     image={thumbnail || require('./defaultImg.png')}
                     alt={title}
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant='h5'>{title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>{address}</Typography>
+                  <CardContent sx={{ paddingBottom: '8px' }}>
+                    <Typography gutterBottom variant='h5'>Title: {title}</Typography>
+                    <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
                     <br/>
                     <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
                   </CardContent>
@@ -83,17 +83,17 @@ const ListElement = ({ listingId }: { listingId: string }) => {
               </Card>
               )
             : (
-              <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+              <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
                 <CardActionArea>
                   <CardMedia
                     component="iframe"
-                    height="140"
+                    height="auto"
                     src={thumbnail}
                     title={title}
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant='h5'>{title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>{address}</Typography>
+                  <CardContent sx={{ paddingBottom: '8px' }}>
+                    <Typography gutterBottom variant='h5'>Title: {title}</Typography>
+                    <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
                     <br/>
                     <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
                   </CardContent>
@@ -102,17 +102,17 @@ const ListElement = ({ listingId }: { listingId: string }) => {
               )
         )
       : (
-        <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+        <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
             <CardActionArea>
               <CardMedia
                 component="img"
-                height="140"
+                height="auto"
                 image={require('./defaultImg.png')}
                 alt={title}
               />
-              <CardContent>
-                <Typography gutterBottom variant='h5'>{title}</Typography>
-                <Typography variant='body2' color='text.secondary'>{address}</Typography>
+              <CardContent sx={{ paddingBottom: '8px' }}>
+                <Typography gutterBottom variant='h5'>Title: {title}</Typography>
+                <Typography variant='body2' color='text.secondary'>Address: {address}</Typography>
                 <br/>
                 <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
               </CardContent>
