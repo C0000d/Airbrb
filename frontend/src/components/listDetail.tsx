@@ -118,16 +118,20 @@ const ListDetail = () => {
       alert('Invalid listing!');
       return;
     }
-
-    if (!startDate || !endDate || (startDate > endDate)) {
-      alert('The date is invalid, please try again!');
-      return;
-    }
     const user = localStorage.getItem('email')
     if (listing.owner === user) {
       alert('You can not book your own listing!');
       return;
     }
+    if (!startDate || !endDate || (startDate > endDate)) {
+      alert('The date is invalid, please try again!');
+      return;
+    }
+    // const user = localStorage.getItem('email')
+    // if (listing.owner === user) {
+    //   alert('You can not book your own listing!');
+    //   return;
+    // }
 
     const totalNights = countNights(startDate, endDate);
     const newTotalPrice = totalNights * listing.price;
