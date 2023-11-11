@@ -30,6 +30,13 @@ const Publish = () => {
           return;
         }
       }
+    } else {
+      for (const date of availability) {
+        if ((date.start === null && date.end !== null) || (date.start !== null && date.end === null)) {
+          alert('Invalid input! Please check all fields!')
+          return;
+        }
+      }
     }
     const token = localStorage.getItem('token')
     const listingId = localStorage.getItem('listingId')
