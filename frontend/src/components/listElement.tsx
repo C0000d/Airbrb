@@ -8,6 +8,8 @@ interface rawListingData {
   listing: ListingDetail;
 }
 
+const defaultImg = './defaultImg.png';
+
 const fetchListingDetails = async (listingId?: string) => {
   // get listing detail data from backend
   const response = await fetch(`http://localhost:5005/listings/${listingId}`);
@@ -59,42 +61,63 @@ const ListElement = ({ listingId }: { listingId: string }) => {
   const reviewsRate = getReviewRate(reviews);
 
   return (
-    thumbnail.includes('image')
+    thumbnail
       ? (
-        <Card >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="140"
-              image={thumbnail}
-              alt={title}
-            />
-            <CardContent>
-              <Typography gutterBottom variant='h5'>{title}</Typography>
-              <Typography variant='body2' color='text.secondary'>{address}</Typography>
-              <br/>
-              <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+          thumbnail.includes('image')
+            ? (
+              <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={thumbnail || require('./defaultImg.png')}
+                    alt={title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant='h5'>{title}</Typography>
+                    <Typography variant='body2' color='text.secondary'>{address}</Typography>
+                    <br/>
+                    <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+              )
+            : (
+              <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+                <CardActionArea>
+                  <CardMedia
+                    component="iframe"
+                    height="140"
+                    src={thumbnail}
+                    title={title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant='h5'>{title}</Typography>
+                    <Typography variant='body2' color='text.secondary'>{address}</Typography>
+                    <br/>
+                    <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+              )
         )
       : (
-        <Card sx={{ maxWidth: 300 }}>
-          <CardActionArea>
-            <CardMedia
-              component="iframe"
-              height="140"
-              src={thumbnail}
-              title={title}
-            />
-            <CardContent>
-              <Typography gutterBottom variant='h5'>{title}</Typography>
-              <Typography variant='body2' color='text.secondary'>{address}</Typography>
-              <br/>
-              <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+        <Card sx={{ maxWidth: '100%', margin: 0.8 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="140"
+                image={require('./defaultImg.png')}
+                alt={title}
+              />
+              <CardContent>
+                <Typography gutterBottom variant='h5'>{title}</Typography>
+                <Typography variant='body2' color='text.secondary'>{address}</Typography>
+                <br/>
+                <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
         )
   );
 };
