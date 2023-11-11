@@ -17,7 +17,7 @@ interface Availability {
 
 const Publish = () => {
   const navigate = useNavigate();
-  const [availability, setAvailability] = useState<Availability[]>([{ start: null, end: null }]);
+  let [availability, setAvailability] = useState<Availability[]>([{ start: null, end: null }]);
   const back = () => {
     navigate('/hostedListing')
   }
@@ -38,6 +38,7 @@ const Publish = () => {
         }
       }
     }
+    availability = availability.filter(date => date.start !== null && date.end !== null);
     const token = localStorage.getItem('token')
     const listingId = localStorage.getItem('listingId')
     const res = await fetch(`http://localhost:5005/listings/publish/${listingId}`, {
@@ -94,8 +95,8 @@ const Publish = () => {
         <br />
         <Box>
           {/* Available Date: <br /> */}
-          <DatePicker value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
-          <DatePicker value={datePickerGroup.end} onChange={(newValue) => updateAvailability(index, 'end', newValue)} label="Available To: *" />
+          <DatePicker disablePast value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
+          <DatePicker disablePast value={datePickerGroup.end} onChange={(newValue) => updateAvailability(index, 'end', newValue)} label="Available To: *" />
         </Box>
         <br />
       </>

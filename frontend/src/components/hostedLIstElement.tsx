@@ -88,9 +88,9 @@ const ListingElement = (props: eleProps) => {
       <CardActionArea onClick={detailPage}>
         <CardMedia
           component="img"
-          height="140"
+          height="auto"
           image={detail.thumbnail || require('./defaultImg.png')}
-          alt="green iguana"
+          alt="Thumbnail Image"
         />
         <CardContent sx={{ paddingBottom: '8px' }}>
           <Typography gutterBottom variant="h5" component="div">

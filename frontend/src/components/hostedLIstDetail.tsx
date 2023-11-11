@@ -6,6 +6,10 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import FileToDataUrl from './fileToDataURL'
+import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
 const HostedDetail = () => {
   const navigate = useNavigate();
@@ -15,6 +19,16 @@ const HostedDetail = () => {
 
   const listingId = localStorage.getItem('listingId')
   const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
+  const [title, setTitle] = React.useState('');
+  // console.log(title)
+  const [address, setAddress] = React.useState('');
+  const [price, setPrice] = React.useState('');
+  const [type, setType] = React.useState('');
+  const [bathrooms, setBathrooms] = React.useState('');
+  const [bedrooms, setBedrooms] = React.useState('');
+  const [beds, setBeds] = React.useState('');
+  const [amenities, setAmenities] = React.useState('');
+  const [img, setImg] = React.useState('');
   useEffect(() => {
     const getDetail = async () => {
       const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
@@ -28,26 +42,49 @@ const HostedDetail = () => {
         alert(data.error);
       } else {
         setDetail(data.listing);
-        // const [title, setTitle] = React.useState(detail.title);
-        // console.log(detail.published)
+        setTitle(data.listing.title);
+        setAddress(data.listing.address);
+        setPrice(data.listing.price);
+        setType(data.listing.metadata.type);
+        setBathrooms(data.listing.metadata.bathrooms);
+        setBedrooms(data.listing.metadata.bedrooms);
+        setBeds(data.listing.metadata.beds);
+        setAmenities(data.listing.metadata.amenities);
+        setImg(data.listing.thumbnail)
       }
     }
-    getDetail()
-  }, []);
-
-  const [title, setTitle] = React.useState(detail.title);
-  // console.log(title)
-  const [address, setAddress] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [bathrooms, setBathrooms] = React.useState('');
-  const [bedrooms, setBedrooms] = React.useState('');
-  const [beds, setBeds] = React.useState('');
-  const [amenities, setAmenities] = React.useState('');
-
-  const saveChange = () => {
-    alert('Successfully update the listing information!')
-    navigate('/hostedListing')
+    getDetail();
+  }, [listingId]);
+  const [fileName, setFileName] = useState('');
+  const handleFileChange = async (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFileName(file.name);
+      const res = await FileToDataUrl(file);
+      setImg(res)
+    } else {
+      setFileName('');
+    }
+  };
+  const saveChange = async () => {
+    const token = localStorage.getItem('token')
+    const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities }
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert('Successfully update the listing information!')
+      navigate('/hostedListing')
+    }
   }
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -60,6 +97,14 @@ const HostedDetail = () => {
     whiteSpace: 'nowrap',
     width: 1,
   });
+
+  if (title === '') {
+    return (
+      <>
+        Loading data...
+      </>
+    )
+  }
 
   return (
     <>
@@ -87,30 +132,48 @@ const HostedDetail = () => {
           <Typography variant="h6" gutterBottom>
             Thumbnail: &nbsp;&nbsp;
           </Typography>
+          {/* <img src={img} alt="Thumbnail Image" /> */}
+          {/* <Card>
+            <CardMedia
+              component="img"
+              height="140"
+              image={img}
+              alt="Thumbnail Image"
+            />
+          </Card> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-            {'Upload file'}
+            {fileName || 'Upload file'}
             <VisuallyHiddenInput
               accept="image/jpeg, image/png, image/jpg"
               type="file"
+              onChange={handleFileChange}
           />
           </Button>
         </Box>
+        <Card>
+            <CardMedia
+              component="img"
+              height="auto"
+              image={img}
+              alt="Thumbnail Image"
+            />
+          </Card>
         <br />
-        <TextField fullWidth label="Listing Title *" value={detail.title} /> <br />
+        <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Address *" value={detail.address} /> <br />
+        <TextField fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Price (per night) *" value={detail.price} /> <br />
+        <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property Type *" value={detail.metadata.type} /> <br />
+        <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bathrooms *" value={detail.metadata.bathrooms} /> <br />
+        <TextField fullWidth label="Number of bathrooms *" value={bathrooms} onChange={e => setBathrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bedrooms *" value={detail.metadata.bedrooms} /> <br />
+        <TextField fullWidth label="Number of bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of beds *" value={detail.metadata.beds} /> <br />
+        <TextField fullWidth label="Number of beds *" value={beds} onChange={e => setBeds(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property amenities *" value={detail.metadata.amenities} /> <br />
+        <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Close</Button>
         <Button variant="contained" type="button" onClick={saveChange} style={{ marginBottom: 10 }}>Save</Button>
