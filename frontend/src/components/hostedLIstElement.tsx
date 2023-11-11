@@ -84,7 +84,7 @@ const ListingElement = (props: eleProps) => {
   }
 
   return (
-    <Card sx={{ maxWidth: '100%' }} onClick={storeId}>
+    <Card sx={{ maxWidth: '100%', boxShadow: 0 }} onClick={storeId}>
       <CardActionArea onClick={detailPage}>
         <CardMedia
           component="img"

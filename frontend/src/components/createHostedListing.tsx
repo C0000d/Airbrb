@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 
 const CreateHostedListing = () => {
   const [title, setTitle] = React.useState('');
@@ -128,6 +130,21 @@ const CreateHostedListing = () => {
           />
           </Button>
         </Box>
+        <br />
+        <Card sx={{ boxShadow: 0 }}>
+          <CardMedia
+            component="img"
+            height='auto'
+            image={img || require('./defaultImg.png')}
+            alt="Thumbnail Image"
+            sx={{
+              width: '50%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              height: 'auto'
+            }}
+          />
+        </Card>
         <br />
         <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />

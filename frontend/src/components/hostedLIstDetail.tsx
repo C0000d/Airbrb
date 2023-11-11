@@ -8,7 +8,6 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
 import Card from '@mui/material/Card';
-// import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
 const HostedDetail = () => {
@@ -133,14 +132,6 @@ const HostedDetail = () => {
             Thumbnail: &nbsp;&nbsp;
           </Typography>
           {/* <img src={img} alt="Thumbnail Image" /> */}
-          {/* <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image={img}
-              alt="Thumbnail Image"
-            />
-          </Card> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             {fileName || 'Upload file'}
             <VisuallyHiddenInput
@@ -150,14 +141,21 @@ const HostedDetail = () => {
           />
           </Button>
         </Box>
-        <Card>
-            <CardMedia
-              component="img"
-              height="auto"
-              image={img}
-              alt="Thumbnail Image"
-            />
-          </Card>
+        <br />
+        <Card sx={{ boxShadow: 0 }}>
+          <CardMedia
+            component="img"
+            height='auto'
+            image={img || require('./defaultImg.png')}
+            alt="Thumbnail Image"
+            sx={{
+              width: '50%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              height: 'auto'
+            }}
+          />
+        </Card>
         <br />
         <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
