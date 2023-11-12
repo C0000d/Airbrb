@@ -16,11 +16,13 @@ const BookRequest = () => {
   const listingId = localStorage.getItem('listingId');
   const token = localStorage.getItem('token');
   const [info, setInfo] = useState([]);
-  // let info = []
   const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false, postedOn: '' });
   const [title, setTitle] = React.useState('');
   const [img, setImg] = React.useState('');
   const [postedOn, setPostedOn] = React.useState('');
+  const [price, setPrice] = React.useState('');
+  const [profit, setProfit] = React.useState(0);
+  const [day, setDay] = React.useState(0);
   const getDetail = async () => {
     const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'GET',
@@ -35,13 +37,16 @@ const BookRequest = () => {
       setDetail(data.listing);
       setTitle(data.listing.title);
       setImg(data.listing.thumbnail);
-      // setPostedOn(data.listing.postedOn);
+      setPrice(data.listing.price);
       setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
-      // if (postedOn !== '') {
       const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
       setDiff(timeDiff)
+      // if (profit !== 0) {
+      // console.log(profit)
+      const days = profit / parseInt(price)
+      // console.log(days)
+      setDay(days)
       // }
-      // {sydneyTimeFormatter.format(new Date(data.listing.postedOn))}
     }
   }
 
@@ -61,7 +66,22 @@ const BookRequest = () => {
         // info = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
         const filteredInfo = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
         setInfo(filteredInfo);
-        // console.log(info)
+        const acceptBooking = data.bookings.filter((booking: any) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
+        // console.log(acceptBooking);
+        let profits = 0;
+        for (const booking of acceptBooking) {
+          profits += parseInt(booking.totalPrice)
+        }
+        // console.log(profits)
+        setProfit(profits)
+        // console.log(profit)
+        // if (profits !== 0) {
+        //   console.log(profits)
+        //   const days = profits / parseInt(price)
+        //   console.log(days)
+        //   setDay(days)
+        // }
+        // console.log(day)
       }
     }
     getAllRequest();
@@ -164,43 +184,43 @@ const BookRequest = () => {
         <Typography variant="h6" gutterBottom>
           PostedOn: {postedOn} <br />
           So far: {diff} <br />
-          Total Days booked: <br />
-          Total Profits:
+          Total Days booked: {profit / parseInt(price)}<br />
+          Total Profits: {profit}
           {/* {sydneyTimeFormatter.format(new Date(postedOn))} */}
       </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {info.map((booking: any) => (
               <React.Fragment key={booking.id}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="thumbnail img" src={img || require('./defaultImg.png')} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={`Booking owner: ${booking.owner}`}
-          secondary={
-            <>
-              <Typography
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Date Range: <br />&nbsp;&nbsp;From: {sydneyTimeFormatter.format(new Date(booking.dateRange.start))} <br /> &nbsp;&nbsp;To: {sydneyTimeFormatter.format(new Date(booking.dateRange.end))} <br />
-                Total Price: {booking.totalPrice} <br />
-                Booking Status: {booking.status}
-              </Typography>
-            </>
-          }
-        />
-      </ListItem>
-      <Box sx={{ textAlign: 'right' }}>
-        <Button onClick={() => accept(booking.id)} variant="contained" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Accept</Button>
-        <Button onClick={() => deny(booking.id)} variant="outlined" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Decline</Button>
-      </Box>
-      <Divider variant="inset" component="li" />
-      {/* {index < info.length - 1 && <Divider variant="inset" component="li" />} */}
-    </React.Fragment>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar alt="thumbnail img" src={img || require('./defaultImg.png')} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={`Booking owner: ${booking.owner}`}
+                  secondary={
+                    <>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        Date Range: <br />&nbsp;&nbsp;From: {sydneyTimeFormatter.format(new Date(booking.dateRange.start))} <br /> &nbsp;&nbsp;To: {sydneyTimeFormatter.format(new Date(booking.dateRange.end))} <br />
+                        Total Price: {booking.totalPrice} <br />
+                        Booking Status: {booking.status}
+                      </Typography>
+                    </>
+                  }
+                />
+              </ListItem>
+              <Box sx={{ textAlign: 'right' }}>
+                <Button onClick={() => accept(booking.id)} variant="contained" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Accept</Button>
+                <Button onClick={() => deny(booking.id)} variant="outlined" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Decline</Button>
+              </Box>
+              <Divider variant="inset" component="li" />
+              {/* {index < info.length - 1 && <Divider variant="inset" component="li" />} */}
+            </React.Fragment>
           ))}
-    </List>
+        </List>
       </Box>
     </>
   )
