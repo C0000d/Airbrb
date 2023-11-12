@@ -50,7 +50,7 @@ const PageList = () => {
       {token
         ? (
           <>
-            <Link to="./dashboard">Dashboard</Link>
+            <Link to="./dashboard">Homepage</Link>
             &nbsp;|&nbsp;
             <Link to="./hostedListing" >Hosted Listings</Link>
             &nbsp;|&nbsp;

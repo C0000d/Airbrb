@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 interface eleProps {
   listingId: string;
@@ -118,35 +118,36 @@ const ListingElement = (props: eleProps) => {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ paddingTop: '0px' }}>
-        <div>
-          <Button style={{ marginBottom: '8px' }} variant="contained" size="small" color="primary" onClick={detailPage}>
+        <Box>
+          <Button style={{ marginRight: '15px' }} size="small" color="primary" onClick={detailPage}>
             Edit
           </Button> &nbsp;
         {!detail.published
           ? (
             <>
-              <Button variant="contained" size="small" color="primary" onClick={publish}>
+              <Button size="small" color="primary" onClick={publish}>
                 Publish
               </Button>
             </>
             )
           : (
             <>
-              <Button variant="contained" size="small" color="primary" onClick={unpublish}>
+              <Button size="small" color="primary" onClick={unpublish}>
                 unPublish
               </Button>
             </>
             )
         } &nbsp;
-        </div>
-        <div>
-          <Button style={{ marginBottom: '8px' }} variant="contained" size="small" color="primary" onClick={requestPage}>
+        {/* </Box> */}
+          {/* <Box> */}
+          <br />
+          <Button style={{ marginRight: '15px' }} size="small" color="primary" onClick={requestPage}>
             Request
           </Button>
           <Button size="small" color="primary" onClick={deleteListing}>
             Delete
           </Button>
-        </div>
+        </Box>
       </CardActions>
     </Card>
   );
