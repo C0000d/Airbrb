@@ -35,8 +35,12 @@ const BookRequest = () => {
       setDetail(data.listing);
       setTitle(data.listing.title);
       setImg(data.listing.thumbnail);
-      setPostedOn(data.listing.postedOn);
+      // setPostedOn(data.listing.postedOn);
       setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+      // if (postedOn !== '') {
+      const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+      setDiff(timeDiff)
+      // }
       // {sydneyTimeFormatter.format(new Date(data.listing.postedOn))}
     }
   }
@@ -111,6 +115,37 @@ const BookRequest = () => {
       // navigate('/hostedListing');
     }
   }
+  const [diff, setDiff] = React.useState('');
+  const calculateTimeDiffWithSydney = (dateStr: any) => {
+    const parseDateStr = (dateStr: any) => {
+      const [datePart, timePart] = dateStr.split(', ');
+      const [day, month, year] = datePart.split('/');
+      const [time, modifier] = timePart.split(' ');
+      const [hours, minutes, seconds] = time.split(':');
+      let hours24 = parseInt(hours, 10);
+      if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
+        hours24 += 12;
+      }
+      if (modifier.toLowerCase() === 'am' && hours24 === 12) {
+        hours24 = 0;
+      }
+      const standardDateStr = `${year}-${month}-${day}T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
+      return new Date(standardDateStr);
+    }
+    const givenDate = parseDateStr(dateStr);
+    // get current local time
+    const now = new Date();
+    const sydneyTimeOffset = 10 * 60;
+    const oneHourInMilliseconds = 3600000;
+    const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
+    // time diff
+    const diff = sydneyNow.getTime() - givenDate.getTime();
+    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const diffTime = `${diffDays} days ${diffHours} hours`;
+    // console.log(diffTime)
+    return diffTime;
+  }
 
   return (
     <>
@@ -127,7 +162,10 @@ const BookRequest = () => {
           Listing Title: {title} <br />
         </Typography>
         <Typography variant="h6" gutterBottom>
-          PostedOn: {postedOn}
+          PostedOn: {postedOn} <br />
+          So far: {diff} <br />
+          Total Days booked: <br />
+          Total Profits:
           {/* {sydneyTimeFormatter.format(new Date(postedOn))} */}
       </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -162,39 +200,7 @@ const BookRequest = () => {
       {/* {index < info.length - 1 && <Divider variant="inset" component="li" />} */}
     </React.Fragment>
           ))}
-</List>
-        {/* <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-            <Avatar alt="thumbnail img" src={img || require('./defaultImg.png')} />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Booking owner:"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Date Range: <br />
-                Total Price: <br />
-                Booking Status:
-              </Typography>
-            </React.Fragment>
-          }
-        />
-          </ListItem>
-          <Box sx={{
-            textAlign: 'right'
-          }}>
-          <Button variant="contained" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Accept</Button>
-            <Button variant="outlined" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Deny</Button>
-            </Box>
-        <Divider variant="inset" component="li" />
-        </List> */}
-      {/* <br /> */}
+    </List>
       </Box>
     </>
   )
