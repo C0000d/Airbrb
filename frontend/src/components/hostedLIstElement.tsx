@@ -16,6 +16,10 @@ const ListingElement = (props: eleProps) => {
     navigate(`/hostedListing/detail/:${props.listingId}`)
   }
 
+  const requestPage = () => {
+    navigate(`/hostedListing/bookRequest/:${props.listingId}`)
+  }
+
   const storeId = () => {
     localStorage.setItem('listingId', props.listingId)
   }
@@ -85,7 +89,7 @@ const ListingElement = (props: eleProps) => {
 
   return (
     <Card sx={{ maxWidth: '100%', boxShadow: 0 }} onClick={storeId}>
-      <CardActionArea onClick={detailPage}>
+      <CardActionArea onClick={detailPage} sx={{ marginBottom: '8px' }}>
         <CardMedia
           component="img"
           height="auto"
@@ -96,6 +100,10 @@ const ListingElement = (props: eleProps) => {
           <Typography gutterBottom variant="h5" component="div">
             Title: {detail.title}
           </Typography>
+          {/* <Button variant="contained" size="small" color="primary" onClick={requestPage}>
+            Request
+          </Button> <br />
+          <br /> */}
           <Typography variant="body2" color="text.secondary">
             {/* Address: {detail.address} <br /> */}
             Property Type: {detail.metadata.type}
@@ -110,28 +118,35 @@ const ListingElement = (props: eleProps) => {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ paddingTop: '0px' }}>
-        <Button size="small" color="primary" onClick={detailPage}>
-          Edit
-        </Button>
+        <div>
+          <Button style={{ marginBottom: '8px' }} variant="contained" size="small" color="primary" onClick={detailPage}>
+            Edit
+          </Button> &nbsp;
         {!detail.published
           ? (
             <>
-              <Button size="small" color="primary" onClick={publish}>
+              <Button variant="contained" size="small" color="primary" onClick={publish}>
                 Publish
               </Button>
             </>
             )
           : (
             <>
-              <Button size="small" color="primary" onClick={unpublish}>
+              <Button variant="contained" size="small" color="primary" onClick={unpublish}>
                 unPublish
               </Button>
             </>
             )
-        }
-        <Button size="small" color="primary" onClick={deleteListing}>
-          Delete
-        </Button>
+        } &nbsp;
+        </div>
+        <div>
+          <Button style={{ marginBottom: '8px' }} variant="contained" size="small" color="primary" onClick={requestPage}>
+            Request
+          </Button>
+          <Button size="small" color="primary" onClick={deleteListing}>
+            Delete
+          </Button>
+        </div>
       </CardActions>
     </Card>
   );

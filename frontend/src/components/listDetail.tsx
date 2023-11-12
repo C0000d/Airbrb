@@ -226,6 +226,7 @@ const ListDetail = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
             <DatePicker
+              sx={{ width: '100%' }}
               label="Start Date *"
               disablePast
               shouldDisableDate={isDateUnavailable}
@@ -240,6 +241,7 @@ const ListDetail = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
             <DatePicker
+              sx={{ width: '100%' }}
               label="End Date *"
               disablePast
               shouldDisableDate={isDateUnavailable}
