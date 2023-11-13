@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, TextField, Typography, Rating } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -8,6 +8,18 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
+interface DateRange {
+  start: string;
+  end: string;
+}
+interface Booking {
+  id: string;
+  listingId: string;
+  owner: string;
+  totalPrice: string;
+  status: string;
+  dateRange: DateRange;
+}
 const BookRequest = () => {
   const navigate = useNavigate();
   const back = () => {
@@ -64,9 +76,9 @@ const BookRequest = () => {
         alert(data.error);
       } else {
         // info = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
-        const filteredInfo = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
+        const filteredInfo = data.bookings.filter((booking: Booking) => Number(booking.listingId) === Number(listingId));
         setInfo(filteredInfo);
-        const acceptBooking = data.bookings.filter((booking: any) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
+        const acceptBooking = data.bookings.filter((booking: Booking) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
         // console.log(acceptBooking);
         let profits = 0;
         for (const booking of acceptBooking) {
@@ -97,7 +109,7 @@ const BookRequest = () => {
     second: '2-digit'
   });
 
-  const accept = async (id: any) => {
+  const accept = async (id: string) => {
     // console.log(id)
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/accept/${id}`, {
@@ -116,7 +128,7 @@ const BookRequest = () => {
       // navigate('/hostedListing');
     }
   }
-  const deny = async (id: any) => {
+  const deny = async (id: string) => {
     // console.log(id)
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/decline/${id}`, {
@@ -136,7 +148,7 @@ const BookRequest = () => {
     }
   }
   const [diff, setDiff] = React.useState('');
-  const calculateTimeDiffWithSydney = (dateStr: any) => {
+  const calculateTimeDiffWithSydney = (dateStr: string) => {
     const parseDateStr = (dateStr: any) => {
       const [datePart, timePart] = dateStr.split(', ');
       const [day, month, year] = datePart.split('/');
@@ -189,7 +201,7 @@ const BookRequest = () => {
           {/* {sydneyTimeFormatter.format(new Date(postedOn))} */}
       </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {info.map((booking: any) => (
+          {info.map((booking: Booking) => (
               <React.Fragment key={booking.id}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>

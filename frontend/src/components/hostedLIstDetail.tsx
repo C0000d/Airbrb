@@ -41,6 +41,7 @@ const HostedDetail = () => {
         alert(data.error);
       } else {
         setDetail(data.listing);
+        console.log(detail);
         setTitle(data.listing.title);
         setAddress(data.listing.address);
         setPrice(data.listing.price);
@@ -55,14 +56,16 @@ const HostedDetail = () => {
     getDetail();
   }, [listingId]);
   const [fileName, setFileName] = useState('');
-  const handleFileChange = async (e: any) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      const res = await FileToDataUrl(file);
-      setImg(res)
-    } else {
-      setFileName('');
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file) {
+        setFileName(file.name);
+        const res = await FileToDataUrl(file);
+        setImg(res)
+      } else {
+        setFileName('');
+      }
     }
   };
   const saveChange = async () => {

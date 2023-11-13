@@ -9,6 +9,15 @@ import ListingElement from './hostedLIstElement';
 import Publish from './publishListing';
 import BookRequest from './bookingRequest'
 
+interface Listing {
+  id: string;
+  title: string;
+  owner: string;
+  address: string;
+  thumbnail: string;
+  price: number;
+}
+
 const HostedListings = () => {
   const location = useLocation();
   const atDetailPage = location.pathname.includes('detail/:');
@@ -20,7 +29,8 @@ const HostedListings = () => {
   const createListing = () => {
     navigate('/hostedListing/createHostedListing')
   }
-  const [hostedListings, setHostedListings] = useState<any[]>([]);
+  // const [hostedListings, setHostedListings] = useState<any[]>([]);
+  const [hostedListings, setHostedListings] = useState<Listing[]>([])
   useEffect(() => {
     (async () => {
       const response = await fetch('http://localhost:5005/listings', {
@@ -34,8 +44,9 @@ const HostedListings = () => {
         alert(allListing.error);
       } else {
         const user = localStorage.getItem('email')
-        const newListings: any = []
-        allListing.listings.forEach((listing: any) => {
+        // const newListings: any = []
+        const newListings: Listing[] = [];
+        allListing.listings.forEach((listing: Listing) => {
           if (listing.owner === user) {
             newListings.push(listing);
           }
@@ -67,7 +78,7 @@ const HostedListings = () => {
                 },
               }}
               >
-                {hostedListings.map((listing: any) => (
+                {hostedListings.map((listing: Listing) => (
               <Grid key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <ListingElement listingId={listing.id} />
               </Grid>
