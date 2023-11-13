@@ -53,12 +53,8 @@ const BookRequest = () => {
       setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
       const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
       setDiff(timeDiff)
-      // if (profit !== 0) {
-      // console.log(profit)
       const days = profit / parseInt(price)
-      // console.log(days)
       setDay(days)
-      // }
     }
   }
 
@@ -75,25 +71,14 @@ const BookRequest = () => {
       if (data.error) {
         alert(data.error);
       } else {
-        // info = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
         const filteredInfo = data.bookings.filter((booking: Booking) => Number(booking.listingId) === Number(listingId));
         setInfo(filteredInfo);
         const acceptBooking = data.bookings.filter((booking: Booking) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
-        // console.log(acceptBooking);
         let profits = 0;
         for (const booking of acceptBooking) {
           profits += parseInt(booking.totalPrice)
         }
-        // console.log(profits)
         setProfit(profits)
-        // console.log(profit)
-        // if (profits !== 0) {
-        //   console.log(profits)
-        //   const days = profits / parseInt(price)
-        //   console.log(days)
-        //   setDay(days)
-        // }
-        // console.log(day)
       }
     }
     getAllRequest();
@@ -110,7 +95,6 @@ const BookRequest = () => {
   });
 
   const accept = async (id: string) => {
-    // console.log(id)
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/accept/${id}`, {
       method: 'PUT',
@@ -125,11 +109,9 @@ const BookRequest = () => {
     } else {
       alert('Successfully Accept a booking!');
       navigate(`/hostedListing/bookRequest/:${listingId}`)
-      // navigate('/hostedListing');
     }
   }
   const deny = async (id: string) => {
-    // console.log(id)
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/decline/${id}`, {
       method: 'PUT',
@@ -144,7 +126,6 @@ const BookRequest = () => {
     } else {
       alert('Successfully Decline a booking!');
       navigate(`/hostedListing/bookRequest/:${listingId}`)
-      // navigate('/hostedListing');
     }
   }
   const [diff, setDiff] = React.useState('');
@@ -175,7 +156,6 @@ const BookRequest = () => {
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const diffTime = `${diffDays} days ${diffHours} hours`;
-    // console.log(diffTime)
     return diffTime;
   }
 
@@ -198,7 +178,6 @@ const BookRequest = () => {
           So far: {diff} <br />
           Total Days booked: {profit / parseInt(price)}<br />
           Total Profits: {profit}
-          {/* {sydneyTimeFormatter.format(new Date(postedOn))} */}
       </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {info.map((booking: Booking) => (
@@ -229,7 +208,6 @@ const BookRequest = () => {
                 <Button onClick={() => deny(booking.id)} variant="outlined" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Decline</Button>
               </Box>
               <Divider variant="inset" component="li" />
-              {/* {index < info.length - 1 && <Divider variant="inset" component="li" />} */}
             </React.Fragment>
           ))}
         </List>

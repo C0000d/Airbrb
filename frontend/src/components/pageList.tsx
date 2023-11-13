@@ -22,6 +22,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -101,6 +102,20 @@ const PageList = () => {
       },
     },
   }));
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAuth(event.target.checked);
+  // };
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <>
       {/* <AppBar position="static">
@@ -115,33 +130,72 @@ const PageList = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
         </Search>
-        {/* <Box sx={{ textAlign: 'right' }}> */}
-        <Typography
-        // variant="h6"
-        // noWrap
-        // component="div"
-        sx={{ textAlign: 'right', flexGrow: 1 }}
-      >
+        {auth && (
+            <div style={{ textAlign: 'right', flexGrow: 1 }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
       {token
         ? (
-          <>
-            <Link to="./dashboard">Homepage</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./hostedListing" >Hosted Listings</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./dashboard" onClick={logout}>Logout</Link>
-          </>
+        <>
+            <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+          <MenuItem onClick={handleClose}>
+            &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link> </MenuItem>
+          <MenuItem onClick={handleClose}>
+            &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
+          <MenuItem onClick={() => { handleClose(); logout(); }}>
+                        &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;</MenuItem>
+            </Menu>
+        </>
           )
         : (
           <>
-            <Link to="./login">Login</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./register">Register</Link>
-          </>
+            <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+          <MenuItem onClick={handleClose}>
+            &nbsp;&nbsp;<Link to="./login">Login&nbsp;</Link>&nbsp;&nbsp; </MenuItem>
+          <MenuItem onClick={handleClose}>
+                        &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;</MenuItem>
+          </Menu>
+        </>
           )
           }
-          </Typography>
-          {/* </Box> */}
+        </div>
+        )}
       </Toolbar>
       {/* </Container>
       </AppBar> */}

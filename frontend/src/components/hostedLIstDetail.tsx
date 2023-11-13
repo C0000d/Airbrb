@@ -19,7 +19,6 @@ const HostedDetail = () => {
   const listingId = localStorage.getItem('listingId')
   const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
   const [title, setTitle] = React.useState('');
-  // console.log(title)
   const [address, setAddress] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [type, setType] = React.useState('');
@@ -41,7 +40,6 @@ const HostedDetail = () => {
         alert(data.error);
       } else {
         setDetail(data.listing);
-        console.log(detail);
         setTitle(data.listing.title);
         setAddress(data.listing.address);
         setPrice(data.listing.price);
@@ -135,7 +133,6 @@ const HostedDetail = () => {
           <Typography variant="h6" gutterBottom>
             Thumbnail: &nbsp;&nbsp;
           </Typography>
-          {/* <img src={img} alt="Thumbnail Image" /> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             {fileName || 'Upload file'}
             <VisuallyHiddenInput

@@ -12,7 +12,6 @@ interface eleProps {
 const ListingElement = (props: eleProps) => {
   const navigate = useNavigate();
   const detailPage = () => {
-    // navigate('/hostedListing/hostedLIstDetail')
     navigate(`/hostedListing/detail/:${props.listingId}`)
   }
 
@@ -38,7 +37,6 @@ const ListingElement = (props: eleProps) => {
         alert(data.error);
       } else {
         setDetail(data.listing);
-        // console.log(detail.published)
       }
     }
 
@@ -100,18 +98,11 @@ const ListingElement = (props: eleProps) => {
           <Typography gutterBottom variant="h5" component="div">
             Title: {detail.title}
           </Typography>
-          {/* <Button variant="contained" size="small" color="primary" onClick={requestPage}>
-            Request
-          </Button> <br />
-          <br /> */}
           <Typography variant="body2" color="text.secondary">
-            {/* Address: {detail.address} <br /> */}
             Property Type: {detail.metadata.type}
             &nbsp;&nbsp; | No. of beds: {detail.metadata.beds}<br />
-            {/* No. of bedrooms: {detail.metadata.bedrooms}<br /> */}
             No. of bathrooms: {detail.metadata.bathrooms} <br />
             Price(per night): {detail.price}<br />
-            {/* Amenities: {detail.metadata.amenities} <br /> */}
             Rating: <br />
             No. of total reviews: {detail.reviews.length}
           </Typography>
@@ -138,8 +129,6 @@ const ListingElement = (props: eleProps) => {
             </>
             )
         } &nbsp;
-        {/* </Box> */}
-          {/* <Box> */}
           <br />
           <Button style={{ marginRight: '15px' }} size="small" color="primary" onClick={requestPage}>
             Request
