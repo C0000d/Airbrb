@@ -136,7 +136,7 @@ const PageList = () => {
   const [searchCity, setSearchCity] = useState('');
   const handleSearch = () => {
     console.log()
-    navigate('/search', { state: { stitle: searchTitle, scity: searchCity } });
+    navigate('/search', { state: { from: 'searchfilter', stitle: searchTitle, scity: searchCity } });
   }
   return (
     <>

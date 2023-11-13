@@ -34,7 +34,7 @@ const ListDetail = () => {
   const location = useLocation();
   const { from } = location.state || {};
   const back = () => {
-    console.log(from);
+    // console.log(from);
     if (from === 'search') {
       navigate('/search');
     } else {

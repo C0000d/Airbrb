@@ -16,38 +16,68 @@ interface Listing {
 const SearchPage = () => {
   const location = useLocation();
   const { stitle, scity } = location.state || {};
+  if (location.state?.from === 'searchfilter') {
+    localStorage.setItem('stitle', stitle)
+    localStorage.setItem('scity', scity)
+  }
   const navigate = useNavigate();
   const back = () => {
     navigate('/dashboard')
   }
   const [searchListing, setSearchListing] = useState<Listing[]>([])
   useEffect(() => {
-    (async () => {
-      const response = await fetch('http://localhost:5005/listings', {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-        }
-      });
-      const allListing = await response.json();
-      if (allListing.error) {
-        alert(allListing.error);
-      } else {
-        // const user = localStorage.getItem('email')
-        // const newListings: any = []
-        const newListings: Listing[] = [];
-        allListing.listings.forEach((listing: Listing) => {
-          if (listing.title.toLowerCase().includes(stitle.toLowerCase())) {
-            newListings.push(listing);
+    if (location.state?.from === 'searchfilter') {
+      (async () => {
+        const response = await fetch('http://localhost:5005/listings', {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
           }
         });
-        setSearchListing(newListings);
-      }
-    })();
-  }, [])
-  const handleListingClick = (listing: Listing) => {
-    navigate(`/listings/${listing.id}`, { state: { from: 'search' } });
-  };
+        const allListing = await response.json();
+        if (allListing.error) {
+          alert(allListing.error);
+        } else {
+          const newListings: Listing[] = [];
+          allListing.listings.forEach((listing: Listing) => {
+            if (listing.title.toLowerCase().includes(stitle.toLowerCase()) && listing.address.toLowerCase().includes(scity.toLowerCase())) {
+              newListings.push(listing);
+            }
+          });
+          setSearchListing(newListings);
+        }
+      })();
+    } else {
+      let stitle = localStorage.getItem('stitle');
+      let scity = localStorage.getItem('scity');
+      (async () => {
+        const response = await fetch('http://localhost:5005/listings', {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
+          }
+        });
+        const allListing = await response.json();
+        if (allListing.error) {
+          alert(allListing.error);
+        } else {
+          const newListings: Listing[] = [];
+          allListing.listings.forEach((listing: Listing) => {
+            if (stitle === null) {
+              stitle = ''
+            }
+            if (scity === null) {
+              scity = ''
+            }
+            if (listing.title.toLowerCase().includes(stitle.toLowerCase()) && listing.address.toLowerCase().includes(scity.toLowerCase())) {
+              newListings.push(listing);
+            }
+          });
+          setSearchListing(newListings);
+        }
+      })();
+    }
+  }, [location.state])
 
   return (
     <>
@@ -74,9 +104,9 @@ const SearchPage = () => {
             {searchListing.map((listing: Listing) => (
           <Grid item key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <div onClick={() => navigate(`/listings/${listing.id}`, { state: { from: 'search' } })}>
-            <Link key={listing.id} to={ `/listings/${listing.id}` }>
+            {/* <Link key={listing.id} to={ `/listings/${listing.id}` }> */}
               <ListElement listingId={listing.id} />
-            </Link>
+            {/* </Link> */}
             </div>
           </Grid>
             ))}
