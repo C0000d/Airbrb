@@ -75,7 +75,7 @@ const RatingPopover = ({ reviews, id }: RatingPopoverProps) => {
               <Box key={rating} sx={{ cursor: 'pointer' }} onClick={ () => handleRatingClick(rating) }>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography paragraph>{rating} stars</Typography>
-                  <Typography paragraph>{ratingDistribution[rating - 1]}%</Typography>
+                  <Typography paragraph>{ratingDistribution[rating - 1] || 0}%</Typography>
                 </Box>
                 <LinearProgress determinate value={ratingDistribution[rating - 1] || 0} />
                 <Divider light />
