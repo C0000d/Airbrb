@@ -89,11 +89,16 @@ const ReviewArea = ({ id, reviews }: ReviewAreaProps) => {
     return diffTime;
   }
 
-  if (!reviews) {
+  if (!reviews || reviews.length === 0) {
     return (
       <>
-        <Box sx={{ alignitems: 'center' }}>
-          <Typography variant='subtitle1'>There are no comments yet, leave yours!</Typography>
+        <br/><br/>
+        <Box sx={{
+          display: 'flex',
+          alignitems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Typography variant='subtitle2'>There are no comments yet!</Typography>
         </Box>
       </>
     );
