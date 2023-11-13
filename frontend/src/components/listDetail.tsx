@@ -1,5 +1,5 @@
 import React, { SetStateAction, useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Rating } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,9 +31,18 @@ const countNights = (start: Date | null, end: Date | null) => {
 
 const ListDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || {};
   const back = () => {
-    navigate('/dashboard')
+    console.log(from);
+    if (from === 'search') {
+      navigate('/search');
+    } else {
+      navigate('/dashboard');
+    }
+    // navigate('/dashboard')
   }
+
   // get token
   const authContext = useContext(AuthContext);
   // check if authContext works

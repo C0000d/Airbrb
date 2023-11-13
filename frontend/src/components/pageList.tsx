@@ -1,8 +1,9 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
+import SearchPage from './search';
 import HostedListings from './hostedListing';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
@@ -23,6 +24,12 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -116,12 +123,27 @@ const PageList = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen(false);
+  };
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchCity, setSearchCity] = useState('');
+  const handleSearch = () => {
+    console.log()
+    navigate('/search', { state: { stitle: searchTitle, scity: searchCity } });
+  }
   return (
     <>
       {/* <AppBar position="static">
         <Container maxWidth="xl"> */}
           <Toolbar disableGutters>
-            <Search sx={{ border: '1px solid black', borderRadius: '6px' }}>
+            <Search onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -130,6 +152,37 @@ const PageList = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
         </Search>
+        <React.Fragment>
+          <Dialog open={open} onClose={handleClose1}>
+            <DialogTitle>Search</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Search the listings you want...
+              </DialogContentText>
+              <TextField
+                // autoFocus
+                margin="dense"
+                label="Listing Title"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e) => setSearchTitle(e.target.value)}
+              />
+              <TextField
+                margin="dense"
+                label="City"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e) => setSearchCity(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose1}>Cancel</Button>
+              <Button onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
+            </DialogActions>
+          </Dialog>
+        </React.Fragment>
         {auth && (
             <div style={{ textAlign: 'right', flexGrow: 1 }}>
               <IconButton
@@ -208,6 +261,7 @@ const PageList = () => {
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
+        <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} />
         </Routes>
     </>
   );

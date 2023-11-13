@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@mui/material';
 
 import { Review, TimePeriod, ListingDetail } from './dashboard';
+// import { useNavigate } from 'react-router-dom';
 
 interface rawListingData {
   listing: ListingDetail;
