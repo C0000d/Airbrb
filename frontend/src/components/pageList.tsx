@@ -160,11 +160,11 @@ const PageList = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); } }>
             &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link> </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={() => { navigate('/hostedListing'); handleClose(); } }>
             &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
-          <MenuItem onClick={() => { handleClose(); logout(); }}>
+          <MenuItem onClick={() => { handleClose(); logout(); navigate('/dashboard'); }}>
                         &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;</MenuItem>
             </Menu>
         </>
@@ -186,10 +186,10 @@ const PageList = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={() => { navigate('/login'); handleClose(); } }>
             &nbsp;&nbsp;<Link to="./login">Login&nbsp;</Link>&nbsp;&nbsp; </MenuItem>
-          <MenuItem onClick={handleClose}>
-                        &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;</MenuItem>
+          <MenuItem onClick={() => { navigate('/register'); handleClose(); } }>
+            &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;</MenuItem>
           </Menu>
         </>
           )
