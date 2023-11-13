@@ -91,6 +91,7 @@ const CreateHostedListing = () => {
 
   return (
     <>
+      <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
       <Box
         sx={{
           width: 500,

@@ -107,6 +107,7 @@ const HostedDetail = () => {
 
   return (
     <>
+      <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
       <Box
         sx={{
           width: 500,
@@ -118,7 +119,7 @@ const HostedDetail = () => {
         <Typography variant="h4" gutterBottom>
           Listing Detail
         </Typography>
-        {/* <br /> */}
+        <br />
         <Box
         sx={{
           width: 500,

@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthContext';
-import { Link } from 'react-router-dom';
-import ListElement, { fetchListingDetails } from './listElement';
+import { Link, useNavigate } from 'react-router-dom';
+import ListElement from './listElement';
 import { Box, Grid } from '@mui/material';
 
 interface Review {
   user: string;
   rate: number;
   comment: string;
+  postOn: Date;
 }
 
 interface ListingData {
@@ -39,6 +40,8 @@ interface MetaData {
   number: string;
   bedrooms: string;
   amenities: string;
+  beds: string;
+  bathrooms: string
 }
 
 interface TimePeriod {
@@ -61,6 +64,7 @@ interface ListingDetail {
 }
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [listings, setListings] = useState<ListingData[]>([]);
   const [bookings, setBookins] = useState<Booking[]>([]);
   // add a property to check if the listing is published to show on dashboard
@@ -82,7 +86,7 @@ const Dashboard = () => {
         }
         const jsonResponse = await response.json();
         const listingData: ListingData[] = jsonResponse.listings;
-        console.log(listingData);
+        // console.log(listingData);
 
         const publishedListings = [];
         for (const listing of listingData) {
@@ -99,7 +103,7 @@ const Dashboard = () => {
 
         if (token) {
           const user = localStorage.getItem('email');
-          console.log('user: ', user);
+          // console.log('user: ', user);
           // fetch bookings
           response = await fetch('http://localhost:5005/bookings', {
             headers: { Authorization: `Bearer ${token}` },
@@ -137,6 +141,11 @@ const Dashboard = () => {
     })();
   }, [token]);
 
+  // navigate to detail page
+  const handleListingClick = (listingId: string) => {
+    navigate(`/listings/${listingId}`);
+  };
+
   if (!listings) {
     return <>Loading...</>
   }
@@ -164,10 +173,10 @@ const Dashboard = () => {
               }}
               >
             {listings.map((listing, index) => (
-              <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                <Link key={listing.id} to={`/listings/${listing.id}`}>
-                  <ListElement listingId={listing.id} />
-                </Link>
+              <Grid item key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                {/* <Link key={listing.id} to={`/listings/${listing.id}`}> */}
+                <ListElement listingId={listing.id} onClick={handleListingClick}/>
+                {/* </Link> */}
               </Grid>
             ))}
           </Grid>
@@ -194,10 +203,10 @@ const Dashboard = () => {
               }}
               >
             {listings.map((listing, index) => (
-              <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                <Link key={listing.id} to={`/listings/${listing.id}`}>
-                  <ListElement listingId={listing.id} />
-                </Link>
+              <Grid item key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                {/* <Link key={listing.id} to={`/listings/${listing.id}`}> */}
+                <ListElement key={listing.id} listingId={listing.id} onClick={handleListingClick} />
+                {/* </Link> */}
               </Grid>
             ))}
           </Grid>
@@ -205,11 +214,6 @@ const Dashboard = () => {
       </>
       );
 };
-
-// const compare = (a: string, b: string) => {
-//   if ()
-//   return
-// };
 
 export default Dashboard;
 export { Booking, Review, TimePeriod, ListingData, ListingDetail, DateRange };
