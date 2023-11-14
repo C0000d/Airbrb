@@ -19,7 +19,6 @@ const HostedDetail = () => {
   const listingId = localStorage.getItem('listingId')
   const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
   const [title, setTitle] = React.useState('');
-  // console.log(title)
   const [address, setAddress] = React.useState('');
   const [price, setPrice] = React.useState('');
   const [type, setType] = React.useState('');
@@ -55,14 +54,16 @@ const HostedDetail = () => {
     getDetail();
   }, [listingId]);
   const [fileName, setFileName] = useState('');
-  const handleFileChange = async (e: any) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      const res = await FileToDataUrl(file);
-      setImg(res)
-    } else {
-      setFileName('');
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file) {
+        setFileName(file.name);
+        const res = await FileToDataUrl(file);
+        setImg(res)
+      } else {
+        setFileName('');
+      }
     }
   };
   const saveChange = async () => {
@@ -132,7 +133,6 @@ const HostedDetail = () => {
           <Typography variant="h6" gutterBottom>
             Thumbnail: &nbsp;&nbsp;
           </Typography>
-          {/* <img src={img} alt="Thumbnail Image" /> */}
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
             {fileName || 'Upload file'}
             <VisuallyHiddenInput

@@ -1,12 +1,13 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from './login';
 import Register from './register';
 import Dashboard from './dashboard';
+import SearchPage from './search';
 import HostedListings from './hostedListing';
-import ListDetail from './listDetail';
 import MyBookings from './myBookings';
 import ReviewPage from './advancedReviews';
+import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -24,6 +25,13 @@ import AdbIcon from '@mui/icons-material/Adb';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -103,12 +111,50 @@ const PageList = () => {
       },
     },
   }));
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAuth(event.target.checked);
+  // };
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen(false);
+  };
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchCity, setSearchCity] = useState('');
+  const handleSearch = () => {
+    // console.log()
+    // localStorage.removeItem('stitle');
+    // localStorage.removeItem('scity');
+    // localStorage.removeItem('email');
+    if (searchTitle === null) {
+      setSearchTitle('')
+    }
+    if (searchCity === null) {
+      setSearchCity('')
+    }
+    navigate('/search', { state: { from: 'searchfilter', stitle: searchTitle, scity: searchCity } });
+  }
   return (
     <>
       {/* <AppBar position="static">
         <Container maxWidth="xl"> */}
           <Toolbar disableGutters>
-            <Search sx={{ border: '1px solid black', borderRadius: '6px' }}>
+            <Search onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -117,35 +163,139 @@ const PageList = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
         </Search>
-        {/* <Box sx={{ textAlign: 'right' }}> */}
-        <Typography
-        // variant="h6"
-        // noWrap
-        // component="div"
-        sx={{ textAlign: 'right', flexGrow: 1 }}
-      >
+        <React.Fragment>
+          <Dialog open={open} onClose={handleClose1}>
+            <DialogTitle>Search</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Search the listings you want...
+              </DialogContentText>
+              <TextField
+                // autoFocus
+                margin="dense"
+                label="Listing Title"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e) => setSearchTitle(e.target.value)}
+              />
+              <TextField
+                margin="dense"
+                label="City"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={(e) => setSearchCity(e.target.value)}
+              />
+              <DialogContentText>
+                <br />Number of bedrooms:
+              </DialogContentText>
+              <TextField
+                margin="dense"
+                label="Min No."
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <TextField
+                margin="dense"
+                label="Max No."
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <DialogContentText>
+                <br />Price(per night):
+              </DialogContentText>
+              <TextField
+                margin="dense"
+                label="Min Price"
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <TextField
+                margin="dense"
+                label="Max Price"
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose1}>Cancel</Button>
+              <Button onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
+            </DialogActions>
+          </Dialog>
+        </React.Fragment>
+        {auth && (
+            <div style={{ textAlign: 'right', flexGrow: 1 }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
       {token
         ? (
-          <>
-            <Link to="./dashboard">Homepage</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./hostedListing" >Hosted Listings</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./myBookings" >My Bookings</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./dashboard" onClick={logout}>Logout</Link>
-          </>
+        <>
+            <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+          <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); } }>
+            &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link> </MenuItem>
+          <MenuItem onClick={() => { navigate('/hostedListing'); handleClose(); } }>
+                      &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
+                    <MenuItem onClick={() => { handleClose(); navigate('/myBookings'); }}>
+                    &nbsp;&nbsp;<Link to="./myBookings" >My Bookings</Link>&nbsp;&nbsp;</MenuItem>
+          <MenuItem onClick={() => { handleClose(); logout(); navigate('/dashboard'); }}>
+                        &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;</MenuItem>
+            </Menu>
+        </>
           )
         : (
           <>
-            <Link to="./login">Login</Link>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link to="./register">Register</Link>
-          </>
+            <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+          <MenuItem onClick={() => { navigate('/login'); handleClose(); } }>
+            &nbsp;&nbsp;<Link to="./login">Login&nbsp;</Link>&nbsp;&nbsp; </MenuItem>
+          <MenuItem onClick={() => { navigate('/register'); handleClose(); } }>
+            &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;</MenuItem>
+          </Menu>
+        </>
           )
           }
-          </Typography>
-          {/* </Box> */}
+        </div>
+        )}
       </Toolbar>
       {/* </Container>
       </AppBar> */}
@@ -156,11 +306,12 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/myBookings' element={<MyBookings />} />
-        <Route path='/reviewPage/:listingId' element={<ReviewPage />} />
         <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
-        </Routes>
+        <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} />
+        <Route path='/myBookings' element={<MyBookings />} />
+        <Route path='/reviewPage/:listingId' element={<ReviewPage />} />
+      </Routes>
     </>
   );
 }

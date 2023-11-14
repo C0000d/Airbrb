@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, TextField, Typography, Rating } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -8,10 +8,22 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
+interface DateRange {
+  start: string;
+  end: string;
+}
+interface Booking {
+  id: string;
+  listingId: string;
+  owner: string;
+  totalPrice: string;
+  status: string;
+  dateRange: DateRange;
+}
 const BookRequest = () => {
   const navigate = useNavigate();
   const back = () => {
-    navigate('/hostedListing');
+    navigate('/hostedListing')
   }
   const listingId = localStorage.getItem('listingId');
   const token = localStorage.getItem('token');
@@ -41,12 +53,8 @@ const BookRequest = () => {
       setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
       const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
       setDiff(timeDiff)
-      // if (profit !== 0) {
-      // console.log(profit)
       const days = profit / parseInt(price)
-      // console.log(days)
       setDay(days)
-      // }
     }
   }
 
@@ -63,25 +71,14 @@ const BookRequest = () => {
       if (data.error) {
         alert(data.error);
       } else {
-        // info = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
-        const filteredInfo = data.bookings.filter((booking: any) => Number(booking.listingId) === Number(listingId));
+        const filteredInfo = data.bookings.filter((booking: Booking) => Number(booking.listingId) === Number(listingId));
         setInfo(filteredInfo);
-        const acceptBooking = data.bookings.filter((booking: any) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
-        // console.log(acceptBooking);
+        const acceptBooking = data.bookings.filter((booking: Booking) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
         let profits = 0;
         for (const booking of acceptBooking) {
           profits += parseInt(booking.totalPrice)
         }
-        // console.log(profits)
         setProfit(profits)
-        // console.log(profit)
-        // if (profits !== 0) {
-        //   console.log(profits)
-        //   const days = profits / parseInt(price)
-        //   console.log(days)
-        //   setDay(days)
-        // }
-        // console.log(day)
       }
     }
     getAllRequest();
@@ -97,8 +94,7 @@ const BookRequest = () => {
     second: '2-digit'
   });
 
-  const accept = async (id: any) => {
-    // console.log(id)
+  const accept = async (id: string) => {
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/accept/${id}`, {
       method: 'PUT',
@@ -113,11 +109,9 @@ const BookRequest = () => {
     } else {
       alert('Successfully Accept a booking!');
       navigate(`/hostedListing/bookRequest/:${listingId}`)
-      // navigate('/hostedListing');
     }
   }
-  const deny = async (id: any) => {
-    // console.log(id)
+  const deny = async (id: string) => {
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/bookings/decline/${id}`, {
       method: 'PUT',
@@ -132,11 +126,10 @@ const BookRequest = () => {
     } else {
       alert('Successfully Decline a booking!');
       navigate(`/hostedListing/bookRequest/:${listingId}`)
-      // navigate('/hostedListing');
     }
   }
   const [diff, setDiff] = React.useState('');
-  const calculateTimeDiffWithSydney = (dateStr: any) => {
+  const calculateTimeDiffWithSydney = (dateStr: string) => {
     const parseDateStr = (dateStr: any) => {
       const [datePart, timePart] = dateStr.split(', ');
       const [day, month, year] = datePart.split('/');
@@ -163,7 +156,6 @@ const BookRequest = () => {
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const diffTime = `${diffDays} days ${diffHours} hours`;
-    // console.log(diffTime)
     return diffTime;
   }
 
@@ -186,10 +178,9 @@ const BookRequest = () => {
           So far: {diff} <br />
           Total Days booked: {profit / parseInt(price)}<br />
           Total Profits: {profit}
-          {/* {sydneyTimeFormatter.format(new Date(postedOn))} */}
       </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {info.map((booking: any) => (
+          {info.map((booking: Booking) => (
               <React.Fragment key={booking.id}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
@@ -217,7 +208,6 @@ const BookRequest = () => {
                 <Button onClick={() => deny(booking.id)} variant="outlined" type="button" style={{ marginRight: 40, marginBottom: 10 }}>Decline</Button>
               </Box>
               <Divider variant="inset" component="li" />
-              {/* {index < info.length - 1 && <Divider variant="inset" component="li" />} */}
             </React.Fragment>
           ))}
         </List>
