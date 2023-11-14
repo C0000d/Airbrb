@@ -2,8 +2,14 @@ import React, { useEffect, useContext, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Rating, Grid } from '@mui/material';
 // import ListingElement from './hostedLIstElement';
-import ListElement from './listElement';
+import ListElement, { fetchListingDetails, getReviewRate } from './listElement';
 
+interface Review {
+  user: string;
+  rate: number;
+  comment: string;
+  postOn: Date;
+}
 interface Listing {
   id: string;
   title: string;
@@ -11,13 +17,7 @@ interface Listing {
   address: string;
   thumbnail: string;
   price: number;
-}
-
-interface Review {
-  user: string;
-  rate: number;
-  comment: string;
-  postOn: Date;
+  reviews: Review[];
 }
 
 interface MetaData {
@@ -55,6 +55,7 @@ const SearchPage = () => {
   const smaxNum = localStorage.getItem('smaxNum');
   const sminPrice = localStorage.getItem('sminPrice');
   const smaxPrice = localStorage.getItem('smaxPrice');
+  const order = localStorage.getItem('order');
   const navigate = useNavigate();
   const back = () => {
     navigate('/dashboard')
@@ -105,6 +106,12 @@ const SearchPage = () => {
           if (smaxPrice !== null && smaxPrice !== '') {
             newListings = newListings.filter(listing => { return listing.price <= parseInt(smaxPrice) })
           }
+          if (order === 'increase') {
+            newListings.sort((a, b) => parseFloat(getReviewRate(a.reviews)) - parseFloat(getReviewRate(b.reviews)));
+          }
+          if (order === 'decrease') {
+            newListings.sort((a, b) => parseFloat(getReviewRate(b.reviews)) - parseFloat(getReviewRate(a.reviews)));
+          }
           const fetchDetailsAndUpdateListings = async () => {
             if (newListings) {
               const temp = [];
@@ -151,21 +158,6 @@ const SearchPage = () => {
               }
               newListings = temp
             }
-            // if (smaxNum !== null && smaxNum !== '') {
-            //   const temp = [];
-            //   for (const listing of newListings) {
-            //     try {
-            //       const detail = await getDetail(listing.id);
-            //       if (parseInt(detail.listing.metadata.bedrooms) <= parseInt(smaxNum)) {
-            //         temp.push(listing);
-            //       }
-            //     } catch (error) {
-            //       console.error(error);
-            //       alert(error);
-            //     }
-            //   }
-            //   newListings = temp
-            // }
           };
           const applyFilters = async () => {
             await fetchDetailsAndUpdateListings();
@@ -204,9 +196,7 @@ const SearchPage = () => {
             {searchListing.map((listing: Listing) => (
           <Grid item key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <div onClick={() => navigate(`/listings/${listing.id}`, { state: { from: 'search' } })}>
-            {/* <Link key={listing.id} to={ `/listings/${listing.id}` }> */}
               <ListElement listingId={listing.id} onClick={ () => { console.log() } } />
-            {/* </Link> */}
             </div>
           </Grid>
             ))}

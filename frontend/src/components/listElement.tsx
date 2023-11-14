@@ -24,7 +24,7 @@ const fetchListingDetails = async (listingId?: string) => {
 
 const getReviewRate = (reviews: Review[]) => {
   if (reviews.length === 0) {
-    return 0;
+    return '0';
   }
 
   const sumRate = reviews.reduce((acc, review) => acc + review.rate, 0);
