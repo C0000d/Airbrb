@@ -163,9 +163,24 @@ const HostedDetail = () => {
           </Button>
         </Box>
         <br />
+        <Card sx={{ boxShadow: 0 }}>
+          <CardMedia
+            component="img"
+            height='auto'
+            image={img || require('./defaultImg.png')}
+            alt="Thumbnail Image"
+            sx={{
+              width: '50%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              height: 'auto'
+            }}
+          />
+        </Card>
         {detail.metadata.video
           ? (
             <Box>
+              <Typography variant="button" gutterBottom></Typography>
               <iframe
                 width="560"
                 height="315"
@@ -177,20 +192,7 @@ const HostedDetail = () => {
             </Box>
             )
           : (
-              <Card sx={{ boxShadow: 0 }}>
-                <CardMedia
-                  component="img"
-                  height='auto'
-                  image={detail.thumbnail || require('./defaultImg.png')}
-                  alt="Thumbnail Image"
-                  sx={{
-                    width: '50%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    height: 'auto'
-                  }}
-                />
-              </Card>
+              <></>
             )
         }
         <br />
