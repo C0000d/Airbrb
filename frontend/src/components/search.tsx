@@ -105,7 +105,7 @@ const SearchPage = () => {
           <Grid item key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <div onClick={() => navigate(`/listings/${listing.id}`, { state: { from: 'search' } })}>
             {/* <Link key={listing.id} to={ `/listings/${listing.id}` }> */}
-              <ListElement listingId={listing.id} />
+                  <ListElement listingId={listing.id} onClick={ () => { console.log() } } />
             {/* </Link> */}
             </div>
           </Grid>

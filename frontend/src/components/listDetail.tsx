@@ -1,16 +1,20 @@
 import React, { SetStateAction, useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Box, Button, TextField, Typography, Rating } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchListingDetails, getReviewRate } from './listElement';
+import { ListingDetail, Booking, DateRange, Review } from './dashboard';
+import ReviewBox from './makingReview';
+import ReviewArea from './showingReview';
+import RatingPopover from './ratingPopover';
+import { Box, Button, Typography, Rating, Popover } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import { fetchListingDetails } from './listElement';
-import { ListingDetail, Booking, DateRange } from './dashboard';
 import { AuthContext } from '../AuthContext';
 import isBetween from 'dayjs/plugin/isBetween';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 // import { useNavigate } from 'react-router-dom';
 
 interface AvailabilityDayjs {
@@ -31,25 +35,15 @@ const countNights = (start: Date | null, end: Date | null) => {
 
 const ListDetail = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { from } = location.state || {};
   const back = () => {
-    // console.log(from);
-    if (from === 'search') {
-      navigate('/search');
-    } else {
-      navigate('/dashboard');
-    }
-    // navigate('/dashboard')
+    navigate('/dashboard');
   }
-
   // get token
   const authContext = useContext(AuthContext);
   // check if authContext works
   if (!authContext) {
     throw new Error('authContext not available!');
   }
-
   const { token } = authContext;
 
   // get listingId from outer router
@@ -66,15 +60,16 @@ const ListDetail = () => {
   // get booking range
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [dateRange, setDateRange] = useState<DateRange | null>(null);
 
   // get booking price & status
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [bookingStatus, setBookingStatus] = useState('');
 
-  // set review detail
-  const [reviews, setReviews] = useState<string | null>('');
-  const [rating, setRating] = useState<number | null>(0);
+  // set reviews of the listing
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [totalRate, setTotalRate] = useState<number>(0);
+
+  // popover control
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     // check if listingId is defined
@@ -102,6 +97,8 @@ const ListDetail = () => {
         }
       }
     })();
+
+    updateReviews();
   }, [listingId]);
 
   useEffect(() => {
@@ -111,6 +108,11 @@ const ListDetail = () => {
       setTotalPrice(nights * listing.price);
     }
   }, [startDate, endDate, listingId]);
+
+  useEffect(() => {
+    const newTotalRate = +getReviewRate(reviews); // convert string to number
+    setTotalRate(newTotalRate);
+  }, [reviews]);
 
   const isDateUnavailable = (date: Dayjs) => {
     return !availableDayjs.some(range =>
@@ -145,9 +147,8 @@ const ListDetail = () => {
     const totalNights = countNights(startDate, endDate);
     const newTotalPrice = totalNights * listing.price;
     setTotalPrice(newTotalPrice);
-    // console.log(newTotalPrice);
+
     try {
-      // console.log(startDate?.toISOString());
       const response = await fetch(`http://localhost:5005/bookings/new/${listingId}`, {
         method: 'POST',
         headers: {
@@ -173,7 +174,19 @@ const ListDetail = () => {
     }
   };
 
-  // if error exists
+  const updateReviews = async () => {
+    try {
+      const jsonData = await fetchListingDetails(listingId);
+      const data: ListingDetail = jsonData.listing;
+
+      // console.log('reviews in update', data.reviews);
+      setListing(data);
+      setReviews(data.reviews);
+    } catch (error) {
+      alert(`Error: can't get listing detail: ${error}`);
+    }
+  }
+
   if (error) {
     return <>Error: {error}</>;
   }
@@ -181,8 +194,18 @@ const ListDetail = () => {
   if (!listing) {
     return <>Loading...</>;
   }
-  // console.log('available dates', listing.availability);
-  // console.log('available dates', availableDayjs);
+
+  // handle popover
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'listingRating' : undefined;
 
   return (
     <>
@@ -210,18 +233,48 @@ const ListDetail = () => {
             }}
           />
         </Card>
+        <br/>
         <Typography variant='h5'>Title: {listing.title}</Typography>
-        <Typography variant='subtitle1'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
-        <Typography variant='body1' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
+        <br/>
+        <Typography variant='button'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
+        <br/>
+        <Typography variant='button' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
           No. of bathrooms: {listing.metadata.bathrooms} <br />
         No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Type: {listing.metadata.type}<br /></Typography>
       </Box>
-      {/* <Typography variant='h4'>{listing.title}</Typography>
-      <Typography variant='subtitle1'>{listing.address}</Typography>
-      <Typography variant='body1' >Owned By: {listing.owner}</Typography> */}
-
-      {/* booking area */}
-      {/* <Typography variant='h5'>Booking</Typography> */}
+      <br/>
+      <Box
+        aria-describedby={id}
+        onClick={handleClick}
+        sx={{
+          display: 'flex',
+          marginBottom: 1,
+          justifyContent: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        <Rating
+          value={totalRate} precision={0.1}
+          size='large'
+          readOnly
+        />
+        <Typography variant='h6'>{totalRate} / 5</Typography>
+      </Box>
+      {/* <ClickAwayListener onClickAway={handlePopoverClose}> */}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        disableRestoreFocus
+      >
+        <RatingPopover id={listingId} reviews={reviews} />
+      </Popover>
+      {/* </ClickAwayListener> */}
       <br/>
       <Box
         sx={{
@@ -231,7 +284,7 @@ const ListDetail = () => {
           margin: 'auto',
         }}
       >
-        <Typography variant='h5'>Booking:</Typography>
+        <Typography variant='h5'>Booking</Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
             <DatePicker
@@ -263,34 +316,19 @@ const ListDetail = () => {
           </DemoContainer>
         </LocalizationProvider>
         <br/>
+        <Typography variant='overline'>
+          {(!isNaN(totalPrice) && totalPrice >= 0) ? 'Total Price: ' + totalPrice.toString() : 'Wrong date!'}
+        </Typography>
+        {/* Total Price: {totalPrice >= 0 ? totalPrice : 'Wrong date!'} */}
+        <br/>
         <Button variant="contained" type="submit" onClick={makeBooking}>Make Booking</Button>
       </Box>
       {/* <hr /> */}
-    <Typography>Booking Confimation</Typography>
-
+      <br/>
       {/* reviewing area: display and send review */}
-      {/* <Typography variant='h5'>Reviews</Typography> */}
-      <Box sx={{
-        width: 800,
-        maxWidth: '100%',
-        textAlign: 'center',
-        margin: 'auto',
-      }} >
-        <Typography variant='h5'>Reviews:</Typography>
-        <Rating name="no-value" value={null} size="large" />
-        <TextField
-            id="outlined-multiline-static"
-            fullWidth
-            multiline
-            rows={6}
-            placeholder="Leave Comment Here..."
-          />
-      </Box>
-      <Box sx={{
-        textAlign: 'right',
-      }}>
-        <Button variant="contained">Send</Button>
-      </Box>
+      {listingId && <ReviewBox id={listingId} onReviewSent={updateReviews}/>}
+      <Typography variant='h5'>Reviews</Typography>
+      {listingId && <ReviewArea id={listingId} reviews={reviews}/>}
     </>
   );
 }

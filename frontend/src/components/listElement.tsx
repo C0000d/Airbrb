@@ -3,13 +3,10 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@mui/material';
 
 import { Review, TimePeriod, ListingDetail } from './dashboard';
-// import { useNavigate } from 'react-router-dom';
 
 interface rawListingData {
   listing: ListingDetail;
 }
-
-const defaultImg = './defaultImg.png';
 
 const fetchListingDetails = async (listingId?: string) => {
   // get listing detail data from backend
@@ -33,7 +30,7 @@ const getReviewRate = (reviews: Review[]) => {
   return (sumRate / reviews.length).toFixed(2);
 };
 
-const ListElement = ({ listingId }: { listingId: string }) => {
+const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (listingId: string) => void }) => {
   const [data, setData] = useState<ListingDetail | null>();
 
   useEffect(() => {
@@ -68,7 +65,7 @@ const ListElement = ({ listingId }: { listingId: string }) => {
           thumbnail.includes('image')
             ? (
               <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
-                <CardActionArea>
+                <CardActionArea onClick={() => onClick(listingId)}>
                   <CardMedia
                     component="img"
                     height="auto"
@@ -77,17 +74,20 @@ const ListElement = ({ listingId }: { listingId: string }) => {
                   />
                   <CardContent sx={{ paddingBottom: '8px' }}>
                     <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                  <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
-                  No. of total reviews: {data.reviews.length}</Typography>
-                    {/* <br/> */}
-                    <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
+                      No. of beds: {data.metadata.beds}<br />
+                      No. of bathrooms: {data.metadata.bathrooms} <br />
+                    </Typography>
+                    <br/>
+                    <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>
               )
             : (
               <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
-                <CardActionArea>
+                <CardActionArea onClick={() => onClick(listingId)}>
                   <CardMedia
                     component="iframe"
                     height="auto"
@@ -96,10 +96,13 @@ const ListElement = ({ listingId }: { listingId: string }) => {
                   />
                   <CardContent sx={{ paddingBottom: '8px' }}>
                     <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
-                  No. of total reviews: {data.reviews.length}</Typography>
-                    {/* <br/> */}
-                    <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
+                      No. of beds: {data.metadata.beds}<br />
+                      No. of bathrooms: {data.metadata.bathrooms} <br />
+                    </Typography>
+                    <br/>
+                    <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>
@@ -107,7 +110,7 @@ const ListElement = ({ listingId }: { listingId: string }) => {
         )
       : (
         <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
-            <CardActionArea>
+            <CardActionArea onClick={() => onClick(listingId)}>
               <CardMedia
                 component="img"
                 height="auto"
@@ -116,10 +119,13 @@ const ListElement = ({ listingId }: { listingId: string }) => {
               />
               <CardContent sx={{ paddingBottom: '8px' }}>
                 <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                <Typography variant='body2' color='text.secondary'>Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />No. of beds: {data.metadata.beds}<br />No. of bathrooms: {data.metadata.bathrooms} <br />
-                  No. of total reviews: {data.reviews.length}</Typography>
-                {/* <br/> */}
-                <Typography variant='body2'>&#x2605; {reviewsRate}</Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
+                  No. of beds: {data.metadata.beds}<br />
+                  No. of bathrooms: {data.metadata.bathrooms} <br />
+                </Typography>
+                <br/>
+                <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
               </CardContent>
             </CardActionArea>
           </Card>
@@ -128,4 +134,4 @@ const ListElement = ({ listingId }: { listingId: string }) => {
 };
 
 export default ListElement;
-export { fetchListingDetails };
+export { fetchListingDetails, getReviewRate };
