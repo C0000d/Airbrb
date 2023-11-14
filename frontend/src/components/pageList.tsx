@@ -5,6 +5,8 @@ import Register from './register';
 import Dashboard from './dashboard';
 import SearchPage from './search';
 import HostedListings from './hostedListing';
+import MyBookings from './myBookings';
+import ReviewPage from './advancedReviews';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
 import AppBar from '@mui/material/AppBar';
@@ -259,7 +261,9 @@ const PageList = () => {
           <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); } }>
             &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link> </MenuItem>
           <MenuItem onClick={() => { navigate('/hostedListing'); handleClose(); } }>
-            &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
+                      &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
+                    <MenuItem onClick={() => { handleClose(); navigate('/myBookings'); }}>
+                    &nbsp;&nbsp;<Link to="./myBookings" >My Bookings</Link>&nbsp;&nbsp;</MenuItem>
           <MenuItem onClick={() => { handleClose(); logout(); navigate('/dashboard'); }}>
                         &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;</MenuItem>
             </Menu>
@@ -305,7 +309,9 @@ const PageList = () => {
         <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
         <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} />
-        </Routes>
+        <Route path='/myBookings' element={<MyBookings />} />
+        <Route path='/reviewPage/:listingId' element={<ReviewPage />} />
+      </Routes>
     </>
   );
 }
