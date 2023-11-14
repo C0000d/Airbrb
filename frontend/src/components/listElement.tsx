@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@mui/material';
-
+import { Card, CardContent, CardMedia, CardActionArea, Box, Typography } from '@mui/material';
+import { CircularProgress } from '@mui/joy';
 import { Review, TimePeriod, ListingDetail } from './dashboard';
+import embedVideoUrl from './embedVideo';
 
 interface rawListingData {
   listing: ListingDetail;
@@ -48,73 +49,64 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
   }, [listingId]);
 
   if (!data) {
-    return <>Loading...</>
+    return (
+      <>
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <CircularProgress size="sm" />
+          <Typography variant='h6'>Loading...</Typography>
+        </Box>
+      </>
+    );
   }
 
   const title: string = data.title;
   const thumbnail: string = data.thumbnail;
   const address: string = data.address;
   const reviews: Review[] = data.reviews;
+  const video: string = data.metadata.video;
 
   // count average review rate
   const reviewsRate = getReviewRate(reviews);
 
   return (
-    thumbnail
-      ? (
-          thumbnail.includes('image')
-            ? (
-              <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
-                <CardActionArea onClick={() => onClick(listingId)}>
-                  <CardMedia
-                    component="img"
-                    height="auto"
-                    image={thumbnail || require('./defaultImg.png')}
-                    alt={title}
-                  />
-                  <CardContent sx={{ paddingBottom: '8px' }}>
-                    <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>
-                      Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
-                      No. of beds: {data.metadata.beds}<br />
-                      No. of bathrooms: {data.metadata.bathrooms} <br />
-                    </Typography>
-                    <br/>
-                    <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-              )
-            : (
-              <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
-                <CardActionArea onClick={() => onClick(listingId)}>
-                  <CardMedia
-                    component="iframe"
-                    height="auto"
-                    src={thumbnail}
-                    title={title}
-                  />
-                  <CardContent sx={{ paddingBottom: '8px' }}>
-                    <Typography gutterBottom variant='h5'>Title: {title}</Typography>
-                    <Typography variant='body2' color='text.secondary'>
-                      Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
-                      No. of beds: {data.metadata.beds}<br />
-                      No. of bathrooms: {data.metadata.bathrooms} <br />
-                    </Typography>
-                    <br/>
-                    <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-              )
-        )
-      : (
-        <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
+    <>
+      {video
+        ? (
+          <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
+            <CardActionArea onClick={() => onClick(listingId)}>
+              <CardMedia
+                component="iframe"
+                height="270"
+                src={embedVideoUrl(video)}
+                title={title}
+              />
+              <CardContent sx={{ paddingBottom: '8px' }}>
+                <Typography gutterBottom variant='h5'>Title: {title}</Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
+                  No. of beds: {data.metadata.beds}<br />
+                  No. of bathrooms: {data.metadata.bathrooms} <br />
+                </Typography>
+                <br/>
+                <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+          )
+        : (
+          <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
             <CardActionArea onClick={() => onClick(listingId)}>
               <CardMedia
                 component="img"
                 height="auto"
-                image={require('./defaultImg.png')}
+                image={thumbnail || require('./defaultImg.png')}
                 alt={title}
               />
               <CardContent sx={{ paddingBottom: '8px' }}>
@@ -129,7 +121,9 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
               </CardContent>
             </CardActionArea>
           </Card>
-        )
+          )
+      }
+    </>
   );
 };
 

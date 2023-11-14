@@ -128,6 +128,12 @@ const PageList = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+    setSearchTitle('');
+    setSearchCity('');
+    setMinNum('');
+    setMaxNum('')
+    setMinPrice('')
+    setMaxPrice('')
     setOpen(true);
   };
 
@@ -136,19 +142,20 @@ const PageList = () => {
   };
   const [searchTitle, setSearchTitle] = useState('');
   const [searchCity, setSearchCity] = useState('');
+  const [minNum, setMinNum] = useState('');
+  const [maxNum, setMaxNum] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const handleSearch = () => {
-    // console.log()
-    // localStorage.removeItem('stitle');
-    // localStorage.removeItem('scity');
-    // localStorage.removeItem('email');
-    if (searchTitle === null) {
-      setSearchTitle('')
-    }
-    if (searchCity === null) {
-      setSearchCity('')
-    }
-    navigate('/search', { state: { from: 'searchfilter', stitle: searchTitle, scity: searchCity } });
+    localStorage.setItem('stitle', searchTitle)
+    localStorage.setItem('scity', searchCity)
+    localStorage.setItem('sminNum', minNum)
+    localStorage.setItem('smaxNum', maxNum)
+    localStorage.setItem('sminPrice', minPrice)
+    localStorage.setItem('smaxPrice', maxPrice)
+    navigate('/search');
   }
+
   return (
     <>
       {/* <AppBar position="static">
@@ -196,6 +203,7 @@ const PageList = () => {
                 type="text"
                 // fullWidth
                 variant="standard"
+                onChange={(e) => setMinNum(e.target.value)}
               />
               <TextField
                 margin="dense"
@@ -203,6 +211,7 @@ const PageList = () => {
                 type="text"
                 // fullWidth
                 variant="standard"
+                onChange={(e) => setMaxNum(e.target.value)}
               />
               <DialogContentText>
                 <br />Price(per night):
@@ -213,6 +222,7 @@ const PageList = () => {
                 type="text"
                 // fullWidth
                 variant="standard"
+                onChange={(e) => setMinPrice(e.target.value)}
               />
               <TextField
                 margin="dense"
@@ -220,6 +230,7 @@ const PageList = () => {
                 type="text"
                 // fullWidth
                 variant="standard"
+                onChange={(e) => setMaxPrice(e.target.value)}
               />
             </DialogContent>
             <DialogActions>
@@ -303,6 +314,7 @@ const PageList = () => {
       <hr />
 
       <Routes>
+        <Route path='/' element={<Dashboard />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />

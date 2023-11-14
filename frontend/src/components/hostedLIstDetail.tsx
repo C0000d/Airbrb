@@ -9,6 +9,9 @@ import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import { CircularProgress } from '@mui/joy';
+import embedVideoUrl from './embedVideo';
+import { Review, TimePeriod, ListingDetail } from './dashboard';
 
 const HostedDetail = () => {
   const navigate = useNavigate();
@@ -17,7 +20,7 @@ const HostedDetail = () => {
   }
 
   const listingId = localStorage.getItem('listingId')
-  const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
+  const [detail, setDetail] = useState<ListingDetail | null>(null);
   const [title, setTitle] = React.useState('');
   const [address, setAddress] = React.useState('');
   const [price, setPrice] = React.useState('');
@@ -48,6 +51,9 @@ const HostedDetail = () => {
         setBathrooms(data.listing.metadata.bathrooms);
         setBedrooms(data.listing.metadata.bedrooms);
         setBeds(data.listing.metadata.beds);
+        if (data.listing.metadata.video) {
+          setVideo(data.listing.metadata.video)
+        }
         setAmenities(data.listing.metadata.amenities);
         setImg(data.listing.thumbnail)
       }
@@ -105,12 +111,22 @@ const HostedDetail = () => {
     width: 1,
   });
 
-  if (title === '') {
+  if (!detail) {
     return (
       <>
-        Loading data...
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <CircularProgress size="lg" />
+          <Typography variant='h6'>Loading...</Typography>
+        </Box>
       </>
-    )
+    );
   }
 
   return (
@@ -118,7 +134,7 @@ const HostedDetail = () => {
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
       <Box
         sx={{
-          width: 500,
+          width: '600px',
           maxWidth: '100%',
           margin: 'auto',
           textAlign: 'center'
@@ -164,6 +180,24 @@ const HostedDetail = () => {
             }}
           />
         </Card>
+        {detail.metadata.video
+          ? (
+            <Box>
+              <Typography variant="button" gutterBottom></Typography>
+              <iframe
+                width="560"
+                height="315"
+                src={embedVideoUrl(detail.metadata.video)}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              >
+              </iframe>
+            </Box>
+            )
+          : (
+              <></>
+            )
+        }
         <br />
         <TextField fullWidth label="Video Url(optional)" value={video} onChange={e => setVideo(e.target.value)} /> <br />
         <br />

@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import ListElement from './listElement';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
+import { CircularProgress } from '@mui/joy';
 
 interface Review {
   user: string;
@@ -41,7 +42,8 @@ interface MetaData {
   bedrooms: string;
   amenities: string;
   beds: string;
-  bathrooms: string
+  bathrooms: string;
+  video: string;
 }
 
 interface TimePeriod {
@@ -147,73 +149,53 @@ const Dashboard = () => {
   };
 
   if (!listings) {
-    return <>Loading...</>
+    return (
+      <>
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <CircularProgress size="lg" />
+          <Typography variant='h6'>Loading...</Typography>
+        </Box>
+      </>
+    );
   }
 
-  // listings.map((listing) => (console.log(listing.reviews)));
-
-  return token
-    ? (
-      <>
-        dashboard
-        <Box sx={{ flexGrow: 1, p: 2 }}>
-        <Grid
-              container
-              spacing={2}
-              sx={{
-                '--Grid-borderWidth': '1px',
-                borderTop: 'var(--Grid-borderWidth) solid',
-                borderLeft: 'var(--Grid-borderWidth) solid',
+  return (
+    <>
+      <Box sx={{ flexGrow: 1, p: 2 }}>
+      <Grid
+            container
+            spacing={2}
+            sx={{
+              '--Grid-borderWidth': '1px',
+              borderTop: 'var(--Grid-borderWidth) solid',
+              borderLeft: 'var(--Grid-borderWidth) solid',
+              borderColor: 'divider',
+              '& > div': {
+                borderRight: 'var(--Grid-borderWidth) solid',
+                borderBottom: 'var(--Grid-borderWidth) solid',
                 borderColor: 'divider',
-                '& > div': {
-                  borderRight: 'var(--Grid-borderWidth) solid',
-                  borderBottom: 'var(--Grid-borderWidth) solid',
-                  borderColor: 'divider',
-                },
-              }}
-              >
-            {listings.map((listing, index) => (
-              <Grid item key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                {/* <Link key={listing.id} to={`/listings/${listing.id}`}> */}
-                <ListElement listingId={listing.id} onClick={handleListingClick}/>
-                {/* </Link> */}
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </>
-      )
-    : (
-      <>
-        landing page
-        <Box sx={{ flexGrow: 1, p: 2 }}>
-        <Grid
-              container
-              spacing={2}
-              sx={{
-                '--Grid-borderWidth': '1px',
-                borderTop: 'var(--Grid-borderWidth) solid',
-                borderLeft: 'var(--Grid-borderWidth) solid',
-                borderColor: 'divider',
-                '& > div': {
-                  borderRight: 'var(--Grid-borderWidth) solid',
-                  borderBottom: 'var(--Grid-borderWidth) solid',
-                  borderColor: 'divider',
-                },
-              }}
-              >
-            {listings.map((listing, index) => (
-              <Grid item key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                {/* <Link key={listing.id} to={`/listings/${listing.id}`}> */}
-                <ListElement key={listing.id} listingId={listing.id} onClick={handleListingClick} />
-                {/* </Link> */}
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </>
-      );
+              },
+            }}
+            >
+          {listings.map((listing, index) => (
+            <Grid item key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+              {/* <Link key={listing.id} to={`/listings/${listing.id}`}> */}
+              <ListElement listingId={listing.id} onClick={handleListingClick}/>
+              {/* </Link> */}
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
+  );
 };
 
 export default Dashboard;
-export { Booking, Review, TimePeriod, ListingData, ListingDetail, DateRange };
+export { Booking, Review, TimePeriod, ListingData, ListingDetail, DateRange, MetaData };

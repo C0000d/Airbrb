@@ -1,10 +1,11 @@
 import React, { SetStateAction, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchListingDetails, getReviewRate } from './listElement';
-import { ListingDetail, Booking, DateRange, Review } from './dashboard';
+import { ListingDetail, Booking, DateRange, Review, MetaData } from './dashboard';
 import ReviewBox from './makingReview';
 import ReviewArea from './showingReview';
 import RatingPopover from './ratingPopover';
+import embedVideoUrl from './embedVideo';
 import { Box, Button, Typography, Rating, Popover } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,6 +15,7 @@ import { AuthContext } from '../AuthContext';
 import isBetween from 'dayjs/plugin/isBetween';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import { CircularProgress } from '@mui/joy';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 // import { useNavigate } from 'react-router-dom';
 
@@ -38,14 +40,13 @@ const ListDetail = () => {
   const location = useLocation();
   const { from } = location.state || {};
   const back = () => {
-    // console.log(from);
     if (from === 'search') {
       navigate('/search');
     } else {
       navigate('/dashboard');
     }
-    // navigate('/dashboard')
   }
+
   // get token
   const authContext = useContext(AuthContext);
   // check if authContext works
@@ -196,11 +197,38 @@ const ListDetail = () => {
   }
 
   if (error) {
-    return <>Error: {error}</>;
+    return (
+      <>
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <Typography variant='h6'>Error: {error}</Typography>
+        </Box>
+      </>
+    );
   }
   // if get invalid listing
   if (!listing) {
-    return <>Loading...</>;
+    return (
+      <>
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <CircularProgress size="lg" />
+          <Typography variant='h6'>Loading...</Typography>
+        </Box>
+      </>
+    );
   }
 
   // handle popover
@@ -220,27 +248,42 @@ const ListDetail = () => {
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
       <Box
         sx={{
-          width: 500,
+          // width: '80%',
           maxWidth: '100%',
           textAlign: 'center',
           margin: 'auto',
         }}
       >
-        {/* <img src={listing.thumbnail || require('./defaultImg.png')} alt='listing image' /> */}
-        <Card sx={{ boxShadow: 0 }}>
-          <CardMedia
-            component="img"
-            height='auto'
-            image={listing.thumbnail || require('./defaultImg.png')}
-            alt="Thumbnail Image"
-            sx={{
-              width: '50%',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              height: 'auto'
-            }}
-          />
-        </Card>
+        {listing.metadata.video
+          ? (
+            <Box>
+              <iframe
+                width="560"
+                height="315"
+                src={embedVideoUrl(listing.metadata.video)}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              >
+              </iframe>
+            </Box>
+            )
+          : (
+              <Card sx={{ boxShadow: 0 }}>
+                <CardMedia
+                  component="img"
+                  height='auto'
+                  image={listing.thumbnail || require('./defaultImg.png')}
+                  alt="Thumbnail Image"
+                  sx={{
+                    width: '50%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    height: 'auto'
+                  }}
+                />
+              </Card>
+            )
+        }
         <br/>
         <Typography variant='h5'>Title: {listing.title}</Typography>
         <br/>
