@@ -233,12 +233,16 @@ const ListDetail = () => {
             }}
           />
         </Card>
+        <br/>
         <Typography variant='h5'>Title: {listing.title}</Typography>
-        <Typography variant='subtitle1'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
-        <Typography variant='body1' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
+        <br/>
+        <Typography variant='button'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
+        <br/>
+        <Typography variant='button' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
           No. of bathrooms: {listing.metadata.bathrooms} <br />
         No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Type: {listing.metadata.type}<br /></Typography>
       </Box>
+      <br/>
       <Box
         aria-describedby={id}
         onClick={handleClick}
@@ -311,6 +315,11 @@ const ListDetail = () => {
               />
           </DemoContainer>
         </LocalizationProvider>
+        <br/>
+        <Typography variant='overline'>
+          {(!isNaN(totalPrice) && totalPrice >= 0) ? 'Total Price: ' + totalPrice.toString() : 'Wrong date!'}
+        </Typography>
+        {/* Total Price: {totalPrice >= 0 ? totalPrice : 'Wrong date!'} */}
         <br/>
         <Button variant="contained" type="submit" onClick={makeBooking}>Make Booking</Button>
       </Box>

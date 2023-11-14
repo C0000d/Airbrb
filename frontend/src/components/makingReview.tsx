@@ -43,13 +43,13 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
   // get user email
   const user = localStorage.getItem('email');
 
-  useEffect(() => {
-    if (!user || !token) {
-      navigate('/login');
-    }
+  // useEffect(() => {
+  //   if (!user || !token) {
+  //     navigate('/login');
+  //   }
 
-    getUserBooking();
-  }, [user, token, navigate]);
+  //   getUserBooking();
+  // }, [user, token, navigate]);
 
   if (!listingId) {
     alert('invalid listingId!');
@@ -58,7 +58,35 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
 
   // useEffect(() => console.log(reviewRating), [reviewRating]);
 
-  const getUserBooking = async () => {
+  // const getUserBooking = async () => {
+  //   const response = await fetch('http://localhost:5005/bookings', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //       Authorization: `Bearer ${token}`
+  //     }
+  //   });
+  //   const data = await response.json();
+  //   if (data.error) {
+  //     alert(data.error);
+  //   } else {
+  //     // get all booking Bookingrmation owned by current user
+  //     const acceptedBooking = data.bookings.filter((booking: Booking) =>
+  //       booking.owner === user &&
+  //       booking.status === 'accepted' &&
+  //       booking.listingId === listingId);
+  //     setBookings(acceptedBooking);
+  //   }
+  // };
+
+  const sendReview = async () => {
+    // check if user logged in
+    if (!user || !token) {
+      alert('invalid user! Please login first');
+      navigate('/login');
+      return;
+    }
+
     const response = await fetch('http://localhost:5005/bookings', {
       method: 'GET',
       headers: {
@@ -75,60 +103,94 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
         booking.owner === user &&
         booking.status === 'accepted' &&
         booking.listingId === listingId);
+      console.log('acceptedBooking', acceptedBooking);
       setBookings(acceptedBooking);
-    }
-  };
 
-  const sendReview = async () => {
-    if (!bookings || bookings.length === 0 || !bookings[0]) {
-      // if the user has no accepted booking
-      alert('You have no accepted bookings, can\'t review this listing!');
-      return;
-    }
-
-    if (!user || !token) {
-      alert('invalid user! Please login first');
-      navigate('/login');
-      return;
-    }
-
-    if (!reviewRating || !reviewText) {
-      alert('Please make full input!');
-      return;
-    }
-
-    const reviewToSend: Review = {
-      user: user,
-      rate: reviewRating,
-      comment: reviewText,
-      postOn: new Date(),
-    };
-
-    // get the first booking as review booking id
-    const bookingId = bookings[0].id;
-    try {
-      const response = await fetch(`http://localhost:5005/listings/${listingId}/review/${bookingId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          review: reviewToSend
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send review');
+      if (!acceptedBooking || acceptedBooking.length === 0 || !acceptedBooking[0]) {
+        setReviewText('');
+        setReviewRating(0);
+        // if the user has no accepted booking
+        alert('You have no accepted bookings, can\'t review this listing!');
+        return;
       }
 
-      alert('Review sent successfully!');
-      setReviewText('');
-      setReviewRating(0);
-      onReviewSent();
-    } catch (error) {
-      alert('Error submitting review: ' + error);
+      if (!reviewRating || !reviewText) {
+        alert('Please make full input!');
+        return;
+      }
+
+      const reviewToSend: Review = {
+        user: user,
+        rate: reviewRating,
+        comment: reviewText,
+        postOn: new Date(),
+      };
+
+      // get the first booking as review booking id
+      const bookingId = acceptedBooking[0].id;
+      try {
+        const response = await fetch(`http://localhost:5005/listings/${listingId}/review/${bookingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            review: reviewToSend
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send review');
+        }
+
+        alert('Review sent successfully!');
+        setReviewText('');
+        setReviewRating(0);
+        onReviewSent();
+      } catch (error) {
+        alert('Error submitting review: ' + error);
+      }
     }
+    // console.log('bookings', bookings);
+
+    // if (!reviewRating || !reviewText) {
+    //   alert('Please make full input!');
+    //   return;
+    // }
+
+    // const reviewToSend: Review = {
+    //   user: user,
+    //   rate: reviewRating,
+    //   comment: reviewText,
+    //   postOn: new Date(),
+    // };
+
+    // // get the first booking as review booking id
+    // const bookingId = bookings[0].id;
+    // try {
+    //   const response = await fetch(`http://localhost:5005/listings/${listingId}/review/${bookingId}`, {
+    //     method: 'PUT',
+    //     headers: {
+    //       'Content-type': 'application/json',
+    //       Authorization: `Bearer ${token}`
+    //     },
+    //     body: JSON.stringify({
+    //       review: reviewToSend
+    //     }),
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error('Failed to send review');
+    //   }
+
+    //   alert('Review sent successfully!');
+    //   setReviewText('');
+    //   setReviewRating(0);
+    //   onReviewSent();
+    // } catch (error) {
+    //   alert('Error submitting review: ' + error);
+    // }
   };
 
   return (
