@@ -4,7 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Box, Button, CardActionArea, CardActions } from '@mui/material';
+import { CircularProgress } from '@mui/joy';
 import { useNavigate } from 'react-router-dom';
+import embedVideoUrl from './embedVideo';
+import { Review, TimePeriod, ListingDetail } from './dashboard';
+
 interface eleProps {
   listingId: string;
 }
@@ -23,7 +27,7 @@ const ListingElement = (props: eleProps) => {
     localStorage.setItem('listingId', props.listingId)
   }
 
-  const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false });
+  const [detail, setDetail] = useState<ListingDetail | null>(null);
   useEffect(() => {
     const getDetail = async () => {
       const res = await fetch(`http://localhost:5005/listings/${props.listingId}`, {
@@ -85,15 +89,45 @@ const ListingElement = (props: eleProps) => {
     }
   }
 
+  if (!detail) {
+    return (
+    <>
+      <Box sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <CircularProgress size="sm" />
+        <Typography variant='h6'>Loading...</Typography>
+      </Box>
+    </>
+    );
+  }
+
   return (
     <Card sx={{ maxWidth: '100%', boxShadow: 0 }} onClick={storeId}>
       <CardActionArea onClick={detailPage} sx={{ marginBottom: '8px' }}>
-        <CardMedia
-          component="img"
-          height="auto"
-          image={detail.thumbnail || require('./defaultImg.png')}
-          alt="Thumbnail Image"
-        />
+        {detail.metadata.video
+          ? (
+            <CardMedia
+              component="iframe"
+              height="270"
+              src={embedVideoUrl(detail.metadata.video)}
+              title={detail.title}
+            />
+            )
+          : (
+              <CardMedia
+                component="img"
+                height="auto"
+                image={detail.thumbnail || require('./defaultImg.png')}
+                alt="Thumbnail Image"
+              />
+            )
+        }
         <CardContent sx={{ paddingBottom: '8px' }}>
           <Typography gutterBottom variant="h5" component="div">
             Title: {detail.title}

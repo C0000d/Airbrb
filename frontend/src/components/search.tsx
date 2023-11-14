@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Rating, Grid } from '@mui/material';
 // import ListingElement from './hostedLIstElement';
 import ListElement from './listElement';
+import ListingData from './dashboard';
 
 interface Listing {
   id: string;
@@ -14,17 +15,27 @@ interface Listing {
 }
 
 const SearchPage = () => {
-  const location = useLocation();
-  const { stitle, scity } = location.state || {};
-  if (location.state?.from === 'searchfilter') {
-    localStorage.setItem('stitle', stitle)
-    localStorage.setItem('scity', scity)
-  }
+  // set navigation
   const navigate = useNavigate();
-  const back = () => {
-    navigate('/dashboard')
-  }
+  const location = useLocation();
+
+  // set search states
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchCity, setSearchCity] = useState('');
+
   const [searchListing, setSearchListing] = useState<Listing[]>([])
+
+  const { stitle, scity } = location.state || {};
+  setSearchCity(searchCity);
+  setSearchTitle(searchTitle); // set state
+  // if (location.state?.from === 'searchfilter') {
+  //   localStorage.setItem('stitle', stitle)
+  //   localStorage.setItem('scity', scity)
+  // }
+
+  const back = () => {
+    navigate('/dashboard');
+  }
   useEffect(() => {
     if (location.state?.from === 'searchfilter') {
       (async () => {
@@ -48,8 +59,8 @@ const SearchPage = () => {
         }
       })();
     } else {
-      let stitle = localStorage.getItem('stitle');
-      let scity = localStorage.getItem('scity');
+      let stitle = searchTitle;
+      let scity = searchCity;
       (async () => {
         const response = await fetch('http://localhost:5005/listings', {
           method: 'GET',
