@@ -135,7 +135,16 @@ const PageList = () => {
   const [searchTitle, setSearchTitle] = useState('');
   const [searchCity, setSearchCity] = useState('');
   const handleSearch = () => {
-    console.log()
+    // console.log()
+    // localStorage.removeItem('stitle');
+    // localStorage.removeItem('scity');
+    // localStorage.removeItem('email');
+    if (searchTitle === null) {
+      setSearchTitle('')
+    }
+    if (searchCity === null) {
+      setSearchCity('')
+    }
     navigate('/search', { state: { from: 'searchfilter', stitle: searchTitle, scity: searchCity } });
   }
   return (
@@ -175,6 +184,40 @@ const PageList = () => {
                 fullWidth
                 variant="standard"
                 onChange={(e) => setSearchCity(e.target.value)}
+              />
+              <DialogContentText>
+                <br />Number of bedrooms:
+              </DialogContentText>
+              <TextField
+                margin="dense"
+                label="Min No."
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <TextField
+                margin="dense"
+                label="Max No."
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <DialogContentText>
+                <br />Price(per night):
+              </DialogContentText>
+              <TextField
+                margin="dense"
+                label="Min Price"
+                type="text"
+                // fullWidth
+                variant="standard"
+              />
+              <TextField
+                margin="dense"
+                label="Max Price"
+                type="text"
+                // fullWidth
+                variant="standard"
               />
             </DialogContent>
             <DialogActions>
