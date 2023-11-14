@@ -27,6 +27,7 @@ const HostedDetail = () => {
   const [beds, setBeds] = React.useState('');
   const [amenities, setAmenities] = React.useState('');
   const [img, setImg] = React.useState('');
+  const [video, setVideo] = React.useState('');
   useEffect(() => {
     const getDetail = async () => {
       const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
@@ -67,11 +68,17 @@ const HostedDetail = () => {
     }
   };
   const saveChange = async () => {
+    if (video !== '') {
+      if (!video.includes('youtube') && !video.includes('youtu.be')) {
+        alert('Not a valid Youtube video Url!');
+        return;
+      }
+    }
     const token = localStorage.getItem('token')
     const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities }
+        title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities, video }
       }),
       headers: {
         'Content-type': 'application/json',
@@ -157,6 +164,8 @@ const HostedDetail = () => {
             }}
           />
         </Card>
+        <br />
+        <TextField fullWidth label="Video Url(optional)" value={video} onChange={e => setVideo(e.target.value)} /> <br />
         <br />
         <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
