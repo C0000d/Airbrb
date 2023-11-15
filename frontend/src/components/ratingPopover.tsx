@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-
 import { Review, Booking, ListingDetail } from './dashboard';
 import { getReviewRate } from './listElement';
 import { Box, Rating, Typography, Card, Divider, Stack } from '@mui/material';
 import LinearProgress from '@mui/joy/LinearProgress';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Location, useNavigate, useParams } from 'react-router-dom';
 
 interface RatingPopoverProps {
   id: string | undefined;
   reviews: Review[];
+  location?: Location;
 }
 
 interface reviewClassification {
@@ -30,7 +30,7 @@ const classifyReviews = (reviews: Review[]) => {
   return classifiedReview;
 };
 
-const RatingPopover = ({ reviews, id }: RatingPopoverProps) => {
+const RatingPopover = ({ reviews, id, location }: RatingPopoverProps) => {
   const listingId: string | undefined = id;
   const navigate = useNavigate();
   const totalRate = +getReviewRate(reviews); // convert string to number
@@ -50,7 +50,7 @@ const RatingPopover = ({ reviews, id }: RatingPopoverProps) => {
   });
 
   const handleRatingClick = (rating: number) => {
-    navigate(`/reviewPage/${listingId}`, { state: { rating, reviews, listingId } });
+    navigate(`/reviewPage/${listingId}`, { state: { from: location?.pathname || '', rating, reviews, listingId } });
   };
 
   return (

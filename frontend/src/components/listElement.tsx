@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardMedia, CardActionArea, CardActions, Box, Typography, Popover } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
 import { Review, TimePeriod, ListingDetail } from './dashboard';
@@ -33,6 +33,7 @@ const getReviewRate = (reviews: Review[]) => {
 };
 
 const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (listingId: string) => void }) => {
+  const location = useLocation();
   const [data, setData] = useState<ListingDetail | null>();
 
   // popover control
@@ -133,7 +134,7 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
               }}
               disableRestoreFocus
             >
-              <RatingPopover id={listingId} reviews={reviews} />
+              <RatingPopover id={listingId} reviews={reviews} location={location} />
             </Popover>
           </Card>
           )
@@ -153,7 +154,6 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
                   No. of beds: {data.metadata.beds}<br />
                   No. of bathrooms: {data.metadata.bathrooms} <br />
                 </Typography>
-                <br/>
               </CardContent>
             </CardActionArea>
             <CardActions
@@ -174,7 +174,7 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
               }}
               disableRestoreFocus
             >
-              <RatingPopover id={listingId} reviews={reviews} />
+              <RatingPopover id={listingId} reviews={reviews} location={location} />
             </Popover>
           </Card>
           )

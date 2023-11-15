@@ -32,6 +32,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const PageList = () => {
   const authContext = useContext(AuthContext);
@@ -134,6 +137,7 @@ const PageList = () => {
     setMaxNum('')
     setMinPrice('')
     setMaxPrice('')
+    setOrder('');
     setOpen(true);
   };
 
@@ -153,9 +157,14 @@ const PageList = () => {
     localStorage.setItem('smaxNum', maxNum)
     localStorage.setItem('sminPrice', minPrice)
     localStorage.setItem('smaxPrice', maxPrice)
-    navigate('/search');
+    localStorage.setItem('order', order)
+    navigate('/search', { state: { from: 'newsearch' } });
   }
+  const [order, setOrder] = React.useState('');
 
+  const handleOrder = (event: SelectChangeEvent) => {
+    setOrder(event.target.value as string);
+  };
   return (
     <>
       {/* <AppBar position="static">
@@ -232,6 +241,21 @@ const PageList = () => {
                 variant="standard"
                 onChange={(e) => setMaxPrice(e.target.value)}
               />
+              <Box sx={{ minWidth: 120 }}>
+                <br /><FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Rating Order</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={order}
+                    label="Age"
+                    onChange={handleOrder}
+                  >
+                    <MenuItem value={'increase'}>low to high</MenuItem>
+                    <MenuItem value={'decrease'}>high to low</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose1}>Cancel</Button>
@@ -318,9 +342,11 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
+        {/* <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} /> */}
+        <Route path='/hostedListing/*' element={<HostedListings />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
-        <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} />
+        {/* <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} /> */}
+        <Route path='/search' element={<SearchPage />} />
         <Route path='/myBookings' element={<MyBookings />} />
         <Route path='/reviewPage/:listingId' element={<ReviewPage />} />
       </Routes>

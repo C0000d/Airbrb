@@ -15,10 +15,13 @@ const ReviewPage = () => {
   const [targetRating, setTargetRating] = useState<number>(0);
   const [targetReview, setTargetReview] = useState<Review[]>([]);
 
-  if (!location) {
+  if (!location.state) {
     alert('Failed to navigate review page, try again!');
     navigate('/dashboard');
   }
+
+  // get previous path
+  const previousPath = location.state.from || `/listings/${listingId}`;
 
   const { rating, reviews } = location.state || {};
   const totalRate = +getReviewRate(reviews); // convert string to number
@@ -45,7 +48,7 @@ const ReviewPage = () => {
   };
 
   const back = () => {
-    navigate(`/listings/${listingId}`);
+    navigate(previousPath);
   }
 
   return (

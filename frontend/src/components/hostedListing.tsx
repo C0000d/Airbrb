@@ -8,6 +8,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ListingElement from './hostedLIstElement';
 import Publish from './publishListing';
 import BookRequest from './bookingRequest'
+import { AuthContext } from '../AuthContext';
 
 interface Listing {
   id: string;
@@ -26,6 +27,8 @@ const HostedListings = () => {
   const atRequestPage = location.pathname.includes('Request');
   const isAtEitherPage = atDetailPage || atCreateListingPage || atPublishListingPage || atRequestPage;
   const navigate = useNavigate();
+  const token = localStorage.getItem('token')
+
   const createListing = () => {
     navigate('/hostedListing/createHostedListing')
   }
@@ -54,7 +57,8 @@ const HostedListings = () => {
         setHostedListings(newListings);
       }
     })();
-  }, [])
+  }, [location.state])
+
   const listingId = localStorage.getItem('listingId')
   return (
     <>
