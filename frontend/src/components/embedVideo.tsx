@@ -8,7 +8,7 @@ const embedVideoUrl = (url: string) => {
     const idSplit = id.split('=');
     id = idSplit[idSplit.length - 1];
   }
-  console.log('embeded url', youtubeEmbededUrl + id);
+
   return youtubeEmbededUrl + id;
 };
 

@@ -51,8 +51,11 @@ const HostedDetail = () => {
         setBathrooms(data.listing.metadata.bathrooms);
         setBedrooms(data.listing.metadata.bedrooms);
         setBeds(data.listing.metadata.beds);
+        if (data.listing.metadata.video) {
+          setVideo(data.listing.metadata.video);
+        }
         setAmenities(data.listing.metadata.amenities);
-        setImg(data.listing.thumbnail)
+        setImg(data.listing.thumbnail);
       }
     }
     getDetail();
@@ -177,6 +180,7 @@ const HostedDetail = () => {
             }}
           />
         </Card>
+        <br />
         {detail.metadata.video
           ? (
             <Box>
@@ -186,7 +190,8 @@ const HostedDetail = () => {
                 height="315"
                 src={embedVideoUrl(detail.metadata.video)}
                 title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"
+                allowFullScreen
               >
               </iframe>
             </Box>

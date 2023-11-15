@@ -1,5 +1,5 @@
 import React, { SetStateAction, useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchListingDetails, getReviewRate } from './listElement';
 import { ListingDetail, Booking, DateRange, Review, MetaData } from './dashboard';
 import ReviewBox from './makingReview';
@@ -37,8 +37,14 @@ const countNights = (start: Date | null, end: Date | null) => {
 
 const ListDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || {};
   const back = () => {
-    navigate('/dashboard');
+    if (from === 'search') {
+      navigate('/search');
+    } else {
+      navigate('/dashboard');
+    }
   }
   // get token
   const authContext = useContext(AuthContext);
@@ -256,6 +262,7 @@ const ListDetail = () => {
                 src={embedVideoUrl(listing.metadata.video)}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
               >
               </iframe>
             </Box>
