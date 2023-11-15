@@ -86,6 +86,8 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
                 height="270"
                 src={embedVideoUrl(video)}
                 title={title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"
+                allowFullScreen
               />
               <CardContent sx={{ paddingBottom: '8px' }}>
                 <Typography gutterBottom variant='h5'>Title: {title}</Typography>

@@ -117,6 +117,8 @@ const ListingElement = (props: eleProps) => {
               height="270"
               src={embedVideoUrl(detail.metadata.video)}
               title={detail.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"
+              allowFullScreen
             />
             )
           : (
