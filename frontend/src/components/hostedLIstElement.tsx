@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import embedVideoUrl from './embedVideo';
 import { Review, TimePeriod, ListingDetail } from './dashboard';
 
@@ -26,7 +26,7 @@ const ListingElement = (props: eleProps) => {
   const storeId = () => {
     localStorage.setItem('listingId', props.listingId)
   }
-
+  const location = useLocation();
   const [detail, setDetail] = useState<ListingDetail | null>(null);
   useEffect(() => {
     const getDetail = async () => {
@@ -45,7 +45,7 @@ const ListingElement = (props: eleProps) => {
     }
 
     getDetail()
-  }, [props.listingId]);
+  }, [location.state]);
 
   const deleteListing = async () => {
     const token = localStorage.getItem('token')
@@ -61,13 +61,14 @@ const ListingElement = (props: eleProps) => {
     if (data.error) {
       alert(data.error);
     } else {
-      navigate('/hostedListing')
+      navigate('/hostedListing', { state: { from: 'delete' } })
       alert('Successfully delete!');
     }
   }
-
+  // const [published, setPublished] = useState(false);
   const publish = () => {
-    navigate('/hostedListing/publishListing')
+    navigate('/hostedListing/publishListing', { state: { from: 'publish' } })
+    // setPublished(true)
   }
 
   const unpublish = async () => {
@@ -85,7 +86,8 @@ const ListingElement = (props: eleProps) => {
       alert(data.error);
     } else {
       alert('successfully unpublished!');
-      navigate('/hostedListing');
+      navigate('/hostedListing', { state: { from: 'unpublish' } });
+      // setPublished(false)
     }
   }
 

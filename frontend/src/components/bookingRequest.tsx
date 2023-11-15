@@ -50,11 +50,21 @@ const BookRequest = () => {
       setTitle(data.listing.title);
       setImg(data.listing.thumbnail);
       setPrice(data.listing.price);
-      setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
-      const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
-      setDiff(timeDiff)
-      const days = profit / parseInt(price)
-      setDay(days)
+      if (data.listing.postedOn === null) {
+        setPostedOn('Not Poseted yet')
+        setDiff('Not Poseted yet')
+      } else {
+        setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+        const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+        setDiff(timeDiff)
+        const days = profit / parseInt(price)
+        setDay(days)
+      }
+      // setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+      // const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+      // setDiff(timeDiff)
+      // const days = profit / parseInt(price)
+      // setDay(days)
     }
   }
 
@@ -130,33 +140,64 @@ const BookRequest = () => {
   }
   const [diff, setDiff] = React.useState('');
   const calculateTimeDiffWithSydney = (dateStr: string) => {
-    const parseDateStr = (dateStr: any) => {
-      const [datePart, timePart] = dateStr.split(', ');
-      const [day, month, year] = datePart.split('/');
-      const [time, modifier] = timePart.split(' ');
-      const [hours, minutes, seconds] = time.split(':');
-      let hours24 = parseInt(hours, 10);
-      if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
-        hours24 += 12;
+    if (dateStr === null || dateStr === '') {
+      return 'Not Poseted yet';
+    } else {
+      const parseDateStr = (dateStr: any) => {
+        const [datePart, timePart] = dateStr.split(', ');
+        const [day, month, year] = datePart.split('/');
+        const [time, modifier] = timePart.split(' ');
+        const [hours, minutes, seconds] = time.split(':');
+        let hours24 = parseInt(hours, 10);
+        if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
+          hours24 += 12;
+        }
+        if (modifier.toLowerCase() === 'am' && hours24 === 12) {
+          hours24 = 0;
+        }
+        const standardDateStr = `${year}-${month}-${day}T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
+        return new Date(standardDateStr);
       }
-      if (modifier.toLowerCase() === 'am' && hours24 === 12) {
-        hours24 = 0;
-      }
-      const standardDateStr = `${year}-${month}-${day}T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
-      return new Date(standardDateStr);
+      const givenDate = parseDateStr(dateStr);
+      // get current local time
+      const now = new Date();
+      const sydneyTimeOffset = 10 * 60;
+      const oneHourInMilliseconds = 3600000;
+      const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
+      // time diff
+      const diff = sydneyNow.getTime() - givenDate.getTime();
+      const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const diffTime = `${diffDays} days ${diffHours} hours`;
+      return diffTime;
     }
-    const givenDate = parseDateStr(dateStr);
-    // get current local time
-    const now = new Date();
-    const sydneyTimeOffset = 10 * 60;
-    const oneHourInMilliseconds = 3600000;
-    const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
-    // time diff
-    const diff = sydneyNow.getTime() - givenDate.getTime();
-    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const diffTime = `${diffDays} days ${diffHours} hours`;
-    return diffTime;
+    // const parseDateStr = (dateStr: any) => {
+    //   const [datePart, timePart] = dateStr.split(', ');
+    //   const [day, month, year] = datePart.split('/');
+    //   const [time, modifier] = timePart.split(' ');
+    //   const [hours, minutes, seconds] = time.split(':');
+    //   let hours24 = parseInt(hours, 10);
+    //   if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
+    //     hours24 += 12;
+    //   }
+    //   if (modifier.toLowerCase() === 'am' && hours24 === 12) {
+    //     hours24 = 0;
+    //   }
+    //   const standardDateStr = `${year}-${month}-${day}T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
+    //   return new Date(standardDateStr);
+    // }
+    // const givenDate = parseDateStr(dateStr);
+    // // get current local time
+    // const now = new Date();
+    // const sydneyTimeOffset = 10 * 60;
+    // const oneHourInMilliseconds = 3600000;
+    // const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
+    // // time diff
+    // const diff = sydneyNow.getTime() - givenDate.getTime();
+    // const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    // const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    // const diffTime = `${diffDays} days ${diffHours} hours`;
+    // return diffTime;
   }
 
   return (

@@ -9,6 +9,9 @@ import ListingElement from './hostedLIstElement';
 import Publish from './publishListing';
 import BookRequest from './bookingRequest'
 import { AuthContext } from '../AuthContext';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
+import RevenueGraph from './RevenueGraph';
 
 interface Listing {
   id: string;
@@ -60,6 +63,9 @@ const HostedListings = () => {
   }, [location.state])
 
   const listingId = localStorage.getItem('listingId')
+
+  const revenue = [{ day: '0', revenue: '1000' }, { day: '1', revenue: '1500' }, { day: '2', revenue: '1020' }, { day: '3', revenue: '540' }, { day: '4', revenue: '1250' }, { day: '4', revenue: '2150' }, { day: '6', revenue: '1050' }, { day: '7', revenue: '950' }, { day: '8', revenue: '4250' }, { day: '9', revenue: '2501' }, { day: '10', revenue: '7527' }, { day: '11', revenue: '447' }, { day: '12', revenue: '2752' }, { day: '13', revenue: '4527' }, { day: '14', revenue: '2725' }, { day: '15', revenue: '7527' }, { day: '16', revenue: '7527' }, { day: '17', revenue: '7527' }, { day: '18', revenue: '4527' }, { day: '19', revenue: '7542' }, { day: '20', revenue: '7274' }, { day: '21', revenue: '7527' }, { day: '22', revenue: '7527' }, { day: '23', revenue: '2047' }, { day: '24', revenue: '7425' }, { day: '25', revenue: '2475' }, { day: '26', revenue: '7427' }, { day: '27', revenue: '7475' }, { day: '28', revenue: '7425' }, { day: '29', revenue: '5727' }, { day: '30', revenue: '2574' }]
+
   return (
     <>
       {
@@ -88,6 +94,9 @@ const HostedListings = () => {
               </Grid>
                 ))}
             </Grid>
+            <Box sx={{ maxWidth: '100%', width: 500, textAlign: 'center', margin: 'auto' }}>
+              <RevenueGraph revenueData={revenue} />
+            </Box>
           </Box>
         </>
         )
