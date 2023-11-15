@@ -57,7 +57,7 @@ const HostedListings = () => {
         setHostedListings(newListings);
       }
     })();
-  }, [])
+  }, [location.state])
 
   const listingId = localStorage.getItem('listingId')
   return (

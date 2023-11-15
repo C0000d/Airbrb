@@ -158,7 +158,7 @@ const PageList = () => {
     localStorage.setItem('sminPrice', minPrice)
     localStorage.setItem('smaxPrice', maxPrice)
     localStorage.setItem('order', order)
-    navigate('/search');
+    navigate('/search', { state: { from: 'newsearch' } });
   }
   const [order, setOrder] = React.useState('');
 
@@ -342,9 +342,11 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} />
+        {/* <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} /> */}
+        <Route path='/hostedListing/*' element={<HostedListings />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
-        <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} />
+        {/* <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} /> */}
+        <Route path='/search' element={<SearchPage />} />
         <Route path='/myBookings' element={<MyBookings />} />
         <Route path='/reviewPage/:listingId' element={<ReviewPage />} />
       </Routes>

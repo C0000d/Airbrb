@@ -75,7 +75,7 @@ const SearchPage = () => {
       return data;
     }
   }
-
+  const location = useLocation();
   const [searchListing, setSearchListing] = useState<Listing[]>([])
   useEffect(() => {
     (async () => {
@@ -100,18 +100,6 @@ const SearchPage = () => {
           if (listing.title.toLowerCase().includes(stitle.toLowerCase()) && listing.address.toLowerCase().includes(scity.toLowerCase())) {
             newListings.push(listing);
           }
-          if (sminPrice !== null && sminPrice !== '') {
-            newListings = newListings.filter(listing => { return listing.price >= parseInt(sminPrice) })
-          }
-          if (smaxPrice !== null && smaxPrice !== '') {
-            newListings = newListings.filter(listing => { return listing.price <= parseInt(smaxPrice) })
-          }
-          if (order === 'increase') {
-            newListings.sort((a, b) => parseFloat(getReviewRate(a.reviews)) - parseFloat(getReviewRate(b.reviews)));
-          }
-          if (order === 'decrease') {
-            newListings.sort((a, b) => parseFloat(getReviewRate(b.reviews)) - parseFloat(getReviewRate(a.reviews)));
-          }
           const fetchDetailsAndUpdateListings = async () => {
             if (newListings) {
               const temp = [];
@@ -127,6 +115,18 @@ const SearchPage = () => {
                 }
               }
               newListings = temp
+            }
+            if (sminPrice !== null && sminPrice !== '') {
+              newListings = newListings.filter(listing => { return listing.price >= parseInt(sminPrice) })
+            }
+            if (smaxPrice !== null && smaxPrice !== '') {
+              newListings = newListings.filter(listing => { return listing.price <= parseInt(smaxPrice) })
+            }
+            if (order === 'increase') {
+              newListings.sort((a, b) => parseFloat(getReviewRate(a.reviews)) - parseFloat(getReviewRate(b.reviews)));
+            }
+            if (order === 'decrease') {
+              newListings.sort((a, b) => parseFloat(getReviewRate(b.reviews)) - parseFloat(getReviewRate(a.reviews)));
             }
             if (sminNum !== null && sminNum !== '') {
               const temp = [];
@@ -167,7 +167,7 @@ const SearchPage = () => {
         });
       }
     })();
-  }, [])
+  }, [location.state])
 
   return (
     <>
