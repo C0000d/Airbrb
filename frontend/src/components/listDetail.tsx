@@ -255,10 +255,10 @@ const ListDetail = () => {
       >
         {listing.metadata.video
           ? (
-            <Box>
+            <Box sx={{ maxWidth: '100%', width: 500, textAlign: 'center', margin: 'auto' }}>
               <iframe
-                width="560"
-                height="315"
+                width="100%"
+                height="300"
                 src={embedVideoUrl(listing.metadata.video)}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -290,7 +290,7 @@ const ListDetail = () => {
         <Typography variant='button'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
         <br/>
         <Typography variant='button' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
-          No. of bathrooms: {listing.metadata.bathrooms} <br />
+          No. of bathrooms: {listing.metadata.bathrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Price: {listing.price} <br />
         No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Type: {listing.metadata.type}<br /></Typography>
       </Box>
       <br/>

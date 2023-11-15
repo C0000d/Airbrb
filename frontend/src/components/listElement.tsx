@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardMedia, CardActionArea, Box, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, CardActionArea, CardActions, Box, Typography, Popover } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
 import { Review, TimePeriod, ListingDetail } from './dashboard';
+import RatingPopover from './ratingPopover';
 import embedVideoUrl from './embedVideo';
 
 interface rawListingData {
@@ -34,6 +35,9 @@ const getReviewRate = (reviews: Review[]) => {
 const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (listingId: string) => void }) => {
   const [data, setData] = useState<ListingDetail | null>();
 
+  // popover control
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,6 +51,18 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
 
     fetchData();
   }, [listingId]);
+
+  // handle popover
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'listingRating' : undefined;
 
   if (!data) {
     return (
@@ -97,9 +113,28 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
                   No. of bathrooms: {data.metadata.bathrooms} <br />
                 </Typography>
                 <br/>
-                <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
               </CardContent>
             </CardActionArea>
+            <CardActions
+              aria-describedby={id}
+              onClick={handleClick}
+              sx={{ cursor: 'pointer' }}
+            >
+              <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
+            </CardActions>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              disableRestoreFocus
+            >
+              <RatingPopover id={listingId} reviews={reviews} />
+            </Popover>
           </Card>
           )
         : (
@@ -119,9 +154,28 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
                   No. of bathrooms: {data.metadata.bathrooms} <br />
                 </Typography>
                 <br/>
-                <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
               </CardContent>
             </CardActionArea>
+            <CardActions
+              aria-describedby={id}
+              onClick={handleClick}
+              sx={{ cursor: 'pointer' }}
+            >
+              <Typography variant='body2'>&#x2605; {reviewsRate} ({data.reviews.length} reviews)</Typography>
+            </CardActions>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              disableRestoreFocus
+            >
+              <RatingPopover id={listingId} reviews={reviews} />
+            </Popover>
           </Card>
           )
       }
