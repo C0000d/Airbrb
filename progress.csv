@@ -15,6 +15,6 @@ section,completed
 2.5.1,YES
 2.5.2,YES
 2.6.1,YES
-2.6.2,NO
+2.6.2,PARTIAL(Graph component is okay, the data not yet processed completely)
 2.6.3,NO
-2.6.4,YES
+2.6.4,YES(in edit page)
