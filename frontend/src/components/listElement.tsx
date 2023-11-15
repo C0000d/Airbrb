@@ -65,7 +65,7 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
   const open = Boolean(anchorEl);
   const id = open ? 'listingRating' : undefined;
 
-  if (!data) {
+  if (!data?.metadata) {
     return (
       <>
         <Box sx={{

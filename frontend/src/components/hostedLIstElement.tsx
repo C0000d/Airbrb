@@ -7,12 +7,32 @@ import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
 import { useNavigate, useLocation } from 'react-router-dom';
 import embedVideoUrl from './embedVideo';
-import { Review, TimePeriod, ListingDetail } from './dashboard';
+import { Review, TimePeriod } from './dashboard';
 
 interface eleProps {
   listingId: string;
 }
-
+interface MetaData {
+  type: string;
+  number: string;
+  bedrooms: string;
+  amenities: string;
+  beds: string;
+  bathrooms: string;
+  video: string;
+}
+interface ListingDetail {
+  title: string;
+  owner: string;
+  address: string;
+  price: number;
+  thumbnail: string;
+  metadata: MetaData;
+  reviews: Review[];
+  availability: TimePeriod[];
+  published: boolean;
+  postedOn: string;
+}
 const ListingElement = (props: eleProps) => {
   const navigate = useNavigate();
   const detailPage = () => {
@@ -28,6 +48,7 @@ const ListingElement = (props: eleProps) => {
   }
   const location = useLocation();
   const [detail, setDetail] = useState<ListingDetail | null>(null);
+  // const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '', video: '' }, price: '', reviews: [], published: false });
   useEffect(() => {
     const getDetail = async () => {
       const res = await fetch(`http://localhost:5005/listings/${props.listingId}`, {
@@ -45,7 +66,7 @@ const ListingElement = (props: eleProps) => {
     }
 
     getDetail()
-  }, [location.state]);
+  }, [props.listingId, location.state]);
 
   const deleteListing = async () => {
     const token = localStorage.getItem('token')
@@ -65,10 +86,9 @@ const ListingElement = (props: eleProps) => {
       alert('Successfully delete!');
     }
   }
-  // const [published, setPublished] = useState(false);
+
   const publish = () => {
     navigate('/hostedListing/publishListing', { state: { from: 'publish' } })
-    // setPublished(true)
   }
 
   const unpublish = async () => {
@@ -87,11 +107,10 @@ const ListingElement = (props: eleProps) => {
     } else {
       alert('successfully unpublished!');
       navigate('/hostedListing', { state: { from: 'unpublish' } });
-      // setPublished(false)
     }
   }
 
-  if (!detail) {
+  if (!detail?.metadata) {
     return (
     <>
       <Box sx={{
@@ -109,10 +128,12 @@ const ListingElement = (props: eleProps) => {
     );
   }
 
+  // const video: string = detail.metadata.video;
+
   return (
     <Card sx={{ maxWidth: '100%', boxShadow: 0 }} onClick={storeId}>
       <CardActionArea onClick={detailPage} sx={{ marginBottom: '8px' }}>
-        {detail.metadata.video
+        {detail && detail.metadata && detail.metadata.video
           ? (
             <CardMedia
               component="iframe"
