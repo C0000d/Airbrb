@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, getByText, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PageList from '../components/pageList';
 import { AuthContext } from '../AuthContext';
@@ -25,8 +25,8 @@ class MockResizeObserver {
   unobserve = jest.fn();
   disconnect = jest.fn();
 
-  constructor(_callback: ResizeObserverCallback) {
-  }
+  // constructor (_callback: ResizeObserverCallback) {
+  // }
 }
 
 (global as any).ResizeObserver = MockResizeObserver;
@@ -101,5 +101,4 @@ describe('Menu', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
   });
-
 });

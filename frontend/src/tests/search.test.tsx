@@ -1,5 +1,4 @@
-import { render, screen, fireEvent, waitFor, getByText, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import PageList from '../components/pageList';
 import { AuthContext } from '../AuthContext';
 import React from 'react';
@@ -52,7 +51,7 @@ describe('Search', () => {
             <PageList />
           </AuthContext.Provider>
         </Router>
-      );
+    );
     const searchInput = screen.getByPlaceholderText('Search…');
     fireEvent.click(searchInput);
     const searchDialogTitle = screen.getByText('Search the listings you want...');

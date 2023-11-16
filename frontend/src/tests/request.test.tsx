@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, getByText, cleanup } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import BookRequest from '../components/bookingRequest';
 import { AuthContext } from '../AuthContext';
@@ -20,16 +20,16 @@ beforeAll(() => {
   window.alert = jest.fn();
 });
 afterEach(cleanup);
-class MockResizeObserver {
-  observe = jest.fn();
-  unobserve = jest.fn();
-  disconnect = jest.fn();
+// class MockResizeObserver {
+//   observe = jest.fn();
+//   unobserve = jest.fn();
+//   disconnect = jest.fn();
 
-  constructor(_callback: ResizeObserverCallback) {
-  }
-}
+//   constructor (_callback: ResizeObserverCallback) {
+//   }
+// }
 
-(global as any).ResizeObserver = MockResizeObserver;
+// (global as any).ResizeObserver = MockResizeObserver;
 
 describe('Request', () => {
   beforeEach(() => {

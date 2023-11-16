@@ -1,5 +1,5 @@
-import { render, screen, waitFor, getByText, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, cleanup } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
 import RatingPopover from '../components/ratingPopover';
 import { AuthContext } from '../AuthContext';
 import React from 'react';
@@ -19,9 +19,9 @@ beforeAll(() => {
   window.alert = jest.fn();
 });
 const myDate = new Date('2023-11-17T12:00:00');
-const reviews = [{user: 'q', rate: 5, comment: 'ausdhf', postOn: myDate}];
+const reviews = [{ user: 'q', rate: 5, comment: 'ausdhf', postOn: myDate }];
 const id = 'someId';
-const location = 'someLocation';
+// const location = 'someLocation';
 afterEach(cleanup);
 describe('RatingPopover', () => {
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('RatingPopover', () => {
         </AuthContext.Provider>
       </Router>
     );
-     const cardElement = screen.getByText((content) => {
+    const cardElement = screen.getByText((content) => {
       return content.includes('global ratings');
     });
     expect(cardElement).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('RatingPopover', () => {
         </AuthContext.Provider>
       </Router>
     );
-     const cardElement = screen.getByText((content) => {
+    const cardElement = screen.getByText((content) => {
       return content.includes('out of 5');
     });
     expect(cardElement).toBeInTheDocument();
