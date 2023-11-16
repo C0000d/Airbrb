@@ -7,7 +7,7 @@ import ReviewArea from './showingReview';
 import RatingPopover from './ratingPopover';
 import embedVideoUrl from './embedVideo';
 import { Box, Button, Typography, Rating, Popover } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
@@ -337,7 +337,7 @@ const ListDetail = () => {
       >
         <Typography variant='h5'>Booking</Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={['DatePicker']}>
+          {/* <DemoContainer components={['DatePicker']}> */}
             <DatePicker
               sx={{ width: '100%' }}
               label="Start Date *"
@@ -349,10 +349,10 @@ const ListDetail = () => {
                 setStartDate(newValue ? newValue.toDate() : null);
               }}
             />
-          </DemoContainer>
+          {/* </DemoContainer> */}
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={['DatePicker']}>
+          {/* <DemoContainer components={['DatePicker']}> */}
             <DatePicker
               sx={{ width: '100%' }}
               label="End Date *"
@@ -364,7 +364,7 @@ const ListDetail = () => {
                 setEndDate(newValue ? newValue.toDate() : null);
               }}
               />
-          </DemoContainer>
+          {/* </DemoContainer> */}
         </LocalizationProvider>
         <br/>
         <Typography variant='overline'>
