@@ -78,16 +78,16 @@ const Register = () => {
         <Typography variant="h4" gutterBottom>
           Register
         </Typography> <br />
-        <TextField fullWidth label="Email *" type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
+        <TextField data-cy="register-email-input" fullWidth label="Email *" type="text" value={email} onChange={e => setEmail(e.target.value)} /><br />
         <br />
-        <TextField fullWidth label="Password *" type="password" value={password} onChange={e => setPassword(e.target.value)} /> <br />
+        <TextField data-cy="register-password-input" fullWidth label="Password *" type="password" value={password} onChange={e => setPassword(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Check Password *" type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /> <br />
+        <TextField data-cy="register-checkpassword-input" fullWidth label="Check Password *" type="password" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Name *" type="text" value={name} onChange={e => setName(e.target.value)} /><br />
+        <TextField data-cy="register-name-input" fullWidth label="Name *" type="text" value={name} onChange={e => setName(e.target.value)} /><br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
-        <Button variant="contained" type="button" onClick={register} style={{ marginBottom: 10 }}>Register</Button>
+        <Button data-cy="register-submit-button" variant="contained" type="button" onClick={register} style={{ marginBottom: 10 }}>Register</Button>
       </Box>
     </>
   )

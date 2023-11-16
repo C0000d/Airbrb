@@ -107,11 +107,11 @@ const CreateHostedListing = () => {
           Create a new listing
         </Typography>
         <br />
-        <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
+        <TextField data-cy="create-list-title" fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
+        <TextField data-cy="create-list-address" fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
+        <TextField data-cy="create-list-price" fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
         <Box
         sx={{
@@ -150,18 +150,18 @@ const CreateHostedListing = () => {
           />
         </Card>
         <br />
-        <TextField fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
+        <TextField data-cy="create-list-type" fullWidth label="Property Type *" value={type} onChange={e => setType(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bathrooms *" value={bathrooms} onChange={e => setBathrooms(e.target.value)} /> <br />
+        <TextField data-cy="create-list-bathrooms" fullWidth label="Number of bathrooms *" value={bathrooms} onChange={e => setBathrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
+        <TextField data-cy="create-list-bedrooms" fullWidth label="Number of bedrooms *" value={bedrooms} onChange={e => setBedrooms(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Number of beds *" value={beds} onChange={e => setBeds(e.target.value)} /> <br />
+        <TextField data-cy="create-list-beds" fullWidth label="Number of beds *" value={beds} onChange={e => setBeds(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
+        <TextField data-cy="create-list-amenities" fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
-        <Button variant="contained" type="button" onClick={create} style={{ marginBottom: 10 }}>Submit</Button>
+        <Button data-cy="create-list-Submit" variant="contained" type="button" onClick={create} style={{ marginBottom: 10 }}>Submit</Button>
       </Box>
     </>
   );

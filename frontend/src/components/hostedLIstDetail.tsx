@@ -203,7 +203,7 @@ const HostedDetail = () => {
         <br />
         <TextField fullWidth label="Video Url(optional)" value={video} onChange={e => setVideo(e.target.value)} /> <br />
         <br />
-        <TextField fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
+        <TextField data-cy="edit-list-title" fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />
         <TextField fullWidth label="Listing Address *" value={address} onChange={e => setAddress(e.target.value)} /> <br />
         <br />
@@ -220,7 +220,7 @@ const HostedDetail = () => {
         <TextField fullWidth label="Property amenities *" value={amenities} onChange={e => setAmenities(e.target.value)} /> <br />
         <br />
         <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Close</Button>
-        <Button variant="contained" type="button" onClick={saveChange} style={{ marginBottom: 10 }}>Save</Button>
+        <Button data-cy="edit-list-Submit" variant="contained" type="button" onClick={saveChange} style={{ marginBottom: 10 }}>Save</Button>
       </Box>
     </>
   );

@@ -71,7 +71,7 @@ const HostedListings = () => {
       {
         !isAtEitherPage && (
         <>
-          <Button variant="contained" type="button" onClick={createListing}>Create Listing</Button>
+          <Button data-cy="Create-list-btn" variant="contained" type="button" onClick={createListing}>Create Listing</Button>
           <Box sx={{ flexGrow: 1, p: 2 }} >
             <Grid
               container
