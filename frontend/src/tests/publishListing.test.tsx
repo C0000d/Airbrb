@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Publish from '../components/publishListing';
 import { AuthContext } from '../AuthContext';
@@ -18,6 +18,7 @@ jest.mock('react-router-dom', () => ({
 beforeAll(() => {
   window.alert = jest.fn();
 });
+afterEach(cleanup);
 describe('Publish', () => {
   beforeEach(() => {
     mockNavigate.mockReset();

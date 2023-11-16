@@ -61,7 +61,7 @@ const RatingPopover = ({ reviews, id, location }: RatingPopoverProps) => {
           marginBottom: 1,
           justifyContent: 'center',
         }}>
-          <Rating value={totalRate} precision={0.1} size='large' readOnly />
+          <Rating data-testid="custom-rating" value={totalRate} precision={0.1} size='large' readOnly />
           <Typography variant='h6'>{totalRate} out of 5</Typography>
         </Box>
         <Typography paragraph>{totalReviewCount} global ratings</Typography>

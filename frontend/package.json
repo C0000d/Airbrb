@@ -13,7 +13,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.5",
     "@mui/x-date-pickers": "^6.18.1",
     "@mui/x-date-pickers-pro": "^6.18.1",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^4.4.0",
     "dayjs": "^1.11.10",

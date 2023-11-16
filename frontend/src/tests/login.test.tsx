@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from '../components/login';
 import { AuthContext } from '../AuthContext';
@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
-
+afterEach(cleanup);
 describe('Login', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
