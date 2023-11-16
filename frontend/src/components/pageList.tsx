@@ -170,7 +170,7 @@ const PageList = () => {
       {/* <AppBar position="static">
         <Container maxWidth="xl"> */}
           <Toolbar disableGutters>
-            <Search onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
+            <Search data-cy="search-list" onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -188,6 +188,7 @@ const PageList = () => {
               </DialogContentText>
               <TextField
                 // autoFocus
+                data-cy="search-title"
                 margin="dense"
                 label="Listing Title"
                 type="text"
@@ -259,7 +260,7 @@ const PageList = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose1}>Cancel</Button>
-              <Button onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
+              <Button data-cy="search-btn" onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
             </DialogActions>
           </Dialog>
         </React.Fragment>

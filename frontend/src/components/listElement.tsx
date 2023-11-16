@@ -96,10 +96,11 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
     <>
       {video
         ? (
-          <Card sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
+          <Card data-cy="search-detail" sx={{ maxWidth: '100%', boxShadow: 0, paddingRight: '16px' }}>
             <CardActionArea onClick={() => onClick(listingId)}>
               <CardMedia
                 component="iframe"
+                data-cy="play-video"
                 height="270"
                 src={embedVideoUrl(video)}
                 title={title}
