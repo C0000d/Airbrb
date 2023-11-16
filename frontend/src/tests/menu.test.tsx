@@ -20,11 +20,20 @@ beforeAll(() => {
   window.alert = jest.fn();
 });
 afterEach(cleanup);
+class MockResizeObserver {
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+
+  constructor(_callback: ResizeObserverCallback) {
+  }
+}
+
+(global as any).ResizeObserver = MockResizeObserver;
 
 describe('Menu', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
-    mockAuth.setToken.mockClear()
   });
   it('renders Menu component correctly', () => {
     render(
