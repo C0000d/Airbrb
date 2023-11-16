@@ -20,7 +20,7 @@ beforeAll(() => {
 });
 afterEach(cleanup);
 
-describe('RatingPopover', () => {
+describe('Search', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
   });
