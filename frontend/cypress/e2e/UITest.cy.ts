@@ -44,7 +44,7 @@ describe('happy path', () => {
     cy.get('[data-cy="create-list-Submit"]').click();
   });
 
-  it ('Successfully edit a listing title', () => {
+  it ('Successfully edit a listing title and add a youtube video url', () => {
     cy.visit('localhost:3000/hostedListing');
     cy.contains('Edit').click()
     const title = 'Unsw new title'
