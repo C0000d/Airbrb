@@ -95,7 +95,7 @@ const Publish = () => {
         <br />
         <Box>
           {/* Available Date: <br /> */}
-          <DatePicker disablePast value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
+          <DatePicker data-testid="startDatePicker" disablePast value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
           <DatePicker disablePast value={datePickerGroup.end} onChange={(newValue) => updateAvailability(index, 'end', newValue)} label="Available To: *" />
         </Box>
         <br />
