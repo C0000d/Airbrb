@@ -4,17 +4,25 @@ import Login from '../components/login';
 // import React from 'react';
 import { AuthContext } from '../AuthContext';
 import React, { useContext, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-describe('Button', () => {
-  // const authContext = useContext(AuthContext);
+const mockAuth = {
+  token: 'fake-token',
+  setToken: jest.fn(),
+};
+
+describe('Login', () => {
   it('renders button with default title', () => {
-    render(<Login />);
-    // expect(screen.getByRole('button')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login-cancel/i })).toBeInTheDocument();
+    render(
+      <Router>
+        <AuthContext.Provider value={mockAuth}>
+          <Login />
+        </AuthContext.Provider>
+      </Router>
+    );
+    expect(screen.getByRole('button', { name: /Cancel/i })).toBeInTheDocument();
     // expect(screen.getByText(/click me!/i)).toBeInTheDocument();
-
-    // screen.getByRole('');
     // screen.debug();
     // screen.logTestingPlaygroundURL();
   });
-})
+});
