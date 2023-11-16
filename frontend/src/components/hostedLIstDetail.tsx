@@ -201,7 +201,7 @@ const HostedDetail = () => {
             )
         }
         <br />
-        <TextField fullWidth label="Video Url(optional)" value={video} onChange={e => setVideo(e.target.value)} /> <br />
+        <TextField data-cy="edit-list-video" fullWidth label="Video Url(optional)" value={video} onChange={e => setVideo(e.target.value)} /> <br />
         <br />
         <TextField data-cy="edit-list-title" fullWidth label="Listing Title *" value={title} onChange={e => setTitle(e.target.value)} /> <br />
         <br />

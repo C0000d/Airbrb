@@ -48,8 +48,11 @@ describe('happy path', () => {
     cy.visit('localhost:3000/hostedListing');
     cy.contains('Edit').click()
     const title = 'Unsw new title'
+    const video = 'https://youtu.be/8peKcSEDFB4?si=7zuOjAmkg31cQF8s'
     cy.get('[data-cy="edit-list-title"]').type('{selectall}{backspace}').type(title);
+    cy.get('[data-cy="edit-list-video"]').type('{selectall}{backspace}').type(video);
     cy.get('[data-cy="edit-list-Submit"]').click();
+    cy.wait(3000)
   });
 
   it ('Successfully publish a listing', () => {
@@ -60,11 +63,13 @@ describe('happy path', () => {
     cy.get('.MuiIconButton-root').eq(2).click();
     cy.get('.MuiPickersDay-root').contains('30').click();
     cy.contains('Submit').click()
+    cy.wait(3000)
   });
 
   it ('Successfully unpublish a listing', () => {
     cy.visit('localhost:3000/hostedListing');
     cy.contains('unPublish').click()
+    cy.wait(3000)
   });
 
   it ('Successfully logout', () => {
@@ -85,6 +90,7 @@ describe('happy path', () => {
   it ('go to delete a listing and logout', () => {
     cy.get('button.MuiIconButton-root[aria-label="account of current user"]').click();
     cy.contains('Hosted Listings').click();
+    cy.wait(3000)
     cy.contains('Delete').click();
     cy.get('button.MuiIconButton-root[aria-label="account of current user"]').click();
     cy.contains('Logout').click();
