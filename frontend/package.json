@@ -51,7 +51,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
     "@babel/eslint-parser": "^7.22.15",
+    "@babel/preset-env": "^7.23.3",
     "@testing-library/react": "^12.1.5",
     "@types/enzyme": "^3.10.16",
     "@types/enzyme-to-json": "^1.5.7",
@@ -64,6 +66,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
+    "babel-jest": "^29.7.0",
     "cypress": "^13.5.1",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
@@ -73,10 +76,15 @@
     "eslint-plugin-n": "^15.3.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.31.10",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.5.1",
     "react-test-renderer": "^17.0.2",
     "typescript": "^4.9.5"
   },
   "jest": {
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "identity-obj-proxy"
+    },
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },

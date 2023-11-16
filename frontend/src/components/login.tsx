@@ -64,7 +64,7 @@ const Login = () => {
         <br/>
         <TextField fullWidth type="password" variant='outlined' label='Password *' value={password} onChange={ e => setPassword(e.target.value)}/> <br />
         <br/>
-        <Button variant='outlined' type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
+        <Button name= 'login-cancel' variant='outlined' type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Cancel</Button>
         <Button variant='contained' type="button" onClick={login} style={{ marginBottom: 10 }}>Login</Button>
       </Box>
     </>
