@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ListElement from './listElement';
 import { Box, Grid, Typography } from '@mui/material';
 import { CircularProgress } from '@mui/joy';

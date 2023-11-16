@@ -1,7 +1,7 @@
-import React, { SetStateAction, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchListingDetails, getReviewRate } from './listElement';
-import { ListingDetail, Booking, DateRange, Review, MetaData } from './dashboard';
+import { ListingDetail, Review } from './dashboard';
 import ReviewBox from './makingReview';
 import ReviewArea from './showingReview';
 import RatingPopover from './ratingPopover';

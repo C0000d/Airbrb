@@ -1,8 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Box, Button, TextField, Typography, Rating, Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Box, Button, Typography, Grid } from '@mui/material';
 // import ListingElement from './hostedLIstElement';
-import ListElement, { fetchListingDetails, getReviewRate } from './listElement';
+import ListElement, { getReviewRate } from './listElement';
 
 interface Review {
   user: string;
@@ -20,33 +20,33 @@ interface Listing {
   reviews: Review[];
 }
 
-interface MetaData {
-  type: string;
-  number: string;
-  bedrooms: string;
-  amenities: string;
-  beds: string;
-  bathrooms: string
-}
+// interface MetaData {
+//   type: string;
+//   number: string;
+//   bedrooms: string;
+//   amenities: string;
+//   beds: string;
+//   bathrooms: string
+// }
 
-interface TimePeriod {
-  // define Availability format
-  start: string;
-  end: string;
-}
+// interface TimePeriod {
+//   // define Availability format
+//   start: string;
+//   end: string;
+// }
 
-interface ListingDetail {
-  title: string;
-  owner: string;
-  address: string;
-  price: number;
-  thumbnail: string;
-  metadata: MetaData;
-  reviews: Review[];
-  availability: TimePeriod[];
-  published: boolean;
-  postedOn: string;
-}
+// interface ListingDetail {
+//   title: string;
+//   owner: string;
+//   address: string;
+//   price: number;
+//   thumbnail: string;
+//   metadata: MetaData;
+//   reviews: Review[];
+//   availability: TimePeriod[];
+//   published: boolean;
+//   postedOn: string;
+// }
 
 const SearchPage = () => {
   let stitle = localStorage.getItem('stitle');

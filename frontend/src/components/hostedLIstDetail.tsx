@@ -11,7 +11,7 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CircularProgress } from '@mui/joy';
 import embedVideoUrl from './embedVideo';
-import { Review, TimePeriod, ListingDetail } from './dashboard';
+import { ListingDetail } from './dashboard';
 
 const HostedDetail = () => {
   const navigate = useNavigate();

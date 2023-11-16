@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Review, Booking } from './dashboard';
 
 import { Box, Button, TextField, Typography, Rating } from '@mui/material';

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Review, Booking, ListingDetail } from './dashboard';
+import React, { useEffect, useState } from 'react';
+// import { AuthContext } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { Review, ListingDetail } from './dashboard';
 import { fetchListingDetails } from './listElement';
-import { Box, Button, TextField, Typography, Rating, Card, CardContent, Divider } from '@mui/material';
+import { Box, Typography, Rating, Card, CardContent, Divider } from '@mui/material';
 // import { Card, CardHeader, CardMedia, CardContent, CardActions, Collapse } from '@mui/material';
 
 interface ReviewAreaProps {

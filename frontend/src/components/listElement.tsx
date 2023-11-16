@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardMedia, CardActionArea, CardActions, Box, Typography, Popover } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
-import { Review, TimePeriod, ListingDetail } from './dashboard';
+import { Review, ListingDetail } from './dashboard';
 import RatingPopover from './ratingPopover';
 import embedVideoUrl from './embedVideo';
 

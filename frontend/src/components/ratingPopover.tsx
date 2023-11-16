@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Review, Booking, ListingDetail } from './dashboard';
+import React, { useEffect } from 'react';
+import { Review } from './dashboard';
 import { getReviewRate } from './listElement';
 import { Box, Rating, Typography, Card, Divider, Stack } from '@mui/material';
 import LinearProgress from '@mui/joy/LinearProgress';
-import { Location, useNavigate, useParams } from 'react-router-dom';
+import { Location, useNavigate } from 'react-router-dom';
 
 interface RatingPopoverProps {
   id: string | undefined;

@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import FileToDataUrl from './fileToDataURL'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import { stat } from 'fs';
+// import { stat } from 'fs';
 
 const CreateHostedListing = () => {
   const [title, setTitle] = React.useState('');

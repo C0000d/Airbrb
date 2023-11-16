@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../AuthContext';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+// import { AuthContext } from '../AuthContext';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getReviewRate } from './listElement';
-import { Review, Booking, ListingDetail } from './dashboard';
+import { Review } from './dashboard';
 import ReviewArea from './showingReview';
 import { reviewClassification, classifyReviews } from './ratingPopover';
 import { Button, Box, Typography, Rating, Divider, Stack } from '@mui/material';
