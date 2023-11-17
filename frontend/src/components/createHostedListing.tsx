@@ -21,7 +21,7 @@ const CreateHostedListing = () => {
   const [beds, setBeds] = React.useState('');
   const [amenities, setAmenities] = React.useState('');
   const [img, setImg] = React.useState('');
-
+  const [video, setVideo] = React.useState('');
   const navigate = useNavigate();
   const back = () => {
     navigate('/hostedListing')
@@ -75,7 +75,7 @@ const CreateHostedListing = () => {
       const res = await fetch('http://localhost:5005/listings/new', {
         method: 'POST',
         body: JSON.stringify({
-          title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities }
+          title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities, video }
         }),
         headers: {
           'Content-type': 'application/json',

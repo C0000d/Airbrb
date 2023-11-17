@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login renders a button with submit button type if nothing is provided 1`] = `
+<MuiButtonRoot
+  className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium"
+  classes={
+    Object {
+      "endIcon": "MuiButton-endIcon MuiButton-iconSizeMedium",
+      "label": "MuiButton-label",
+      "root": "MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium",
+      "startIcon": "MuiButton-startIcon MuiButton-iconSizeMedium",
+    }
+  }
+  component="button"
+  disabled={false}
+  focusRipple={true}
+  focusVisibleClassName=""
+  onClick={[Function]}
+  ownerState={
+    Object {
+      "color": "primary",
+      "component": "button",
+      "disableElevation": false,
+      "disableFocusRipple": false,
+      "disabled": false,
+      "fullWidth": false,
+      "onClick": [Function],
+      "size": "medium",
+      "type": "submit",
+      "variant": "text",
+    }
+  }
+  type="submit"
+/>
+`;
