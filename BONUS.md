@@ -1,0 +1,2 @@
+Note: If you choose to complete your assignment (Frontend) fully in typescript, such that everything is type compliant to the provided tsconfig definition, then this will count as full marks for bonus marks.
+we use typescript.
