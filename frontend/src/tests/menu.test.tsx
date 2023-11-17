@@ -1,9 +1,9 @@
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import PageList from '../components/pageList';
-import { AuthContext } from '../AuthContext';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import PageList from '../components/pageList';
+import { AuthContext } from '../AuthContext';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 const mockAuth = {
   token: 'fake-token',
@@ -16,17 +16,17 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
+
 beforeAll(() => {
   window.alert = jest.fn();
 });
+
 afterEach(cleanup);
+
 class MockResizeObserver {
   observe = jest.fn();
   unobserve = jest.fn();
   disconnect = jest.fn();
-
-  // constructor (_callback: ResizeObserverCallback) {
-  // }
 }
 
 (global as any).ResizeObserver = MockResizeObserver;

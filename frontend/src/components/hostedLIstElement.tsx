@@ -7,57 +7,37 @@ import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import { CircularProgress } from '@mui/joy';
 import { useNavigate, useLocation } from 'react-router-dom';
 import embedVideoUrl from './embedVideo';
-import { Review, TimePeriod } from './dashboard';
+import { ListingDetail } from './dashboard';
 
 interface eleProps {
   listingId: string;
 }
-interface MetaData {
-  type: string;
-  number: string;
-  bedrooms: string;
-  amenities: string;
-  beds: string;
-  bathrooms: string;
-  video: string;
-}
-interface ListingDetail {
-  title: string;
-  owner: string;
-  address: string;
-  price: number;
-  thumbnail: string;
-  metadata: MetaData;
-  reviews: Review[];
-  availability: TimePeriod[];
-  published: boolean;
-  postedOn: string;
-}
+
 const ListingElement = (props: eleProps) => {
   const navigate = useNavigate();
   const detailPage = () => {
-    navigate(`/hostedListing/detail/:${props.listingId}`)
+    navigate(`/hostedListing/detail/:${props.listingId}`);
   }
 
   const requestPage = () => {
-    navigate(`/hostedListing/bookRequest/:${props.listingId}`)
+    navigate(`/hostedListing/bookRequest/:${props.listingId}`);
   }
 
   const storeId = () => {
-    localStorage.setItem('listingId', props.listingId)
+    localStorage.setItem('listingId', props.listingId);
   }
   const location = useLocation();
   const [detail, setDetail] = useState<ListingDetail | null>(null);
-  // const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '', video: '' }, price: '', reviews: [], published: false });
+
   useEffect(() => {
     const getDetail = async () => {
-      const res = await fetch(`http://localhost:5005/listings/${props.listingId}`, {
+      const response = await fetch(`http://localhost:5005/listings/${props.listingId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
         }
       });
-      const data = await res.json();
+      const data = await response.json();
       if (data.error) {
         alert(data.error);
       } else {
@@ -65,43 +45,43 @@ const ListingElement = (props: eleProps) => {
       }
     }
 
-    getDetail()
+    getDetail();
   }, [props.listingId, location.state]);
 
   const deleteListing = async () => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     const listingId = props.listingId
-    const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
+    const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
-      navigate('/hostedListing', { state: { from: 'delete' } })
+      navigate('/hostedListing', { state: { from: 'delete' } });
       alert('Successfully delete!');
     }
   }
 
   const publish = () => {
-    navigate('/hostedListing/publishListing', { state: { from: 'publish' } })
+    navigate('/hostedListing/publishListing', { state: { from: 'publish' } });
   }
 
   const unpublish = async () => {
-    const token = localStorage.getItem('token')
-    const listingId = props.listingId
-    const res = await fetch(`http://localhost:5005/listings/unpublish/${listingId}`, {
+    const token = localStorage.getItem('token');
+    const listingId = props.listingId;
+    const response = await fetch(`http://localhost:5005/listings/unpublish/${listingId}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
@@ -127,8 +107,6 @@ const ListingElement = (props: eleProps) => {
     </>
     );
   }
-
-  // const video: string = detail.metadata.video;
 
   return (
     <Card sx={{ maxWidth: '100%', boxShadow: 0 }} onClick={storeId}>
@@ -172,22 +150,22 @@ const ListingElement = (props: eleProps) => {
           <Button style={{ marginRight: '15px' }} size="small" color="primary" onClick={detailPage}>
             Edit
           </Button> &nbsp;
-        {!detail.published
-          ? (
-            <>
-              <Button size="small" color="primary" onClick={publish}>
-                Publish
-              </Button>
-            </>
-            )
-          : (
-            <>
-              <Button size="small" color="primary" onClick={unpublish}>
-                unPublish
-              </Button>
-            </>
-            )
-        } &nbsp;
+          {!detail.published
+            ? (
+              <>
+                <Button size="small" color="primary" onClick={publish}>
+                  Publish
+                </Button>
+              </>
+              )
+            : (
+              <>
+                <Button size="small" color="primary" onClick={unpublish}>
+                  unPublish
+                </Button>
+              </>
+              )
+          } &nbsp;
           <br />
           <Button style={{ marginRight: '15px' }} size="small" color="primary" onClick={requestPage}>
             Request

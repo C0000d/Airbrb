@@ -1,9 +1,10 @@
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import Publish from '../components/publishListing';
-import { AuthContext } from '../AuthContext';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import Publish from '../components/publishListing';
+import { AuthContext } from '../AuthContext';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 const mockAuth = {
   token: 'fake-token',
   setToken: jest.fn(),
@@ -15,10 +16,13 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
+
 beforeAll(() => {
   window.alert = jest.fn();
 });
+
 afterEach(cleanup);
+
 describe('Publish', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
@@ -97,6 +101,7 @@ describe('Publish', () => {
       });
     });
   });
+
   it('triggers onClick when cancel clicked', () => {
     render(
       <Router>

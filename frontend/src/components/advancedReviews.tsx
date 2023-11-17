@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { AuthContext } from '../AuthContext';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getReviewRate } from './listElement';
 import { Review } from './dashboard';
@@ -9,21 +8,25 @@ import { Button, Box, Typography, Rating, Divider, Stack } from '@mui/material';
 import LinearProgress from '@mui/joy/LinearProgress';
 
 const ReviewPage = () => {
+  // get current location and navigation
   const navigate = useNavigate();
   const location = useLocation();
   const { listingId } = useParams();
+
+  // set the rating state that to be shown
   const [targetRating, setTargetRating] = useState<number>(0);
   const [targetReview, setTargetReview] = useState<Review[]>([]);
 
   if (!location.state) {
+    // if no location, go back to dashboard
     alert('Failed to navigate review page, try again!');
     navigate('/dashboard');
   }
 
-  // get previous path
+  // get previous path, if from dashboard, go back to dashboard, if not back to detail page
   const previousPath = location.state.from || `/listings/${listingId}`;
 
-  const { rating, reviews } = location.state || {};
+  const { reviews } = location.state || {};
   const totalRate = +getReviewRate(reviews); // convert string to number
   const totalReviewCount = reviews.length;
   const classifiedReview: reviewClassification = classifyReviews(reviews);

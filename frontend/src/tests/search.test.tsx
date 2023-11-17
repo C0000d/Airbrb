@@ -1,8 +1,9 @@
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import PageList from '../components/pageList';
-import { AuthContext } from '../AuthContext';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import PageList from '../components/pageList';
+import { AuthContext } from '../AuthContext';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+
 const mockAuth = {
   token: 'fake-token',
   setToken: jest.fn(),
@@ -14,9 +15,11 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
+
 beforeAll(() => {
   window.alert = jest.fn();
 });
+
 afterEach(cleanup);
 
 describe('Search', () => {
@@ -32,6 +35,7 @@ describe('Search', () => {
       </Router>
     );
   });
+
   it('renders search component correctly', () => {
     render(
       <Router>

@@ -1,45 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import embedVideoUrl from './embedVideo';
+import { ListingDetail } from './dashboard';
+import FileToDataUrl from './fileToDataURL';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import FileToDataUrl from './fileToDataURL'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CircularProgress } from '@mui/joy';
-import embedVideoUrl from './embedVideo';
-import { ListingDetail } from './dashboard';
 
 const HostedDetail = () => {
   const navigate = useNavigate();
   const back = () => {
-    navigate('/hostedListing')
+    navigate('/hostedListing');
   }
 
-  const listingId = localStorage.getItem('listingId')
+  // get listing id, set state
+  const listingId = localStorage.getItem('listingId');
   const [detail, setDetail] = useState<ListingDetail | null>(null);
-  const [title, setTitle] = React.useState('');
-  const [address, setAddress] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [bathrooms, setBathrooms] = React.useState('');
-  const [bedrooms, setBedrooms] = React.useState('');
-  const [beds, setBeds] = React.useState('');
-  const [amenities, setAmenities] = React.useState('');
-  const [img, setImg] = React.useState('');
-  const [video, setVideo] = React.useState('');
+  const [title, setTitle] = useState('');
+  const [address, setAddress] = useState('');
+  const [price, setPrice] = useState('');
+  const [type, setType] = useState('');
+  const [bathrooms, setBathrooms] = useState('');
+  const [bedrooms, setBedrooms] = useState('');
+  const [beds, setBeds] = useState('');
+  const [amenities, setAmenities] = useState('');
+  const [img, setImg] = useState('');
+  const [video, setVideo] = useState('');
+  const [fileName, setFileName] = useState('');
+
   useEffect(() => {
     const getDetail = async () => {
-      const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
+      const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
         }
       });
-      const data = await res.json();
+      const data = await response.json();
       if (data.error) {
         alert(data.error);
       } else {
@@ -60,7 +63,8 @@ const HostedDetail = () => {
     }
     getDetail();
   }, [listingId]);
-  const [fileName, setFileName] = useState('');
+
+  // if file changed, update state
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -73,6 +77,8 @@ const HostedDetail = () => {
       }
     }
   };
+
+  // if saved, send request to api
   const saveChange = async () => {
     if (video !== '') {
       if (!video.includes('youtube') && !video.includes('youtu.be')) {
@@ -80,8 +86,8 @@ const HostedDetail = () => {
         return;
       }
     }
-    const token = localStorage.getItem('token')
-    const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'PUT',
       body: JSON.stringify({
         title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities, video }
@@ -91,14 +97,16 @@ const HostedDetail = () => {
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
-      alert('Successfully update the listing information!')
-      navigate('/hostedListing')
+      alert('Successfully update the listing information!');
+      navigate('/hostedListing');
     }
   }
+
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -132,27 +140,23 @@ const HostedDetail = () => {
   return (
     <>
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
-      <Box
-        sx={{
-          width: '600px',
-          maxWidth: '100%',
-          margin: 'auto',
-          textAlign: 'center'
-        }}
-      >
+      <Box sx={{
+        width: '600px',
+        maxWidth: '100%',
+        margin: 'auto',
+        textAlign: 'center'
+      }}>
         <Typography variant="h4" gutterBottom>
           Listing Detail
         </Typography>
         <br />
-        <Box
-        sx={{
+        <Box sx={{
           width: 500,
           maxWidth: '100%',
           margin: 'auto',
           textAlign: 'center',
           display: 'flex',
-        }}
-        >
+        }}>
           <Typography variant="h6" gutterBottom>
             Thumbnail: &nbsp;&nbsp;
           </Typography>
@@ -162,7 +166,7 @@ const HostedDetail = () => {
               accept="image/jpeg, image/png, image/jpg"
               type="file"
               onChange={handleFileChange}
-          />
+            />
           </Button>
         </Box>
         <br />

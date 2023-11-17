@@ -1,23 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 import { fetchListingDetails, getReviewRate } from './listElement';
 import { ListingDetail, Review } from './dashboard';
 import ReviewBox from './makingReview';
 import ReviewArea from './showingReview';
 import RatingPopover from './ratingPopover';
 import embedVideoUrl from './embedVideo';
-import { Box, Button, Typography, Rating, Popover } from '@mui/material';
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Box, Button, Typography, Rating, Popover, Divider } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import { AuthContext } from '../AuthContext';
 import isBetween from 'dayjs/plugin/isBetween';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CircularProgress } from '@mui/joy';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-// import { useNavigate } from 'react-router-dom';
 
 interface AvailabilityDayjs {
   start: Dayjs | null;
@@ -31,7 +28,6 @@ const countNights = (start: Date | null, end: Date | null) => {
   }
 
   const oneDay = 1000 * 60 * 60 * 24;
-
   return Math.ceil((end.valueOf() - start.valueOf()) / oneDay);
 };
 
@@ -137,21 +133,25 @@ const ListDetail = () => {
       alert('Invalid listing!');
       return;
     }
-    const user = localStorage.getItem('email')
+
+    // check user
+    const user = localStorage.getItem('email');
     if (listing.owner === user) {
       alert('You can not book your own listing!');
+      setStartDayjs(null);
+      setEndDayjs(null);
       return;
     }
+
+    // check if date input is valid
     if (!startDate || !endDate || (startDate > endDate)) {
       alert('The date is invalid, please try again!');
+      setStartDayjs(null);
+      setEndDayjs(null);
       return;
     }
-    // const user = localStorage.getItem('email')
-    // if (listing.owner === user) {
-    //   alert('You can not book your own listing!');
-    //   return;
-    // }
 
+    // count total price
     const totalNights = countNights(startDate, endDate);
     const newTotalPrice = totalNights * listing.price;
     setTotalPrice(newTotalPrice);
@@ -169,13 +169,12 @@ const ListDetail = () => {
         })
       });
 
-      // if (!response.ok) {
-      //   alert(`HTTP error! status: ${response.status}`);
-      // }
-
       const data = await response.json();
       alert('Booking has been sent! Please wait for owner\'s response.');
-      navigate('/dashboard')
+
+      // clear date input
+      setStartDayjs(null);
+      setEndDayjs(null);
       return data;
     } catch (error) {
       alert(`Booking failed: ${error}`);
@@ -187,7 +186,6 @@ const ListDetail = () => {
       const jsonData = await fetchListingDetails(listingId);
       const data: ListingDetail = jsonData.listing;
 
-      // console.log('reviews in update', data.reviews);
       setListing(data);
       setReviews(data.reviews);
     } catch (error) {
@@ -211,7 +209,8 @@ const ListDetail = () => {
       </>
     );
   }
-  // if get invalid listing
+
+  // if listing is not valid/loaded
   if (!listing) {
     return (
       <>
@@ -245,14 +244,11 @@ const ListDetail = () => {
   return (
     <>
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
-      <Box
-        sx={{
-          // width: '80%',
-          maxWidth: '100%',
-          textAlign: 'center',
-          margin: 'auto',
-        }}
-      >
+      <Box sx={{
+        maxWidth: '100%',
+        textAlign: 'center',
+        margin: 'auto',
+      }}>
         {listing.metadata.video
           ? (
             <Box sx={{ maxWidth: '100%', width: 500, textAlign: 'center', margin: 'auto' }}>
@@ -287,11 +283,22 @@ const ListDetail = () => {
         <br/>
         <Typography variant='h5'>Title: {listing.title}</Typography>
         <br/>
-        <Typography variant='button'>Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;No. of beds: {listing.metadata.beds}</Typography>
+        <Typography variant='button'>
+          Address: {listing.address} &nbsp;&nbsp;| &nbsp;&nbsp;
+          No. of beds: {listing.metadata.beds}
+        </Typography>
         <br/>
-        <Typography variant='button' >Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;Amenities: {listing.metadata.amenities} <br />
-          No. of bathrooms: {listing.metadata.bathrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Price: {listing.price} <br />
-        No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;Type: {listing.metadata.type}<br /></Typography>
+        <Typography variant='button' >
+          Owned By: {listing.owner} &nbsp;&nbsp;| &nbsp;&nbsp;
+          Amenities: {listing.metadata.amenities}
+          <br />
+          No. of bathrooms: {listing.metadata.bathrooms} &nbsp;&nbsp;| &nbsp;&nbsp;
+          Price: {listing.price}
+          <br />
+          No. of bedrooms: {listing.metadata.bedrooms} &nbsp;&nbsp;| &nbsp;&nbsp;
+          Type: {listing.metadata.type}
+          <br />
+        </Typography>
       </Box>
       <br/>
       <Box
@@ -311,7 +318,6 @@ const ListDetail = () => {
         />
         <Typography variant='h6'>{totalRate} / 5</Typography>
       </Box>
-      {/* <ClickAwayListener onClickAway={handlePopoverClose}> */}
       <Popover
         id={id}
         open={open}
@@ -325,58 +331,54 @@ const ListDetail = () => {
       >
         <RatingPopover id={listingId} reviews={reviews} />
       </Popover>
-      {/* </ClickAwayListener> */}
       <br/>
-      <Box
-        sx={{
-          width: 500,
-          maxWidth: '100%',
-          textAlign: 'center',
-          margin: 'auto',
-        }}
-      >
+      <Divider variant="middle" />
+      <br/>
+      <Box sx={{
+        width: 500,
+        maxWidth: '100%',
+        textAlign: 'center',
+        margin: 'auto',
+      }}>
         <Typography variant='h5'>Booking</Typography>
+        <br/>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {/* <DemoContainer components={['DatePicker']}> */}
-            <DatePicker
-              sx={{ width: '100%' }}
-              label="Start Date *"
-              disablePast
-              shouldDisableDate={isDateUnavailable}
-              value={startDayjs}
-              onChange={(newValue) => {
-                setStartDayjs(newValue);
-                setStartDate(newValue ? newValue.toDate() : null);
-              }}
-            />
-          {/* </DemoContainer> */}
+          <DatePicker
+            sx={{ width: '100%' }}
+            label="Start Date *"
+            disablePast
+            shouldDisableDate={isDateUnavailable}
+            value={startDayjs}
+            onChange={(newValue) => {
+              setStartDayjs(newValue);
+              setStartDate(newValue ? newValue.toDate() : null);
+            }}
+          />
         </LocalizationProvider>
+        <br/><br/>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {/* <DemoContainer components={['DatePicker']}> */}
-            <DatePicker
-              sx={{ width: '100%' }}
-              label="End Date *"
-              disablePast
-              shouldDisableDate={isDateUnavailable}
-              value={endDayjs}
-              onChange={(newValue) => {
-                setEndDayjs(newValue);
-                setEndDate(newValue ? newValue.toDate() : null);
-              }}
-              />
-          {/* </DemoContainer> */}
+          <DatePicker
+            sx={{ width: '100%' }}
+            label="End Date *"
+            disablePast
+            shouldDisableDate={isDateUnavailable}
+            value={endDayjs}
+            onChange={(newValue) => {
+              setEndDayjs(newValue);
+              setEndDate(newValue ? newValue.toDate() : null);
+            }}
+            />
         </LocalizationProvider>
         <br/>
         <Typography variant='overline'>
           {(!isNaN(totalPrice) && totalPrice >= 0) ? 'Total Price: ' + totalPrice.toString() : 'Wrong date!'}
         </Typography>
-        {/* Total Price: {totalPrice >= 0 ? totalPrice : 'Wrong date!'} */}
         <br/>
         <Button variant="contained" type="submit" onClick={makeBooking}>Make Booking</Button>
       </Box>
-      {/* <hr /> */}
       <br/>
-      {/* reviewing area: display and send review */}
+      <Divider variant="middle" />
+      <br/>
       {listingId && <ReviewBox id={listingId} onReviewSent={updateReviews}/>}
       <Typography variant='h5'>Reviews</Typography>
       {listingId && <ReviewArea id={listingId} reviews={reviews}/>}
