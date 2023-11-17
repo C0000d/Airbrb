@@ -1,0 +1,1 @@
+In rating page, when clicking a specific rating bar, its review zone will automatically display the corresponding reviews of that rating.
