@@ -151,4 +151,8 @@ describe('unhappy path', () => {
     cy.contains('Logout').click();
     cy.wait(3000)
   });
+
+  after(() => {
+    cy.clearLocalStorage();
+  });
 })

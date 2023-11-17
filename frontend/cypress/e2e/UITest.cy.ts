@@ -117,4 +117,8 @@ describe('happy path', () => {
     cy.contains('Logout').click();
     cy.wait(1000)
   });
+
+  after(() => {
+    cy.clearLocalStorage();
+  });
 })
