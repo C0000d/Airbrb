@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Card, CardContent, CardMedia, CardActionArea, CardActions, Box, Typography, Popover } from '@mui/material';
-import { CircularProgress } from '@mui/joy';
 import { Review, ListingDetail } from './dashboard';
 import RatingPopover from './ratingPopover';
 import embedVideoUrl from './embedVideo';
+import { Card, CardContent, CardMedia, CardActionArea, CardActions, Box, Typography, Popover } from '@mui/material';
+import { CircularProgress } from '@mui/joy';
 
 interface rawListingData {
   listing: ListingDetail;
 }
 
 const fetchListingDetails = async (listingId?: string) => {
-  // get listing detail data from backend
+  // get listing detail data from api
   const response = await fetch(`http://localhost:5005/listings/${listingId}`);
 
   if (!response.status) {
@@ -19,7 +19,6 @@ const fetchListingDetails = async (listingId?: string) => {
   }
 
   const data: rawListingData = await response.json();
-  // console.log(data)
   return data;
 };
 
@@ -151,7 +150,8 @@ const ListElement = ({ listingId, onClick }: { listingId: string, onClick: (list
               <CardContent sx={{ paddingBottom: '8px' }}>
                 <Typography gutterBottom variant='h5'>Title: {title}</Typography>
                 <Typography variant='body2' color='text.secondary'>
-                  Address: {address}&nbsp;&nbsp; |&nbsp;  Type: {data.metadata.type} <br />
+                  Address: {address}&nbsp;&nbsp; |&nbsp;
+                  Type: {data.metadata.type} <br />
                   No. of beds: {data.metadata.beds}<br />
                   No. of bathrooms: {data.metadata.bathrooms} <br />
                 </Typography>

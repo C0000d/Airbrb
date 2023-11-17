@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../AuthContext';
 import { ListingDetail, Booking } from './dashboard';
 import { Box, Button, Typography } from '@mui/material';
 import List from '@mui/material/List';
@@ -50,7 +50,7 @@ const MyBookings = () => {
     getUserBooking();
   }, [user]);
 
-  //
+  // if bookings updated, fetch new listings
   useEffect(() => {
     bookings.forEach(async (booking: Booking) => {
       const listingDetails = await getDetail(booking.listingId);
@@ -83,39 +83,6 @@ const MyBookings = () => {
     second: '2-digit'
   });
 
-  const calculateTimeDiffWithSydney = (dateStr: any) => {
-    const parseDateStr = (dateStr: any) => {
-      const [datePart, timePart] = dateStr.split(', ');
-      const [day, month, year] = datePart.split('/');
-      const [time, modifier] = timePart.split(' ');
-      const [hours, minutes, seconds] = time.split(':');
-      let hours24 = parseInt(hours, 10);
-      if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
-        hours24 += 12;
-      }
-      if (modifier.toLowerCase() === 'am' && hours24 === 12) {
-        hours24 = 0;
-      }
-      const standardDateStr = `${year}-${month}-${day}T${String(hours24).padStart(2, '0')}:${minutes}:${seconds}`;
-      return new Date(standardDateStr);
-    }
-    const givenDate = parseDateStr(dateStr);
-
-    // get current local time
-    const now = new Date();
-    const sydneyTimeOffset = 10 * 60;
-    const oneHourInMilliseconds = 3600000;
-    const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
-
-    // time diff
-    const diff = sydneyNow.getTime() - givenDate.getTime();
-    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const diffTime = `${diffDays} days ${diffHours} hours`;
-
-    return diffTime;
-  }
-
   const back = () => {
     navigate('/dashboard');
   }
@@ -123,47 +90,44 @@ const MyBookings = () => {
   return (
     <>
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-            margin: 'auto',
-            textAlign: 'center'
-          }}
-        >
-          <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            {bookings.map((booking: Booking) => (
-                <React.Fragment key={booking.id}>
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar alt="thumbnail img" src={listings[booking.listingId]?.thumbnail || require('./defaultImg.png')} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={`Listing: ${listings[booking.listingId]?.title}`}
-                    secondary={
-                      <>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          Date Range: <br />
-                          &nbsp;&nbsp;From: {booking.dateRange.start ? sydneyTimeFormatter.format(new Date(booking.dateRange.start)) : 'Not available'} <br />
-                          &nbsp;&nbsp;To: {booking.dateRange.end ? sydneyTimeFormatter.format(new Date(booking.dateRange.end)) : 'Not available'} <br />
-                          Total Price: {booking.totalPrice} <br />
-                          Listing owner: {listings[booking.listingId]?.owner} <br />
-                          Booking Status: {booking.status}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                {/* {index < Booking.length - 1 && <Divider variant="inset" component="li" />} */}
-              </React.Fragment>
-            ))}
-          </List>
-        </Box>
+      <Box sx={{
+        width: 500,
+        maxWidth: '100%',
+        margin: 'auto',
+        textAlign: 'center'
+      }}>
+        <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          {bookings.map((booking: Booking) => (
+            <React.Fragment key={booking.id}>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="thumbnail img" src={listings[booking.listingId]?.thumbnail || require('./defaultImg.png')} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Listing: ${listings[booking.listingId]?.title}`}
+                secondary={
+                  <>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      Date Range: <br />
+                      &nbsp;&nbsp;From: {booking.dateRange.start ? sydneyTimeFormatter.format(new Date(booking.dateRange.start)) : 'Not available'} <br />
+                      &nbsp;&nbsp;To: {booking.dateRange.end ? sydneyTimeFormatter.format(new Date(booking.dateRange.end)) : 'Not available'} <br />
+                      Total Price: {booking.totalPrice} <br />
+                      Listing owner: {listings[booking.listingId]?.owner} <br />
+                      Booking Status: {booking.status}
+                    </Typography>
+                  </>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </React.Fragment>
+          ))}
+        </List>
+      </Box>
     </>
   );
 };

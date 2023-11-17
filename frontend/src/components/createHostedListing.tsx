@@ -1,30 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import FileToDataUrl from './fileToDataURL'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-import FileToDataUrl from './fileToDataURL'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-// import { stat } from 'fs';
 
 const CreateHostedListing = () => {
-  const [title, setTitle] = React.useState('');
-  const [address, setAddress] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [bathrooms, setBathrooms] = React.useState('');
-  const [bedrooms, setBedrooms] = React.useState('');
-  const [beds, setBeds] = React.useState('');
-  const [amenities, setAmenities] = React.useState('');
-  const [img, setImg] = React.useState('');
-  const [video, setVideo] = React.useState('');
+  // set states
+  const [title, setTitle] = useState('');
+  const [address, setAddress] = useState('');
+  const [price, setPrice] = useState('');
+  const [type, setType] = useState('');
+  const [bathrooms, setBathrooms] = useState('');
+  const [bedrooms, setBedrooms] = useState('');
+  const [beds, setBeds] = useState('');
+  const [amenities, setAmenities] = useState('');
+  const [img, setImg] = useState('');
+  const [video, setVideo] = useState('');
+  const [fileName, setFileName] = useState('');
+
   const navigate = useNavigate();
   const back = () => {
-    navigate('/hostedListing')
+    navigate('/hostedListing');
   }
 
   const VisuallyHiddenInput = styled('input')({
@@ -39,14 +41,13 @@ const CreateHostedListing = () => {
     width: 1,
   });
 
-  const [fileName, setFileName] = useState('');
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (file) {
         setFileName(file.name);
-        const res = await FileToDataUrl(file);
-        setImg(res)
+        const response = await FileToDataUrl(file);
+        setImg(response);
       } else {
         setFileName('');
       }
@@ -54,55 +55,77 @@ const CreateHostedListing = () => {
   };
 
   const create = async () => {
+    // check if input is valid
     if (title === '') {
-      alert('Please input title!')
-    } else if (address === '') {
-      alert('Please input address!')
-    } else if (price === '') {
-      alert('Please input price!')
-    } else if (type === '') {
-      alert('Please input type!')
-    } else if (bathrooms === '') {
-      alert('Please input number of bathrooms!')
-    } else if (bedrooms === '') {
-      alert('Please input number of bedrooms!')
-    } else if (beds === '') {
-      alert('Please input number of beds!')
-    } else if (amenities === '') {
-      alert('Please describe the amenities!')
-    } else {
-      const token = localStorage.getItem('token')
-      const res = await fetch('http://localhost:5005/listings/new', {
-        method: 'POST',
-        body: JSON.stringify({
-          title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities, video }
-        }),
-        headers: {
-          'Content-type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      const data = await res.json();
-      if (data.error) {
-        alert(data.error);
-      } else {
-        alert('Successfully create a new listing!');
-        navigate('/hostedListing', { state: { from: 'create' } });
+      alert('Please input title!');
+      return;
+    }
+
+    if (address === '') {
+      alert('Please input address!');
+      return;
+    }
+
+    if (price === '') {
+      alert('Please input price!');
+      return;
+    }
+
+    if (type === '') {
+      alert('Please input type!');
+      return;
+    }
+
+    if (bathrooms === '') {
+      alert('Please input number of bathrooms!');
+      return;
+    }
+
+    if (bedrooms === '') {
+      alert('Please input number of bedrooms!');
+      return;
+    }
+
+    if (beds === '') {
+      alert('Please input number of beds!');
+      return;
+    }
+
+    if (amenities === '') {
+      alert('Please describe the amenities!');
+      return;
+    }
+
+    // send request to api
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:5005/listings/new', {
+      method: 'POST',
+      body: JSON.stringify({
+        title, address, price, thumbnail: img, metadata: { type, bathrooms, bedrooms, beds, amenities, video }
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
       }
+    });
+    const data = await response.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert('Successfully create a new listing!');
+      navigate('/hostedListing', { state: { from: 'create' } });
     }
   }
 
   return (
     <>
       <Button variant="outlined" type="button" onClick={back} style={{ marginRight: 40, marginBottom: 10 }}>Back</Button>
-      <Box
-        sx={{
-          width: 500,
-          maxWidth: '100%',
-          margin: 'auto',
-          textAlign: 'center'
-        }}
-      >
+      <Box sx={{
+        width: 500,
+        maxWidth: '100%',
+        margin: 'auto',
+        textAlign: 'center'
+      }}>
         <Typography variant="h4" gutterBottom>
           Create a new listing
         </Typography>
@@ -113,15 +136,13 @@ const CreateHostedListing = () => {
         <br />
         <TextField data-cy="create-list-price" fullWidth label="Listing Price (per night) *" value={price} onChange={e => setPrice(e.target.value)} /> <br />
         <br />
-        <Box
-        sx={{
+        <Box sx={{
           width: 500,
           maxWidth: '100%',
           margin: 'auto',
           textAlign: 'center',
           display: 'flex',
-        }}
-        >
+        }}>
           <Typography variant="h6" gutterBottom>
             Thumbnail (optional): &nbsp;&nbsp;
           </Typography>
@@ -131,7 +152,7 @@ const CreateHostedListing = () => {
               accept="image/jpeg, image/png, image/jpg"
               type="file"
               onChange={handleFileChange}
-          />
+            />
           </Button>
         </Box>
         <br />

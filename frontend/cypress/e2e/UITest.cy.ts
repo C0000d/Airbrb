@@ -81,6 +81,7 @@ describe('happy path', () => {
 
   it ('Successfully unpublish a listing', () => {
     cy.visit('localhost:3000/hostedListing');
+    cy.wait(6000)
     cy.contains('unPublish').click()
     cy.wait(3000)
   });
