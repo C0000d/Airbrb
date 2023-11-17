@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { useNavigate } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Box from '@mui/material/Box';
-// import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 
 type DateType = Date | null;
 interface Availability {
@@ -19,29 +17,29 @@ const Publish = () => {
   const navigate = useNavigate();
   let [availability, setAvailability] = useState<Availability[]>([{ start: null, end: null }]);
   const back = () => {
-    navigate('/hostedListing')
+    navigate('/hostedListing');
   }
 
   const publish = async () => {
     if (availability.length === 1) {
       for (const date of availability) {
         if (date.start === null || date.end === null) {
-          alert('Please add at least one available date!')
+          alert('Please add at least one available date!');
           return;
         }
       }
     } else {
       for (const date of availability) {
         if ((date.start === null && date.end !== null) || (date.start !== null && date.end === null)) {
-          alert('Invalid input! Please check all fields!')
+          alert('Invalid input! Please check all fields!');
           return;
         }
       }
     }
     availability = availability.filter(date => date.start !== null && date.end !== null);
-    const token = localStorage.getItem('token')
-    const listingId = localStorage.getItem('listingId')
-    const res = await fetch(`http://localhost:5005/listings/publish/${listingId}`, {
+    const token = localStorage.getItem('token');
+    const listingId = localStorage.getItem('listingId');
+    const response = await fetch(`http://localhost:5005/listings/publish/${listingId}`, {
       method: 'PUT',
       body: JSON.stringify({ availability }),
       headers: {
@@ -49,12 +47,11 @@ const Publish = () => {
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
-      alert('successfuly published!')
-      // console.log(availability);
+      alert('successfuly published!');
       navigate('/hostedListing');
     }
   }
@@ -77,7 +74,7 @@ const Publish = () => {
   const addDatePicker = () => {
     for (const date of availability) {
       if (date.start === null || date.end === null) {
-        alert('Please fill all the fields!')
+        alert('Please fill all the fields!');
         return;
       }
     }
@@ -94,29 +91,25 @@ const Publish = () => {
       <>
         <br />
         <Box>
-          {/* Available Date: <br /> */}
-          <DatePicker disablePast value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
+          <DatePicker data-cy="publish-start-date" data-testid="startDatePicker" disablePast value={datePickerGroup.start} onChange={(newValue) => updateAvailability(index, 'start', newValue)} sx={{ margin: 'auto' }} label="Available From: *" />
           <DatePicker disablePast value={datePickerGroup.end} onChange={(newValue) => updateAvailability(index, 'end', newValue)} label="Available To: *" />
         </Box>
         <br />
       </>
-    )
-  }
+    );
+  };
 
   return (
-    <Box
-        sx={{
-          width: 500,
-          maxWidth: '100%',
-          margin: 'auto',
-          textAlign: 'center'
-        }}
-    >
+    <Box sx={{
+      width: 500,
+      maxWidth: '100%',
+      margin: 'auto',
+      textAlign: 'center'
+    }}>
       <Typography variant="h4" gutterBottom>
         Publish a listing
       </Typography>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {/* {datePickers.map((DatePickerComponent) => DatePickerComponent)} */}
         {availability.map((_, index) => (
           <DatePickerComponent key={index} index={index} />
         ))}
@@ -129,4 +122,4 @@ const Publish = () => {
   );
 }
 
-export default Publish
+export default Publish;

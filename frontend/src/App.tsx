@@ -5,7 +5,7 @@ import { AuthContext } from './AuthContext';
 
 function App () {
   const [token, setToken] = useState<string | null>(null);
-  console.clear();
+
   return (
     <>
       <AuthContext.Provider value={{ token, setToken }}>

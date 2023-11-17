@@ -1,52 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Box, Button, TextField, Typography, Rating, Grid } from '@mui/material';
-// import ListingElement from './hostedLIstElement';
-import ListElement, { fetchListingDetails, getReviewRate } from './listElement';
-
-interface Review {
-  user: string;
-  rate: number;
-  comment: string;
-  postOn: Date;
-}
-interface Listing {
-  id: string;
-  title: string;
-  owner: string;
-  address: string;
-  thumbnail: string;
-  price: number;
-  reviews: Review[];
-}
-
-interface MetaData {
-  type: string;
-  number: string;
-  bedrooms: string;
-  amenities: string;
-  beds: string;
-  bathrooms: string
-}
-
-interface TimePeriod {
-  // define Availability format
-  start: string;
-  end: string;
-}
-
-interface ListingDetail {
-  title: string;
-  owner: string;
-  address: string;
-  price: number;
-  thumbnail: string;
-  metadata: MetaData;
-  reviews: Review[];
-  availability: TimePeriod[];
-  published: boolean;
-  postedOn: string;
-}
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ListElement, { getReviewRate } from './listElement';
+import { ListingData } from './dashboard';
+import { Box, Button, Typography, Grid } from '@mui/material';
 
 const SearchPage = () => {
   let stitle = localStorage.getItem('stitle');
@@ -58,25 +14,29 @@ const SearchPage = () => {
   const order = localStorage.getItem('order');
   const navigate = useNavigate();
   const back = () => {
-    navigate('/dashboard')
+    navigate('/dashboard');
   }
 
+  // set searching states
+  const [searchListing, setSearchListing] = useState<ListingData[]>([]);
+
   const getDetail = async (id: string) => {
-    const res = await fetch(`http://localhost:5005/listings/${id}`, {
+    const response = await fetch(`http://localhost:5005/listings/${id}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
       }
     });
-    const data = await res.json();
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
       return data;
     }
   }
+
+  // get current location
   const location = useLocation();
-  const [searchListing, setSearchListing] = useState<Listing[]>([])
   useEffect(() => {
     (async () => {
       const response = await fetch('http://localhost:5005/listings', {
@@ -85,17 +45,19 @@ const SearchPage = () => {
           'Content-type': 'application/json',
         }
       });
+
       const allListing = await response.json();
       if (allListing.error) {
         alert(allListing.error);
       } else {
-        let newListings: Listing[] = [];
-        allListing.listings.forEach((listing: Listing) => {
+        // get user input
+        let newListings: ListingData[] = [];
+        allListing.listings.forEach((listing: ListingData) => {
           if (stitle === null) {
-            stitle = ''
+            stitle = '';
           }
           if (scity === null) {
-            scity = ''
+            scity = '';
           }
           if (listing.title.toLowerCase().includes(stitle.toLowerCase()) && listing.address.toLowerCase().includes(scity.toLowerCase())) {
             newListings.push(listing);
@@ -114,8 +76,10 @@ const SearchPage = () => {
                   alert(error);
                 }
               }
-              newListings = temp
+              newListings = temp;
             }
+
+            // filter mismatched listings
             if (sminPrice !== null && sminPrice !== '') {
               newListings = newListings.filter(listing => { return listing.price >= parseInt(sminPrice) })
             }
@@ -141,8 +105,9 @@ const SearchPage = () => {
                   alert(error);
                 }
               }
-              newListings = temp
+              newListings = temp;
             }
+
             if (smaxNum !== null && smaxNum !== '') {
               const temp = [];
               for (const listing of newListings) {
@@ -156,7 +121,7 @@ const SearchPage = () => {
                   alert(error);
                 }
               }
-              newListings = temp
+              newListings = temp;
             }
           };
           const applyFilters = async () => {
@@ -167,7 +132,7 @@ const SearchPage = () => {
         });
       }
     })();
-  }, [location.state])
+  }, [location.state]);
 
   return (
     <>
@@ -177,40 +142,40 @@ const SearchPage = () => {
       </Typography>
       {searchListing.length !== 0
         ? (
-        <Box sx={{ flexGrow: 1, p: 2 }} >
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            '--Grid-borderWidth': '1px',
-            borderTop: 'var(--Grid-borderWidth) solid',
-            borderLeft: 'var(--Grid-borderWidth) solid',
-            borderColor: 'divider',
-            '& > div': {
-              borderRight: 'var(--Grid-borderWidth) solid',
-              borderBottom: 'var(--Grid-borderWidth) solid',
-              borderColor: 'divider',
-            },
-          }}
-          >
-            {searchListing.map((listing: Listing) => (
-          <Grid item key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-            <div onClick={() => navigate(`/listings/${listing.id}`, { state: { from: 'search' } })}>
-              <ListElement listingId={listing.id} onClick={ () => { console.log() } } />
-            </div>
-          </Grid>
-            ))}
-        </Grid>
-      </Box>
+            <Box sx={{ flexGrow: 1, p: 2 }} >
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  '--Grid-borderWidth': '1px',
+                  borderTop: 'var(--Grid-borderWidth) solid',
+                  borderLeft: 'var(--Grid-borderWidth) solid',
+                  borderColor: 'divider',
+                  '& > div': {
+                    borderRight: 'var(--Grid-borderWidth) solid',
+                    borderBottom: 'var(--Grid-borderWidth) solid',
+                    borderColor: 'divider',
+                  },
+                }}
+              >
+                {searchListing.map((listing: ListingData) => (
+                  <Grid item key={listing.id} {...{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                    <div onClick={() => navigate(`/listings/${listing.id}`, { state: { from: 'search' } })}>
+                      <ListElement listingId={listing.id} onClick={ () => { console.log() } } />
+                    </div>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           )
         : (
-          <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
-            No result found...
-          </Typography>
+            <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
+              No result found...
+            </Typography>
           )
-    }
+      }
     </>
-  )
-}
+  );
+};
 
 export default SearchPage;

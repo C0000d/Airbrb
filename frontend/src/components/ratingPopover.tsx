@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Review, Booking, ListingDetail } from './dashboard';
+import React, { useEffect } from 'react';
+import { Location, useNavigate } from 'react-router-dom';
+import { Review } from './dashboard';
 import { getReviewRate } from './listElement';
 import { Box, Rating, Typography, Card, Divider, Stack } from '@mui/material';
 import LinearProgress from '@mui/joy/LinearProgress';
-import { Location, useNavigate, useParams } from 'react-router-dom';
 
 interface RatingPopoverProps {
   id: string | undefined;
@@ -61,7 +61,7 @@ const RatingPopover = ({ reviews, id, location }: RatingPopoverProps) => {
           marginBottom: 1,
           justifyContent: 'center',
         }}>
-          <Rating value={totalRate} precision={0.1} size='large' readOnly />
+          <Rating data-testid="custom-rating" value={totalRate} precision={0.1} size='large' readOnly />
           <Typography variant='h6'>{totalRate} out of 5</Typography>
         </Box>
         <Typography paragraph>{totalReviewCount} global ratings</Typography>

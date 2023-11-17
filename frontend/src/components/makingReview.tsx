@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { Review, Booking } from './dashboard';
-
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Rating } from '@mui/material';
 
 interface ReviewBoxProps {
@@ -18,6 +17,7 @@ const labels: { [index: string]: string } = {
   5: 'Very Satisfied',
 };
 
+// get label fro rating numbers
 function getLabelText (value: number) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
@@ -28,8 +28,6 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
 
   const [reviewText, setReviewText] = useState<string>('');
   const [reviewRating, setReviewRating] = useState<number>(0);
-  const [review, setReview] = useState<Review | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
   const [hover, setHover] = React.useState(-1);
 
   // get user info
@@ -43,41 +41,11 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
   // get user email
   const user = localStorage.getItem('email');
 
-  // useEffect(() => {
-  //   if (!user || !token) {
-  //     navigate('/login');
-  //   }
-
-  //   getUserBooking();
-  // }, [user, token, navigate]);
-
   if (!listingId) {
     alert('invalid listingId!');
+    navigate('/dashboard');
     return <></>;
   }
-
-  // useEffect(() => console.log(reviewRating), [reviewRating]);
-
-  // const getUserBooking = async () => {
-  //   const response = await fetch('http://localhost:5005/bookings', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-type': 'application/json',
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   });
-  //   const data = await response.json();
-  //   if (data.error) {
-  //     alert(data.error);
-  //   } else {
-  //     // get all booking Bookingrmation owned by current user
-  //     const acceptedBooking = data.bookings.filter((booking: Booking) =>
-  //       booking.owner === user &&
-  //       booking.status === 'accepted' &&
-  //       booking.listingId === listingId);
-  //     setBookings(acceptedBooking);
-  //   }
-  // };
 
   const sendReview = async () => {
     // check if user logged in
@@ -98,13 +66,11 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
     if (data.error) {
       alert(data.error);
     } else {
-      // get all booking Bookingrmation owned by current user
+      // get all booking information owned by current user
       const acceptedBooking = data.bookings.filter((booking: Booking) =>
         booking.owner === user &&
         booking.status === 'accepted' &&
         booking.listingId === listingId);
-      console.log('acceptedBooking', acceptedBooking);
-      setBookings(acceptedBooking);
 
       if (!acceptedBooking || acceptedBooking.length === 0 || !acceptedBooking[0]) {
         setReviewText('');
@@ -152,45 +118,6 @@ const ReviewBox = ({ id, onReviewSent }: ReviewBoxProps) => {
         alert('Error submitting review: ' + error);
       }
     }
-    // console.log('bookings', bookings);
-
-    // if (!reviewRating || !reviewText) {
-    //   alert('Please make full input!');
-    //   return;
-    // }
-
-    // const reviewToSend: Review = {
-    //   user: user,
-    //   rate: reviewRating,
-    //   comment: reviewText,
-    //   postOn: new Date(),
-    // };
-
-    // // get the first booking as review booking id
-    // const bookingId = bookings[0].id;
-    // try {
-    //   const response = await fetch(`http://localhost:5005/listings/${listingId}/review/${bookingId}`, {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-type': 'application/json',
-    //       Authorization: `Bearer ${token}`
-    //     },
-    //     body: JSON.stringify({
-    //       review: reviewToSend
-    //     }),
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error('Failed to send review');
-    //   }
-
-    //   alert('Review sent successfully!');
-    //   setReviewText('');
-    //   setReviewRating(0);
-    //   onReviewSent();
-    // } catch (error) {
-    //   alert('Error submitting review: ' + error);
-    // }
   };
 
   return (

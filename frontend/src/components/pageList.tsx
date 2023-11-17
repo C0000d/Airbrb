@@ -9,19 +9,12 @@ import MyBookings from './myBookings';
 import ReviewPage from './advancedReviews';
 import ListDetail from './listDetail';
 import { AuthContext } from '../AuthContext';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
@@ -45,23 +38,36 @@ const PageList = () => {
 
   const { token, setToken } = authContext;
   const navigate = useNavigate();
+  // set states
+  // handle menu states
+  const [auth, setAuth] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+  // search states
+  const [order, setOrder] = useState('');
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchCity, setSearchCity] = useState('');
+  const [minNum, setMinNum] = useState('');
+  const [maxNum, setMaxNum] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   const logout = async () => {
     const token = localStorage.getItem('token');
-    const res = await fetch('http://localhost:5005/user/auth/logout', {
+    const response = await fetch('http://localhost:5005/user/auth/logout', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
       setToken(null);
       localStorage.clear();
-      alert('Successfully logout!')
+      alert('Successfully logout!');
       navigate('/dashboard');
     }
   }
@@ -114,13 +120,8 @@ const PageList = () => {
       },
     },
   }));
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setAuth(event.target.checked);
-  // };
-
+  // handle search box events
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -128,15 +129,14 @@ const PageList = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setSearchTitle('');
     setSearchCity('');
     setMinNum('');
-    setMaxNum('')
-    setMinPrice('')
-    setMaxPrice('')
+    setMaxNum('');
+    setMinPrice('');
+    setMaxPrice('');
     setOrder('');
     setOpen(true);
   };
@@ -144,40 +144,33 @@ const PageList = () => {
   const handleClose1 = () => {
     setOpen(false);
   };
-  const [searchTitle, setSearchTitle] = useState('');
-  const [searchCity, setSearchCity] = useState('');
-  const [minNum, setMinNum] = useState('');
-  const [maxNum, setMaxNum] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+
   const handleSearch = () => {
-    localStorage.setItem('stitle', searchTitle)
-    localStorage.setItem('scity', searchCity)
-    localStorage.setItem('sminNum', minNum)
-    localStorage.setItem('smaxNum', maxNum)
-    localStorage.setItem('sminPrice', minPrice)
-    localStorage.setItem('smaxPrice', maxPrice)
-    localStorage.setItem('order', order)
+    localStorage.setItem('stitle', searchTitle);
+    localStorage.setItem('scity', searchCity);
+    localStorage.setItem('sminNum', minNum);
+    localStorage.setItem('smaxNum', maxNum);
+    localStorage.setItem('sminPrice', minPrice);
+    localStorage.setItem('smaxPrice', maxPrice);
+    localStorage.setItem('order', order);
     navigate('/search', { state: { from: 'newsearch' } });
   }
-  const [order, setOrder] = React.useState('');
 
   const handleOrder = (event: SelectChangeEvent) => {
     setOrder(event.target.value as string);
   };
+
   return (
     <>
-      {/* <AppBar position="static">
-        <Container maxWidth="xl"> */}
-          <Toolbar disableGutters>
-            <Search onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
+      <Toolbar disableGutters>
+        <Search data-cy="search-list" onClick={handleClickOpen} sx={{ border: '1px solid black', borderRadius: '6px' }}>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+          />
         </Search>
         <React.Fragment>
           <Dialog open={open} onClose={handleClose1}>
@@ -187,7 +180,7 @@ const PageList = () => {
                 Search the listings you want...
               </DialogContentText>
               <TextField
-                // autoFocus
+                data-cy="search-title"
                 margin="dense"
                 label="Listing Title"
                 type="text"
@@ -210,7 +203,6 @@ const PageList = () => {
                 margin="dense"
                 label="Min No."
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setMinNum(e.target.value)}
               />
@@ -218,7 +210,6 @@ const PageList = () => {
                 margin="dense"
                 label="Max No."
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setMaxNum(e.target.value)}
               />
@@ -229,7 +220,6 @@ const PageList = () => {
                 margin="dense"
                 label="Min Price"
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setMinPrice(e.target.value)}
               />
@@ -237,12 +227,12 @@ const PageList = () => {
                 margin="dense"
                 label="Max Price"
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setMaxPrice(e.target.value)}
               />
               <Box sx={{ minWidth: 120 }}>
-                <br /><FormControl fullWidth>
+                <br />
+                <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Rating Order</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -259,81 +249,85 @@ const PageList = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose1}>Cancel</Button>
-              <Button onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
+              <Button data-cy="search-btn" onClick={() => { handleClose1(); handleSearch(); } }>Search</Button>
             </DialogActions>
           </Dialog>
         </React.Fragment>
         {auth && (
-            <div style={{ textAlign: 'right', flexGrow: 1 }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-      {token
-        ? (
-        <>
-            <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-          <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); } }>
-            &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link> </MenuItem>
-          <MenuItem onClick={() => { navigate('/hostedListing'); handleClose(); } }>
-                      &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp; </MenuItem>
-                    <MenuItem onClick={() => { handleClose(); navigate('/myBookings'); }}>
-                    &nbsp;&nbsp;<Link to="./myBookings" >My Bookings</Link>&nbsp;&nbsp;</MenuItem>
-          <MenuItem onClick={() => { handleClose(); logout(); navigate('/dashboard'); }}>
-                        &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;</MenuItem>
-            </Menu>
-        </>
-          )
-        : (
-          <>
-            <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-          <MenuItem onClick={() => { navigate('/login'); handleClose(); } }>
-            &nbsp;&nbsp;<Link to="./login">Login&nbsp;</Link>&nbsp;&nbsp; </MenuItem>
-          <MenuItem onClick={() => { navigate('/register'); handleClose(); } }>
-            &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;</MenuItem>
-          </Menu>
-        </>
-          )
-          }
-        </div>
+          <div style={{ textAlign: 'right', flexGrow: 1 }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            {token
+              ? (
+                  <>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={() => { navigate('/dashboard'); handleClose(); } }>
+                        &nbsp;&nbsp;<Link to="./dashboard">Homepage</Link>
+                      </MenuItem>
+                      <MenuItem onClick={() => { navigate('/hostedListing'); handleClose(); } }>
+                        &nbsp;&nbsp;<Link to="./hostedListing" >Hosted Listings</Link>&nbsp;&nbsp;
+                      </MenuItem>
+                      <MenuItem onClick={() => { handleClose(); navigate('/myBookings'); }}>
+                        &nbsp;&nbsp;<Link to="./myBookings" >My Bookings</Link>&nbsp;&nbsp;
+                      </MenuItem>
+                      <MenuItem onClick={() => { handleClose(); logout(); navigate('/dashboard'); }}>
+                        &nbsp;&nbsp;<Link to="./dashboard" >Logout</Link>&nbsp;&nbsp;
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )
+              : (
+                  <>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={() => { navigate('/login'); handleClose(); } }>
+                        &nbsp;&nbsp;<Link to="./login">Login&nbsp;</Link>&nbsp;&nbsp;
+                      </MenuItem>
+                      <MenuItem onClick={() => { navigate('/register'); handleClose(); } }>
+                        &nbsp;&nbsp;<Link to="./register">Register</Link> &nbsp;&nbsp;
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )
+            }
+          </div>
         )}
       </Toolbar>
-      {/* </Container>
-      </AppBar> */}
 
       <hr />
 
@@ -342,10 +336,8 @@ const PageList = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        {/* <Route path='/hostedListing/*' element={<HostedListings key={new Date().toISOString()} />} /> */}
         <Route path='/hostedListing/*' element={<HostedListings />} />
         <Route path='/listings/:listingId' element={<ListDetail />} />
-        {/* <Route path='/search' element={<SearchPage key={new Date().toISOString()} />} /> */}
         <Route path='/search' element={<SearchPage />} />
         <Route path='/myBookings' element={<MyBookings />} />
         <Route path='/reviewPage/:listingId' element={<ReviewPage />} />

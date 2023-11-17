@@ -12,6 +12,7 @@ interface DateRange {
   start: string;
   end: string;
 }
+
 interface Booking {
   id: string;
   listingId: string;
@@ -20,29 +21,38 @@ interface Booking {
   status: string;
   dateRange: DateRange;
 }
+
 const BookRequest = () => {
   const navigate = useNavigate();
   const back = () => {
-    navigate('/hostedListing')
+    navigate('/hostedListing');
   }
+
+  // get current listing and token
   const listingId = localStorage.getItem('listingId');
   const token = localStorage.getItem('token');
+
+  // set states for booking
   const [info, setInfo] = useState([]);
-  const [detail, setDetail] = useState({ title: '', thumbnail: '', address: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false, postedOn: '' });
-  const [title, setTitle] = React.useState('');
-  const [img, setImg] = React.useState('');
-  const [postedOn, setPostedOn] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [profit, setProfit] = React.useState(0);
-  const [day, setDay] = React.useState(0);
+  const [detail, setDetail] = useState({ title: '', thumbnail: '', addresponses: '', metadata: { type: '', beds: '', bedrooms: '', amenities: '', bathrooms: '' }, price: '', reviews: [], published: false, postedOn: '' });
+  const [title, setTitle] = useState('');
+  const [img, setImg] = useState('');
+  const [postedOn, setPostedOn] = useState('');
+  const [price, setPrice] = useState('');
+  const [profit, setProfit] = useState(0);
+  const [day, setDay] = useState(0);
+  const [diff, setDiff] = useState('');
+
+  // get listing detail
   const getDetail = async () => {
-    const res = await fetch(`http://localhost:5005/listings/${listingId}`, {
+    const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
       }
     });
-    const data = await res.json();
+
+    const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
@@ -50,24 +60,32 @@ const BookRequest = () => {
       setTitle(data.listing.title);
       setImg(data.listing.thumbnail);
       setPrice(data.listing.price);
-      setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
-      const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
-      setDiff(timeDiff)
-      const days = profit / parseInt(price)
-      setDay(days)
+
+      // check if this listing posted
+      if (data.listing.postedOn === null) {
+        setPostedOn('Not Poseted yet');
+        setDiff('Not Poseted yet');
+      } else {
+        setPostedOn((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+        const timeDiff = calculateTimeDiffWithSydney((sydneyTimeFormatter.format(new Date(data.listing.postedOn))));
+        setDiff(timeDiff);
+        const days = profit / parseInt(price);
+        setDay(days);
+      }
     }
   }
 
   useEffect(() => {
     const getAllRequest = async () => {
-      const res = await fetch('http://localhost:5005/bookings', {
+      const response = await fetch('http://localhost:5005/bookings', {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         }
       });
-      const data = await res.json();
+      const data = await response.json();
+
       if (data.error) {
         alert(data.error);
       } else {
@@ -76,14 +94,15 @@ const BookRequest = () => {
         const acceptBooking = data.bookings.filter((booking: Booking) => (Number(booking.listingId) === Number(listingId)) && (booking.status === 'accepted'));
         let profits = 0;
         for (const booking of acceptBooking) {
-          profits += parseInt(booking.totalPrice)
+          profits += parseInt(booking.totalPrice);
         }
-        setProfit(profits)
+        setProfit(profits);
       }
     }
     getAllRequest();
     getDetail();
   }, []);
+
   const sydneyTimeFormatter = new Intl.DateTimeFormat('en-AU', {
     timeZone: 'Australia/Sydney',
     year: 'numeric',
@@ -96,45 +115,72 @@ const BookRequest = () => {
 
   const accept = async (id: string) => {
     const token = localStorage.getItem('token')
-    const res = await fetch(`http://localhost:5005/bookings/accept/${id}`, {
+    const response = await fetch(`http://localhost:5005/bookings/accept/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
+
     if (data.error) {
       alert(data.error);
     } else {
       alert('Successfully Accept a booking!');
-      navigate(`/hostedListing/bookRequest/:${listingId}`)
+      navigate(`/hostedListing/bookRequest/:${listingId}`);
     }
   }
+
   const deny = async (id: string) => {
-    const token = localStorage.getItem('token')
-    const res = await fetch(`http://localhost:5005/bookings/decline/${id}`, {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5005/bookings/decline/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
     });
-    const data = await res.json();
+    const data = await response.json();
+
     if (data.error) {
       alert(data.error);
     } else {
       alert('Successfully Decline a booking!');
-      navigate(`/hostedListing/bookRequest/:${listingId}`)
+      navigate(`/hostedListing/bookRequest/:${listingId}`);
     }
   }
-  const [diff, setDiff] = React.useState('');
+
   const calculateTimeDiffWithSydney = (dateStr: string) => {
-    const parseDateStr = (dateStr: any) => {
+    if (dateStr === null || dateStr === '') {
+      return 'Not poseted yet.';
+    }
+
+    if (!dateStr.includes(',')) {
+      return 'Not valid date.';
+    }
+
+    const parseDateStr = (dateStr: string) => {
       const [datePart, timePart] = dateStr.split(', ');
+
+      // check if date is valid
+      if (!datePart || !timePart) {
+        return;
+      }
+
       const [day, month, year] = datePart.split('/');
       const [time, modifier] = timePart.split(' ');
+
+      // check if time is valid
+      if (!time || !modifier) {
+        return;
+      }
+
       const [hours, minutes, seconds] = time.split(':');
+
+      if (!hours) {
+        return;
+      }
       let hours24 = parseInt(hours, 10);
       if (modifier.toLowerCase() === 'pm' && hours24 < 12) {
         hours24 += 12;
@@ -146,16 +192,22 @@ const BookRequest = () => {
       return new Date(standardDateStr);
     }
     const givenDate = parseDateStr(dateStr);
+    if (!givenDate) {
+      return 'Not valid date';
+    }
+
     // get current local time
     const now = new Date();
     const sydneyTimeOffset = 10 * 60;
     const oneHourInMilliseconds = 3600000;
     const sydneyNow = new Date(now.getTime() + sydneyTimeOffset * 60000 + (now.getTimezoneOffset() * 60000) + oneHourInMilliseconds);
+
     // time diff
     const diff = sydneyNow.getTime() - givenDate.getTime();
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const diffTime = `${diffDays} days ${diffHours} hours`;
+
     return diffTime;
   }
 
@@ -170,7 +222,7 @@ const BookRequest = () => {
           textAlign: 'center'
         }}
       >
-      <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Listing Title: {title} <br />
         </Typography>
         <Typography variant="h6" gutterBottom>
@@ -178,10 +230,10 @@ const BookRequest = () => {
           So far: {diff} <br />
           Total Days booked: {profit / parseInt(price)}<br />
           Total Profits: {profit}
-      </Typography>
+        </Typography>
         <List sx={{ margin: 'auto', width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {info.map((booking: Booking) => (
-              <React.Fragment key={booking.id}>
+            <React.Fragment key={booking.id}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar alt="thumbnail img" src={img || require('./defaultImg.png')} />
@@ -213,7 +265,7 @@ const BookRequest = () => {
         </List>
       </Box>
     </>
-  )
+  );
 }
 
 export default BookRequest;
